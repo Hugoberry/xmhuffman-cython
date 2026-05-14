@@ -76,19 +76,42 @@ strings = xmhuffman.decode_with_table(
 
 ## Format notes
 
-Each dictionary page in a Vertipaq column store is, schematically:
+The on-disk format is documented publicly in Microsoft's open
+specification [\[MS-XLDM\] §2.7.4 — Huffman
+Compression](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9).
+Each dictionary page is, schematically:
 
 | Field | Description |
 |---|---|
-| `encode_array` | 128 bytes, two 4-bit code lengths per byte (low nibble = symbol `2i`, high = `2i+1`). Value 0 means "symbol unused". Max length 15 bits. |
-| `compressed_string_buffer` | The bitstream itself, with adjacent bytes pair-swapped on disk. |
+| `encode_array` | 128 bytes, two 4-bit code lengths per byte (low nibble = symbol `2i`, high = `2i+1`). Value 0 means "symbol unused". Per [\[MS-XLDM\]](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9) codeword lengths are between 2 and 15 bits. |
+| `uiDecodeBits` | Width of the on-disk primary lookup table (≤ 12). This decoder uses a single flat `2^max_len` table instead and ignores `uiDecodeBits`. |
+| `compressed_string_buffer` | The bitstream itself, with adjacent bytes pair-swapped on disk. No padding between strings. |
 | `store_total_bits` | Total logical bit length; end sentinel for the last string. |
 | `vector_of_record_handle_structures` | Per-record `(bit_offset, page_id)`; sorted offsets per page give the per-string start boundaries. |
 
-Codes are canonical Huffman, assigned by sorting `(length, symbol)`
-ascending and incrementing the code with a left-shift on length changes.
+Codes are classical Huffman, encoded canonically by sorting
+`(length, symbol)` ascending and incrementing the code with a left-shift
+on length changes — exactly the reconstruction described in
+[\[MS-XLDM\] §2.7.4.1.5](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9).
 
-See [xmhuffman-python.md](xmhuffman-python.md) for the full spec.
+### Character-set modes
+
+[\[MS-XLDM\] §2.7.4.1.4](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9)
+distinguishes two modes per page:
+
+- **Single character set** (`character_set_type_identifier = 0x000aba91`)
+  — only the low byte of each character is Huffman-encoded; the upper
+  (charset) byte is stored once on the page and must be reinserted by
+  the caller to recover the original 2-byte character stream.
+- **Multiple character sets** (`0x000aba92`) — both bytes are encoded;
+  the output byte stream is consumed directly as UTF-16LE.
+
+This decoder emits raw `bytes` either way; reassembly of UTF-16 characters
+(including reinserting the single-charset upper byte) is the caller's
+responsibility.
+
+See [xmhuffman-python.md](xmhuffman-python.md) for additional notes
+specific to this implementation.
 
 ## Performance
 
@@ -154,6 +177,11 @@ MIT. See [LICENSE](LICENSE).
 This package is the third in a family of thin Cython wrappers around
 Microsoft column-store / compression formats, alongside
 [xpress8-python](https://github.com/Hugoberry/xpress8-python) and
-[xpress9-python](https://github.com/Hugoberry/xpress9-python). The
-canonical-Huffman format details follow what's documented in the
-[pbixray](https://github.com/Hugoberry/pbixray) project's reader code.
+[xpress9-python](https://github.com/Hugoberry/xpress9-python).
+
+The format itself is documented publicly in Microsoft's open
+specification [\[MS-XLDM\] — Spreadsheet Data Model File
+Format](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/),
+which the implementation here follows. The Python reference and
+end-to-end test fixtures come from the
+[pbixray](https://github.com/Hugoberry/pbixray) project.

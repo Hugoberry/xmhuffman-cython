@@ -36,7 +36,10 @@ int xmh_build_table(const uint8_t *lengths256,
                     uint16_t *table,
                     unsigned *out_max_len)
 {
-    /* Count symbols by length. */
+    /* Count symbols by length. Per [MS-XLDM] §2.7.4.1.2 valid codeword
+     * lengths in this format are 2..15; we accept 1..15 here because a
+     * length-1 code is still a well-formed canonical Huffman code and
+     * rejecting it would offer no real safety. 0 means "unused". */
     uint32_t count[XMH_MAX_CODE_LEN + 1] = {0};
     unsigned max_len = 0;
     for (unsigned s = 0; s < 256; ++s) {

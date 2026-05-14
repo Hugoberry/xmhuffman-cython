@@ -9,10 +9,14 @@ dictionary pages from xVelocity / Vertipaq column stores (`.pbix`
 DataModel, Power Pivot `item.data`). It is a focused, single-purpose
 package — not a general Huffman library.
 
-The format itself is described in [xmhuffman-python.md](xmhuffman-python.md)
-and follows what the open-source [pbixray](https://github.com/Hugoberry/pbixray)
-reader uses. All documentation in this repo describes the on-disk file
-format only.
+The on-disk format is documented in Microsoft's open specification
+[\[MS-XLDM\] §2.7.4 — Huffman
+Compression](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9).
+Additional implementation notes live in
+[xmhuffman-python.md](xmhuffman-python.md). The Python reference used
+by the test suite comes from the open-source
+[pbixray](https://github.com/Hugoberry/pbixray) reader. All
+documentation in this repo describes the published file format only.
 
 ## Project conventions
 
