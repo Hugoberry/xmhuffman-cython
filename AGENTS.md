@@ -12,9 +12,7 @@ package — not a general Huffman library.
 The on-disk format is documented in Microsoft's open specification
 [\[MS-XLDM\] §2.7.4 — Huffman
 Compression](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-xldm/f70b41f2-ca64-44a1-9e6f-53e63f6a5ee9).
-Additional implementation notes live in
-[xmhuffman-python.md](xmhuffman-python.md). The Python reference used
-by the test suite comes from the open-source
+The Python reference used by the test suite comes from the open-source
 [pbixray](https://github.com/Hugoberry/pbixray) reader. All
 documentation in this repo describes the published file format only.
 
@@ -69,7 +67,7 @@ zero.
 
 - **Don't expand scope.** No encoder, no other alphabets, no other
   bitstream conventions, no charset conversion inside the extension.
-  See "Non-goals" in [xmhuffman-python.md](xmhuffman-python.md).
+  See "Scope and non-goals" in [README.md](README.md).
 - **Don't add dependencies.** The runtime dependency set is empty by
   design. Build-time needs only Cython and a C compiler.
 - **Don't reintroduce per-symbol Python.** Any change that puts Python

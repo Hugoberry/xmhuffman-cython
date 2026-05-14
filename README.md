@@ -110,9 +110,6 @@ This decoder emits raw `bytes` either way; reassembly of UTF-16 characters
 (including reinserting the single-charset upper byte) is the caller's
 responsibility.
 
-See [xmhuffman-python.md](xmhuffman-python.md) for additional notes
-specific to this implementation.
-
 ## Performance
 
 Apples-to-apples against an equivalent pure-Python decoder on a few real
