@@ -51,9 +51,52 @@ strings: list[bytes] = xmhuffman.decode_page(
 )
 ```
 
-Output is `list[bytes]`. Charset interpretation is the caller's choice:
-Vertipaq pages flag themselves as either single-charset (latin-1 / ANSI,
-one Python `str` per record) or general (the byte stream is UTF-16LE).
+Output is `list[bytes]`. Charset interpretation is the caller's choice
+(see [Character-set modes](#character-set-modes) below): Vertipaq pages
+declare themselves as either *single character set* or *multiple
+character set*, and the caller decodes the returned bytes accordingly.
+
+### Single-charset pages with non-zero `CharacterSetUsed`
+
+When a single-charset page carries a non-zero `CharacterSetUsed` byte,
+the spec requires reinserting that byte as the UTF-16-LE high byte of
+every decoded character before the byte stream is meaningful as text.
+xmhuffman can perform that interleave inside the extension:
+
+```python
+# charset_mode='single' + charset_byte != 0 returns interleaved bytes,
+# each output element being 2 * decoded_length bytes long, ready for
+# direct `bytes.decode('utf-16-le')` by the caller.
+strings = xmhuffman.decode_page(
+    bitstream, encode_array_128, offsets, total_bits,
+    swap=True,
+    charset_mode='single',
+    charset_byte=character_set_used,
+)
+text = [b.decode('utf-16-le') for b in strings]
+```
+
+For pages with `CharacterSetUsed == 0`, the default `decode_page(...)`
+call is sufficient — `b.decode('latin-1')` on its output is byte-for-byte
+equivalent to the interleave path and several times faster, so callers
+should branch on `CharacterSetUsed`:
+
+```python
+if character_set_used == 0:
+    strings = xmhuffman.decode_page(bitstream, encode_array_128,
+                                    offsets, total_bits)
+    text = [b.decode('latin-1') for b in strings]
+else:
+    strings = xmhuffman.decode_page(bitstream, encode_array_128,
+                                    offsets, total_bits,
+                                    charset_mode='single',
+                                    charset_byte=character_set_used)
+    text = [b.decode('utf-16-le') for b in strings]
+```
+
+For *multiple character set* pages the raw decoded byte stream is
+already UTF-16-LE; `b[:len(b) & ~1].decode('utf-16-le')` is the
+canonical caller-side path.
 
 ### Lower-level building blocks
 
@@ -101,14 +144,20 @@ distinguishes two modes per page:
 
 - **Single character set** (`character_set_type_identifier = 0x000aba91`)
   — only the low byte of each character is Huffman-encoded; the upper
-  (charset) byte is stored once on the page and must be reinserted by
-  the caller to recover the original 2-byte character stream.
+  (charset) byte is stored once on the page as `CharacterSetUsed` and
+  must be reinserted to recover the original 2-byte character stream.
+  Pass `charset_mode='single', charset_byte=CharacterSetUsed` to
+  `decode_page` / `decode_with_table` to have the extension perform that
+  reinsertion. When `CharacterSetUsed == 0` you can skip the kwargs and
+  feed the raw `bytes` output straight to `b.decode('latin-1')` for the
+  same result at lower cost.
 - **Multiple character sets** (`0x000aba92`) — both bytes are encoded;
   the output byte stream is consumed directly as UTF-16LE.
 
-This decoder emits raw `bytes` either way; reassembly of UTF-16 characters
-(including reinserting the single-charset upper byte) is the caller's
-responsibility.
+Reinsertion order is the one the reference encoder/decoder uses: each
+emitted byte becomes the UTF-16-LE *low* byte and `CharacterSetUsed`
+becomes the *high* byte, so output element `k` is exactly
+`bytes([symbol, CharacterSetUsed]) * nwritten`.
 
 ## Performance
 
@@ -161,9 +210,12 @@ available.
   symbols, codeword lengths are capped at 15 bits, and the bitstream
   convention is the one used by Vertipaq pages.
 - **Not** an encoder. Round-tripping pages is out of scope.
-- **No** charset conversion inside the extension. The decoder returns
-  raw `bytes`; the caller picks between `latin-1` and paired UTF-16LE
-  based on the page's character-set identifier.
+- **No** Python-string outputs. The decoder returns raw `bytes`; the
+  caller picks between `latin-1` and paired UTF-16-LE based on the
+  page's character-set identifier. The `charset_mode='single',
+  charset_byte=cb` option performs the spec-defined `CharacterSetUsed`
+  reinsertion as a byte interleave (still `bytes` out) so the caller
+  can `b.decode('utf-16-le')` it directly.
 
 ## License
 

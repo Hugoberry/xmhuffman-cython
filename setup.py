@@ -22,7 +22,7 @@ xmhuffman_module = Extension(
 
 setup(
     name="xmhuffman",
-    version="0.1.0",
+    version="0.2.0",
     description="Cython bindings for Microsoft xVelocity/Vertipaq canonical-Huffman string decoding (PBIX/Power Pivot)",
     author="Igor Cotruta",
     url="https://github.com/Hugoberry/xmhuffman-cython",

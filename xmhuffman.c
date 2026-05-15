@@ -2965,7 +2965,8 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *, size_t, uint16_t const *, unsigned int, uint32_t const *, Py_ssize_t, uint64_t); /*proto*/
+static int __pyx_f_9xmhuffman__parse_charset_mode(PyObject *); /*proto*/
+static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *, size_t, uint16_t const *, unsigned int, uint32_t const *, Py_ssize_t, uint64_t, int, uint8_t); /*proto*/
 static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *, uint32_t **, Py_ssize_t *, int *); /*proto*/
 static int __pyx_array_allocate_buffer(struct __pyx_array_obj *); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char const *, char *); /*proto*/
@@ -3065,8 +3066,8 @@ static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSE
 static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_buffer); /* proto */
 static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_buffer); /* proto */
 static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_encode_array_128); /* proto */
-static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_table, PyObject *__pyx_v_max_len, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap); /* proto */
-static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_encode_array_128, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap); /* proto */
+static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_table, PyObject *__pyx_v_max_len, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap, PyObject *__pyx_v_charset_mode, PyObject *__pyx_v_charset_byte); /* proto */
+static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_encode_array_128, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap, PyObject *__pyx_v_charset_mode, PyObject *__pyx_v_charset_byte); /* proto */
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3106,7 +3107,7 @@ typedef struct {
   PyObject *__pyx_slice[1];
   PyObject *__pyx_tuple[3];
   PyObject *__pyx_codeobj_tab[5];
-  PyObject *__pyx_string_tab[160];
+  PyObject *__pyx_string_tab[168];
   PyObject *__pyx_number_tab[4];
 /* #### Code section: module_state_contents ### */
 /* CommonTypesMetaclass.module_state_decls */
@@ -3176,138 +3177,146 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_kp_u_and __pyx_string_tab[25]
 #define __pyx_kp_u_at_0x __pyx_string_tab[26]
 #define __pyx_kp_u_bytes_expected __pyx_string_tab[27]
-#define __pyx_kp_u_collections_abc __pyx_string_tab[28]
-#define __pyx_kp_u_contiguous_and_direct __pyx_string_tab[29]
-#define __pyx_kp_u_contiguous_and_indirect __pyx_string_tab[30]
-#define __pyx_kp_u_decode_failure_on_string __pyx_string_tab[31]
-#define __pyx_kp_u_disable __pyx_string_tab[32]
-#define __pyx_kp_u_enable __pyx_string_tab[33]
-#define __pyx_kp_u_encode_array_must_be_exactly_128 __pyx_string_tab[34]
-#define __pyx_kp_u_gc __pyx_string_tab[35]
-#define __pyx_kp_u_got __pyx_string_tab[36]
-#define __pyx_kp_u_got_differing_extents_in_dimensi __pyx_string_tab[37]
-#define __pyx_kp_u_invalid_Huffman_code_lengths_rc __pyx_string_tab[38]
-#define __pyx_kp_u_isenabled __pyx_string_tab[39]
-#define __pyx_kp_u_itemsize_0_for_cython_array __pyx_string_tab[40]
-#define __pyx_kp_u_max_len_must_be_in_0_15 __pyx_string_tab[41]
-#define __pyx_kp_u_no_default___reduce___due_to_non __pyx_string_tab[42]
-#define __pyx_kp_u_object __pyx_string_tab[43]
-#define __pyx_kp_u_rc __pyx_string_tab[44]
-#define __pyx_kp_u_strided_and_direct __pyx_string_tab[45]
-#define __pyx_kp_u_strided_and_direct_or_indirect __pyx_string_tab[46]
-#define __pyx_kp_u_strided_and_indirect __pyx_string_tab[47]
-#define __pyx_kp_u_table_size_mismatch_got __pyx_string_tab[48]
-#define __pyx_kp_u_unable_to_allocate_array_data __pyx_string_tab[49]
-#define __pyx_kp_u_unable_to_allocate_shape_and_str __pyx_string_tab[50]
-#define __pyx_kp_u_xmhuffman_pyx __pyx_string_tab[51]
-#define __pyx_n_u_ASCII __pyx_string_tab[52]
-#define __pyx_n_u_Ellipsis __pyx_string_tab[53]
-#define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[54]
-#define __pyx_n_u_Sequence __pyx_string_tab[55]
-#define __pyx_n_u_View_MemoryView __pyx_string_tab[56]
-#define __pyx_n_u_abc __pyx_string_tab[57]
-#define __pyx_n_u_allocate_buffer __pyx_string_tab[58]
-#define __pyx_n_u_asyncio_coroutines __pyx_string_tab[59]
-#define __pyx_n_u_base __pyx_string_tab[60]
-#define __pyx_n_u_bitstream __pyx_string_tab[61]
-#define __pyx_n_u_bsv __pyx_string_tab[62]
-#define __pyx_n_u_buffer __pyx_string_tab[63]
-#define __pyx_n_u_build_table __pyx_string_tab[64]
-#define __pyx_n_u_c __pyx_string_tab[65]
-#define __pyx_n_u_class __pyx_string_tab[66]
-#define __pyx_n_u_class_getitem __pyx_string_tab[67]
-#define __pyx_n_u_cline_in_traceback __pyx_string_tab[68]
-#define __pyx_n_u_count __pyx_string_tab[69]
-#define __pyx_n_u_d __pyx_string_tab[70]
-#define __pyx_n_u_decode_page __pyx_string_tab[71]
-#define __pyx_n_u_decode_with_table __pyx_string_tab[72]
-#define __pyx_n_u_decompress_encode_array __pyx_string_tab[73]
-#define __pyx_n_u_dict __pyx_string_tab[74]
-#define __pyx_n_u_dtype_is_object __pyx_string_tab[75]
-#define __pyx_n_u_eav __pyx_string_tab[76]
-#define __pyx_n_u_encode __pyx_string_tab[77]
-#define __pyx_n_u_encode_array_128 __pyx_string_tab[78]
-#define __pyx_n_u_enumerate __pyx_string_tab[79]
-#define __pyx_n_u_error __pyx_string_tab[80]
-#define __pyx_n_u_expected __pyx_string_tab[81]
-#define __pyx_n_u_flags __pyx_string_tab[82]
-#define __pyx_n_u_format __pyx_string_tab[83]
-#define __pyx_n_u_fortran __pyx_string_tab[84]
-#define __pyx_n_u_func __pyx_string_tab[85]
-#define __pyx_n_u_getstate __pyx_string_tab[86]
-#define __pyx_n_u_id __pyx_string_tab[87]
-#define __pyx_n_u_import __pyx_string_tab[88]
-#define __pyx_n_u_index __pyx_string_tab[89]
-#define __pyx_n_u_inv __pyx_string_tab[90]
-#define __pyx_n_u_is_coroutine __pyx_string_tab[91]
-#define __pyx_n_u_items __pyx_string_tab[92]
-#define __pyx_n_u_itemsize __pyx_string_tab[93]
-#define __pyx_n_u_keep __pyx_string_tab[94]
-#define __pyx_n_u_lengths __pyx_string_tab[95]
-#define __pyx_n_u_main __pyx_string_tab[96]
-#define __pyx_n_u_max_len __pyx_string_tab[97]
-#define __pyx_n_u_memview __pyx_string_tab[98]
-#define __pyx_n_u_ml __pyx_string_tab[99]
-#define __pyx_n_u_mode __pyx_string_tab[100]
-#define __pyx_n_u_module __pyx_string_tab[101]
-#define __pyx_n_u_n __pyx_string_tab[102]
-#define __pyx_n_u_n_buf __pyx_string_tab[103]
-#define __pyx_n_u_n_strings __pyx_string_tab[104]
-#define __pyx_n_u_name __pyx_string_tab[105]
-#define __pyx_n_u_name_2 __pyx_string_tab[106]
-#define __pyx_n_u_nbytes __pyx_string_tab[107]
-#define __pyx_n_u_ndim __pyx_string_tab[108]
-#define __pyx_n_u_new __pyx_string_tab[109]
-#define __pyx_n_u_obj __pyx_string_tab[110]
-#define __pyx_n_u_off_ptr __pyx_string_tab[111]
-#define __pyx_n_u_offsets __pyx_string_tab[112]
-#define __pyx_n_u_op __pyx_string_tab[113]
-#define __pyx_n_u_out __pyx_string_tab[114]
-#define __pyx_n_u_owns __pyx_string_tab[115]
-#define __pyx_n_u_pack __pyx_string_tab[116]
-#define __pyx_n_u_pop __pyx_string_tab[117]
-#define __pyx_n_u_pyx_checksum __pyx_string_tab[118]
-#define __pyx_n_u_pyx_state __pyx_string_tab[119]
-#define __pyx_n_u_pyx_type __pyx_string_tab[120]
-#define __pyx_n_u_pyx_unpickle_Enum __pyx_string_tab[121]
-#define __pyx_n_u_pyx_vtable __pyx_string_tab[122]
-#define __pyx_n_u_qualname __pyx_string_tab[123]
-#define __pyx_n_u_rc_2 __pyx_string_tab[124]
-#define __pyx_n_u_reduce __pyx_string_tab[125]
-#define __pyx_n_u_reduce_cython __pyx_string_tab[126]
-#define __pyx_n_u_reduce_ex __pyx_string_tab[127]
-#define __pyx_n_u_register __pyx_string_tab[128]
-#define __pyx_n_u_set_name __pyx_string_tab[129]
-#define __pyx_n_u_setdefault __pyx_string_tab[130]
-#define __pyx_n_u_setstate __pyx_string_tab[131]
-#define __pyx_n_u_setstate_cython __pyx_string_tab[132]
-#define __pyx_n_u_shape __pyx_string_tab[133]
-#define __pyx_n_u_size __pyx_string_tab[134]
-#define __pyx_n_u_start __pyx_string_tab[135]
-#define __pyx_n_u_step __pyx_string_tab[136]
-#define __pyx_n_u_stop __pyx_string_tab[137]
-#define __pyx_n_u_store_total_bits __pyx_string_tab[138]
-#define __pyx_n_u_struct __pyx_string_tab[139]
-#define __pyx_n_u_swap __pyx_string_tab[140]
-#define __pyx_n_u_swap_bytes __pyx_string_tab[141]
-#define __pyx_n_u_swapped_owned __pyx_string_tab[142]
-#define __pyx_n_u_swapped_view __pyx_string_tab[143]
-#define __pyx_n_u_table __pyx_string_tab[144]
-#define __pyx_n_u_tbl __pyx_string_tab[145]
-#define __pyx_n_u_tblv __pyx_string_tab[146]
-#define __pyx_n_u_test __pyx_string_tab[147]
-#define __pyx_n_u_unpack __pyx_string_tab[148]
-#define __pyx_n_u_update __pyx_string_tab[149]
-#define __pyx_n_u_values __pyx_string_tab[150]
-#define __pyx_n_u_x __pyx_string_tab[151]
-#define __pyx_n_u_xmhuffman __pyx_string_tab[152]
-#define __pyx_kp_b__6 __pyx_string_tab[153]
-#define __pyx_kp_b_iso88591_6_avQ_r_A_q_81_aq_1D_HA_1 __pyx_string_tab[154]
-#define __pyx_kp_b_iso88591_A_Q_A_s_Cq_j_CvQa_fA_t3a_1IQk_q __pyx_string_tab[155]
-#define __pyx_kp_b_iso88591_A_s_Cq_j_fA_t3a_q_AT_q_3c_A_DBa __pyx_string_tab[156]
-#define __pyx_kp_b_iso88591_s_Cq_j_1F_81_1AS_Q_1 __pyx_string_tab[157]
-#define __pyx_kp_b_iso88591_z_Q_A_s_Q_q_s_1_s_A_j_1_CvQa_T __pyx_string_tab[158]
-#define __pyx_n_b_O __pyx_string_tab[159]
+#define __pyx_kp_u_charset_mode_must_be_general_or __pyx_string_tab[28]
+#define __pyx_kp_u_collections_abc __pyx_string_tab[29]
+#define __pyx_kp_u_contiguous_and_direct __pyx_string_tab[30]
+#define __pyx_kp_u_contiguous_and_indirect __pyx_string_tab[31]
+#define __pyx_kp_u_decode_failure_on_string __pyx_string_tab[32]
+#define __pyx_kp_u_disable __pyx_string_tab[33]
+#define __pyx_kp_u_enable __pyx_string_tab[34]
+#define __pyx_kp_u_encode_array_must_be_exactly_128 __pyx_string_tab[35]
+#define __pyx_kp_u_gc __pyx_string_tab[36]
+#define __pyx_kp_u_got __pyx_string_tab[37]
+#define __pyx_kp_u_got_differing_extents_in_dimensi __pyx_string_tab[38]
+#define __pyx_kp_u_invalid_Huffman_code_lengths_rc __pyx_string_tab[39]
+#define __pyx_kp_u_isenabled __pyx_string_tab[40]
+#define __pyx_kp_u_itemsize_0_for_cython_array __pyx_string_tab[41]
+#define __pyx_kp_u_max_len_must_be_in_0_15 __pyx_string_tab[42]
+#define __pyx_kp_u_no_default___reduce___due_to_non __pyx_string_tab[43]
+#define __pyx_kp_u_object __pyx_string_tab[44]
+#define __pyx_kp_u_rc __pyx_string_tab[45]
+#define __pyx_kp_u_strided_and_direct __pyx_string_tab[46]
+#define __pyx_kp_u_strided_and_direct_or_indirect __pyx_string_tab[47]
+#define __pyx_kp_u_strided_and_indirect __pyx_string_tab[48]
+#define __pyx_kp_u_table_size_mismatch_got __pyx_string_tab[49]
+#define __pyx_kp_u_unable_to_allocate_array_data __pyx_string_tab[50]
+#define __pyx_kp_u_unable_to_allocate_shape_and_str __pyx_string_tab[51]
+#define __pyx_kp_u_xmhuffman_pyx __pyx_string_tab[52]
+#define __pyx_n_u_ASCII __pyx_string_tab[53]
+#define __pyx_n_u_Ellipsis __pyx_string_tab[54]
+#define __pyx_n_u_Pyx_PyDict_NextRef __pyx_string_tab[55]
+#define __pyx_n_u_Sequence __pyx_string_tab[56]
+#define __pyx_n_u_View_MemoryView __pyx_string_tab[57]
+#define __pyx_n_u_abc __pyx_string_tab[58]
+#define __pyx_n_u_allocate_buffer __pyx_string_tab[59]
+#define __pyx_n_u_asyncio_coroutines __pyx_string_tab[60]
+#define __pyx_n_u_base __pyx_string_tab[61]
+#define __pyx_n_u_bitstream __pyx_string_tab[62]
+#define __pyx_n_u_bsv __pyx_string_tab[63]
+#define __pyx_n_u_buffer __pyx_string_tab[64]
+#define __pyx_n_u_build_table __pyx_string_tab[65]
+#define __pyx_n_u_c __pyx_string_tab[66]
+#define __pyx_n_u_cb __pyx_string_tab[67]
+#define __pyx_n_u_charset_byte __pyx_string_tab[68]
+#define __pyx_n_u_charset_mode __pyx_string_tab[69]
+#define __pyx_n_u_class __pyx_string_tab[70]
+#define __pyx_n_u_class_getitem __pyx_string_tab[71]
+#define __pyx_n_u_cline_in_traceback __pyx_string_tab[72]
+#define __pyx_n_u_count __pyx_string_tab[73]
+#define __pyx_n_u_cset __pyx_string_tab[74]
+#define __pyx_n_u_d __pyx_string_tab[75]
+#define __pyx_n_u_decode_page __pyx_string_tab[76]
+#define __pyx_n_u_decode_with_table __pyx_string_tab[77]
+#define __pyx_n_u_decompress_encode_array __pyx_string_tab[78]
+#define __pyx_n_u_dict __pyx_string_tab[79]
+#define __pyx_n_u_dtype_is_object __pyx_string_tab[80]
+#define __pyx_n_u_eav __pyx_string_tab[81]
+#define __pyx_n_u_encode __pyx_string_tab[82]
+#define __pyx_n_u_encode_array_128 __pyx_string_tab[83]
+#define __pyx_n_u_enumerate __pyx_string_tab[84]
+#define __pyx_n_u_error __pyx_string_tab[85]
+#define __pyx_n_u_expected __pyx_string_tab[86]
+#define __pyx_n_u_flags __pyx_string_tab[87]
+#define __pyx_n_u_format __pyx_string_tab[88]
+#define __pyx_n_u_fortran __pyx_string_tab[89]
+#define __pyx_n_u_func __pyx_string_tab[90]
+#define __pyx_n_u_general __pyx_string_tab[91]
+#define __pyx_n_u_getstate __pyx_string_tab[92]
+#define __pyx_n_u_id __pyx_string_tab[93]
+#define __pyx_n_u_import __pyx_string_tab[94]
+#define __pyx_n_u_index __pyx_string_tab[95]
+#define __pyx_n_u_inv __pyx_string_tab[96]
+#define __pyx_n_u_is_coroutine __pyx_string_tab[97]
+#define __pyx_n_u_items __pyx_string_tab[98]
+#define __pyx_n_u_itemsize __pyx_string_tab[99]
+#define __pyx_n_u_keep __pyx_string_tab[100]
+#define __pyx_n_u_lengths __pyx_string_tab[101]
+#define __pyx_n_u_main __pyx_string_tab[102]
+#define __pyx_n_u_max_len __pyx_string_tab[103]
+#define __pyx_n_u_memview __pyx_string_tab[104]
+#define __pyx_n_u_ml __pyx_string_tab[105]
+#define __pyx_n_u_mode __pyx_string_tab[106]
+#define __pyx_n_u_module __pyx_string_tab[107]
+#define __pyx_n_u_multi __pyx_string_tab[108]
+#define __pyx_n_u_n __pyx_string_tab[109]
+#define __pyx_n_u_n_buf __pyx_string_tab[110]
+#define __pyx_n_u_n_strings __pyx_string_tab[111]
+#define __pyx_n_u_name __pyx_string_tab[112]
+#define __pyx_n_u_name_2 __pyx_string_tab[113]
+#define __pyx_n_u_nbytes __pyx_string_tab[114]
+#define __pyx_n_u_ndim __pyx_string_tab[115]
+#define __pyx_n_u_new __pyx_string_tab[116]
+#define __pyx_n_u_obj __pyx_string_tab[117]
+#define __pyx_n_u_off_ptr __pyx_string_tab[118]
+#define __pyx_n_u_offsets __pyx_string_tab[119]
+#define __pyx_n_u_op __pyx_string_tab[120]
+#define __pyx_n_u_out __pyx_string_tab[121]
+#define __pyx_n_u_owns __pyx_string_tab[122]
+#define __pyx_n_u_pack __pyx_string_tab[123]
+#define __pyx_n_u_pop __pyx_string_tab[124]
+#define __pyx_n_u_pyx_checksum __pyx_string_tab[125]
+#define __pyx_n_u_pyx_state __pyx_string_tab[126]
+#define __pyx_n_u_pyx_type __pyx_string_tab[127]
+#define __pyx_n_u_pyx_unpickle_Enum __pyx_string_tab[128]
+#define __pyx_n_u_pyx_vtable __pyx_string_tab[129]
+#define __pyx_n_u_qualname __pyx_string_tab[130]
+#define __pyx_n_u_rc_2 __pyx_string_tab[131]
+#define __pyx_n_u_reduce __pyx_string_tab[132]
+#define __pyx_n_u_reduce_cython __pyx_string_tab[133]
+#define __pyx_n_u_reduce_ex __pyx_string_tab[134]
+#define __pyx_n_u_register __pyx_string_tab[135]
+#define __pyx_n_u_set_name __pyx_string_tab[136]
+#define __pyx_n_u_setdefault __pyx_string_tab[137]
+#define __pyx_n_u_setstate __pyx_string_tab[138]
+#define __pyx_n_u_setstate_cython __pyx_string_tab[139]
+#define __pyx_n_u_shape __pyx_string_tab[140]
+#define __pyx_n_u_single __pyx_string_tab[141]
+#define __pyx_n_u_size __pyx_string_tab[142]
+#define __pyx_n_u_start __pyx_string_tab[143]
+#define __pyx_n_u_step __pyx_string_tab[144]
+#define __pyx_n_u_stop __pyx_string_tab[145]
+#define __pyx_n_u_store_total_bits __pyx_string_tab[146]
+#define __pyx_n_u_struct __pyx_string_tab[147]
+#define __pyx_n_u_swap __pyx_string_tab[148]
+#define __pyx_n_u_swap_bytes __pyx_string_tab[149]
+#define __pyx_n_u_swapped_owned __pyx_string_tab[150]
+#define __pyx_n_u_swapped_view __pyx_string_tab[151]
+#define __pyx_n_u_table __pyx_string_tab[152]
+#define __pyx_n_u_tbl __pyx_string_tab[153]
+#define __pyx_n_u_tblv __pyx_string_tab[154]
+#define __pyx_n_u_test __pyx_string_tab[155]
+#define __pyx_n_u_unpack __pyx_string_tab[156]
+#define __pyx_n_u_update __pyx_string_tab[157]
+#define __pyx_n_u_values __pyx_string_tab[158]
+#define __pyx_n_u_x __pyx_string_tab[159]
+#define __pyx_n_u_xmhuffman __pyx_string_tab[160]
+#define __pyx_kp_b__6 __pyx_string_tab[161]
+#define __pyx_kp_b_iso88591_31_A_Q_A_q_j_m2Q_s_Cq_j_CvQa_fA __pyx_string_tab[162]
+#define __pyx_kp_b_iso88591_6_avQ_r_A_q_81_aq_1D_HA_1 __pyx_string_tab[163]
+#define __pyx_kp_b_iso88591_9_z_Q_A_q_j_m2Q_s_Q_q_s_1_s_A_j __pyx_string_tab[164]
+#define __pyx_kp_b_iso88591_A_s_Cq_j_fA_t3a_q_AT_q_3c_A_DBa __pyx_string_tab[165]
+#define __pyx_kp_b_iso88591_s_Cq_j_1F_81_1AS_Q_1 __pyx_string_tab[166]
+#define __pyx_n_b_O __pyx_string_tab[167]
 #define __pyx_int_0 __pyx_number_tab[0]
 #define __pyx_int_neg_1 __pyx_number_tab[1]
 #define __pyx_int_1 __pyx_number_tab[2]
@@ -3338,7 +3347,7 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   for (int i=0; i<1; ++i) { Py_CLEAR(clear_module_state->__pyx_slice[i]); }
   for (int i=0; i<3; ++i) { Py_CLEAR(clear_module_state->__pyx_tuple[i]); }
   for (int i=0; i<5; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<160; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<168; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
   for (int i=0; i<4; ++i) { Py_CLEAR(clear_module_state->__pyx_number_tab[i]); }
 /* #### Code section: module_state_clear_contents ### */
 /* CommonTypesMetaclass.module_state_clear */
@@ -3374,7 +3383,7 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   for (int i=0; i<1; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_slice[i]); }
   for (int i=0; i<3; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_tuple[i]); }
   for (int i=0; i<5; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<160; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<168; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
   for (int i=0; i<4; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_number_tab[i]); }
 /* #### Code section: module_state_traverse_contents ### */
 /* CommonTypesMetaclass.module_state_traverse */
@@ -16656,7 +16665,139 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":27
+/* "xmhuffman.pyx":30
+ * 
+ * 
+ * cdef int _parse_charset_mode(object mode) except -1:             # <<<<<<<<<<<<<<
+ *     """Map ``'general'``/``'multi'`` and ``'single'`` to internal flags.
+ * 
+*/
+
+static int __pyx_f_9xmhuffman__parse_charset_mode(PyObject *__pyx_v_mode) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  size_t __pyx_t_5;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_parse_charset_mode", 0);
+
+  /* "xmhuffman.pyx":36
+ *     ``XM_HUFFMAN_SINGLECHARSET`` (0xABA91).
+ *     """
+ *     if mode is None or mode == 'general' or mode == 'multi':             # <<<<<<<<<<<<<<
+ *         return _CHARSET_GENERAL
+ *     if mode == 'single':
+*/
+  __pyx_t_2 = (__pyx_v_mode == Py_None);
+  if (!__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L4_bool_binop_done;
+  }
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_mstate_global->__pyx_n_u_general, Py_EQ)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
+  if (!__pyx_t_2) {
+  } else {
+    __pyx_t_1 = __pyx_t_2;
+    goto __pyx_L4_bool_binop_done;
+  }
+  __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_mstate_global->__pyx_n_u_multi, Py_EQ)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_1 = __pyx_t_2;
+  __pyx_L4_bool_binop_done:;
+  if (__pyx_t_1) {
+
+    /* "xmhuffman.pyx":37
+ *     """
+ *     if mode is None or mode == 'general' or mode == 'multi':
+ *         return _CHARSET_GENERAL             # <<<<<<<<<<<<<<
+ *     if mode == 'single':
+ *         return _CHARSET_SINGLE
+*/
+    __pyx_r = 0;
+    goto __pyx_L0;
+
+    /* "xmhuffman.pyx":36
+ *     ``XM_HUFFMAN_SINGLECHARSET`` (0xABA91).
+ *     """
+ *     if mode is None or mode == 'general' or mode == 'multi':             # <<<<<<<<<<<<<<
+ *         return _CHARSET_GENERAL
+ *     if mode == 'single':
+*/
+  }
+
+  /* "xmhuffman.pyx":38
+ *     if mode is None or mode == 'general' or mode == 'multi':
+ *         return _CHARSET_GENERAL
+ *     if mode == 'single':             # <<<<<<<<<<<<<<
+ *         return _CHARSET_SINGLE
+ *     raise ValueError("charset_mode must be 'general' or 'single'")
+*/
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_mode, __pyx_mstate_global->__pyx_n_u_single, Py_EQ)); if (unlikely((__pyx_t_1 < 0))) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (__pyx_t_1) {
+
+    /* "xmhuffman.pyx":39
+ *         return _CHARSET_GENERAL
+ *     if mode == 'single':
+ *         return _CHARSET_SINGLE             # <<<<<<<<<<<<<<
+ *     raise ValueError("charset_mode must be 'general' or 'single'")
+ * 
+*/
+    __pyx_r = 1;
+    goto __pyx_L0;
+
+    /* "xmhuffman.pyx":38
+ *     if mode is None or mode == 'general' or mode == 'multi':
+ *         return _CHARSET_GENERAL
+ *     if mode == 'single':             # <<<<<<<<<<<<<<
+ *         return _CHARSET_SINGLE
+ *     raise ValueError("charset_mode must be 'general' or 'single'")
+*/
+  }
+
+  /* "xmhuffman.pyx":40
+ *     if mode == 'single':
+ *         return _CHARSET_SINGLE
+ *     raise ValueError("charset_mode must be 'general' or 'single'")             # <<<<<<<<<<<<<<
+ * 
+ * 
+*/
+  __pyx_t_4 = NULL;
+  __pyx_t_5 = 1;
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_charset_mode_must_be_general_or};
+    __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+  }
+  __Pyx_Raise(__pyx_t_3, 0, 0, 0);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __PYX_ERR(0, 40, __pyx_L1_error)
+
+  /* "xmhuffman.pyx":30
+ * 
+ * 
+ * cdef int _parse_charset_mode(object mode) except -1:             # <<<<<<<<<<<<<<
+ *     """Map ``'general'``/``'multi'`` and ``'single'`` to internal flags.
+ * 
+*/
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("xmhuffman._parse_charset_mode", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "xmhuffman.pyx":43
  * 
  * 
  * def swap_bytes(buffer):             # <<<<<<<<<<<<<<
@@ -16704,32 +16845,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_buffer,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 27, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 43, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 27, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 43, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "swap_bytes", 0) < (0)) __PYX_ERR(0, 27, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "swap_bytes", 0) < (0)) __PYX_ERR(0, 43, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("swap_bytes", 1, 1, 1, i); __PYX_ERR(0, 27, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("swap_bytes", 1, 1, 1, i); __PYX_ERR(0, 43, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 27, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 43, __pyx_L3_error)
     }
     __pyx_v_buffer = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("swap_bytes", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 27, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("swap_bytes", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 43, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -16767,19 +16908,19 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("swap_bytes", 0);
 
-  /* "xmhuffman.pyx":29
+  /* "xmhuffman.pyx":45
  * def swap_bytes(buffer):
  *     """Pair-swap a bytes-like buffer; trailing odd byte left as-is."""
  *     cdef const unsigned char[::1] inv = buffer             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t n = inv.shape[0]
  *     cdef bytes out = PyBytes_FromStringAndSize(NULL, n)
 */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_buffer, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_buffer, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 45, __pyx_L1_error)
   __pyx_v_inv = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "xmhuffman.pyx":30
+  /* "xmhuffman.pyx":46
  *     """Pair-swap a bytes-like buffer; trailing odd byte left as-is."""
  *     cdef const unsigned char[::1] inv = buffer
  *     cdef Py_ssize_t n = inv.shape[0]             # <<<<<<<<<<<<<<
@@ -16788,19 +16929,19 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
 */
   __pyx_v_n = (__pyx_v_inv.shape[0]);
 
-  /* "xmhuffman.pyx":31
+  /* "xmhuffman.pyx":47
  *     cdef const unsigned char[::1] inv = buffer
  *     cdef Py_ssize_t n = inv.shape[0]
  *     cdef bytes out = PyBytes_FromStringAndSize(NULL, n)             # <<<<<<<<<<<<<<
  *     cdef unsigned char *op
  *     if n == 0:
 */
-  __pyx_t_2 = PyBytes_FromStringAndSize(NULL, __pyx_v_n); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_2 = PyBytes_FromStringAndSize(NULL, __pyx_v_n); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_out = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "xmhuffman.pyx":33
+  /* "xmhuffman.pyx":49
  *     cdef bytes out = PyBytes_FromStringAndSize(NULL, n)
  *     cdef unsigned char *op
  *     if n == 0:             # <<<<<<<<<<<<<<
@@ -16810,7 +16951,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_t_3 = (__pyx_v_n == 0);
   if (__pyx_t_3) {
 
-    /* "xmhuffman.pyx":34
+    /* "xmhuffman.pyx":50
  *     cdef unsigned char *op
  *     if n == 0:
  *         return out             # <<<<<<<<<<<<<<
@@ -16822,7 +16963,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
     __pyx_r = __pyx_v_out;
     goto __pyx_L0;
 
-    /* "xmhuffman.pyx":33
+    /* "xmhuffman.pyx":49
  *     cdef bytes out = PyBytes_FromStringAndSize(NULL, n)
  *     cdef unsigned char *op
  *     if n == 0:             # <<<<<<<<<<<<<<
@@ -16831,7 +16972,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
 */
   }
 
-  /* "xmhuffman.pyx":35
+  /* "xmhuffman.pyx":51
  *     if n == 0:
  *         return out
  *     op = <unsigned char *>(<char *>out)             # <<<<<<<<<<<<<<
@@ -16840,12 +16981,12 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
 */
   if (unlikely(__pyx_v_out == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-    __PYX_ERR(0, 35, __pyx_L1_error)
+    __PYX_ERR(0, 51, __pyx_L1_error)
   }
-  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_v_out); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_v_out); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
   __pyx_v_op = ((unsigned char *)((char *)__pyx_t_4));
 
-  /* "xmhuffman.pyx":36
+  /* "xmhuffman.pyx":52
  *         return out
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -16858,7 +16999,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
       __Pyx_FastGIL_Remember();
       /*try:*/ {
 
-        /* "xmhuffman.pyx":37
+        /* "xmhuffman.pyx":53
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:
  *         xmh_swap_pairs(&inv[0], op, <size_t>n)             # <<<<<<<<<<<<<<
@@ -16869,7 +17010,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
         xmh_swap_pairs((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_inv.data) + __pyx_t_5)) )))), __pyx_v_op, ((size_t)__pyx_v_n));
       }
 
-      /* "xmhuffman.pyx":36
+      /* "xmhuffman.pyx":52
  *         return out
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -16886,7 +17027,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
       }
   }
 
-  /* "xmhuffman.pyx":38
+  /* "xmhuffman.pyx":54
  *     with nogil:
  *         xmh_swap_pairs(&inv[0], op, <size_t>n)
  *     return out             # <<<<<<<<<<<<<<
@@ -16898,7 +17039,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "xmhuffman.pyx":27
+  /* "xmhuffman.pyx":43
  * 
  * 
  * def swap_bytes(buffer):             # <<<<<<<<<<<<<<
@@ -16920,7 +17061,7 @@ static PyObject *__pyx_pf_9xmhuffman_swap_bytes(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":41
+/* "xmhuffman.pyx":57
  * 
  * 
  * def decompress_encode_array(buffer):             # <<<<<<<<<<<<<<
@@ -16968,32 +17109,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_buffer,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 41, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 57, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 41, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 57, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decompress_encode_array", 0) < (0)) __PYX_ERR(0, 41, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decompress_encode_array", 0) < (0)) __PYX_ERR(0, 57, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decompress_encode_array", 1, 1, 1, i); __PYX_ERR(0, 41, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decompress_encode_array", 1, 1, 1, i); __PYX_ERR(0, 57, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 41, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 57, __pyx_L3_error)
     }
     __pyx_v_buffer = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decompress_encode_array", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 41, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("decompress_encode_array", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 57, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17032,19 +17173,19 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("decompress_encode_array", 0);
 
-  /* "xmhuffman.pyx":43
+  /* "xmhuffman.pyx":59
  * def decompress_encode_array(buffer):
  *     """Expand the 128-byte nibble-packed code-length array to 256 bytes."""
  *     cdef const unsigned char[::1] inv = buffer             # <<<<<<<<<<<<<<
  *     cdef bytes out
  *     cdef unsigned char *op
 */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_buffer, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_buffer, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 59, __pyx_L1_error)
   __pyx_v_inv = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "xmhuffman.pyx":46
+  /* "xmhuffman.pyx":62
  *     cdef bytes out
  *     cdef unsigned char *op
  *     if inv.shape[0] != 128:             # <<<<<<<<<<<<<<
@@ -17054,7 +17195,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
   __pyx_t_2 = ((__pyx_v_inv.shape[0]) != 0x80);
   if (unlikely(__pyx_t_2)) {
 
-    /* "xmhuffman.pyx":47
+    /* "xmhuffman.pyx":63
  *     cdef unsigned char *op
  *     if inv.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")             # <<<<<<<<<<<<<<
@@ -17067,14 +17208,14 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
       PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_encode_array_must_be_exactly_128};
       __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 47, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 47, __pyx_L1_error)
+    __PYX_ERR(0, 63, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":46
+    /* "xmhuffman.pyx":62
  *     cdef bytes out
  *     cdef unsigned char *op
  *     if inv.shape[0] != 128:             # <<<<<<<<<<<<<<
@@ -17083,19 +17224,19 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
 */
   }
 
-  /* "xmhuffman.pyx":48
+  /* "xmhuffman.pyx":64
  *     if inv.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     out = PyBytes_FromStringAndSize(NULL, 256)             # <<<<<<<<<<<<<<
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:
 */
-  __pyx_t_3 = PyBytes_FromStringAndSize(NULL, 0x100); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_3 = PyBytes_FromStringAndSize(NULL, 0x100); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_out = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "xmhuffman.pyx":49
+  /* "xmhuffman.pyx":65
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     out = PyBytes_FromStringAndSize(NULL, 256)
  *     op = <unsigned char *>(<char *>out)             # <<<<<<<<<<<<<<
@@ -17104,12 +17245,12 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
 */
   if (unlikely(__pyx_v_out == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
-    __PYX_ERR(0, 49, __pyx_L1_error)
+    __PYX_ERR(0, 65, __pyx_L1_error)
   }
-  __pyx_t_6 = __Pyx_PyBytes_AsWritableString(__pyx_v_out); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyBytes_AsWritableString(__pyx_v_out); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L1_error)
   __pyx_v_op = ((unsigned char *)((char *)__pyx_t_6));
 
-  /* "xmhuffman.pyx":50
+  /* "xmhuffman.pyx":66
  *     out = PyBytes_FromStringAndSize(NULL, 256)
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -17122,7 +17263,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
       __Pyx_FastGIL_Remember();
       /*try:*/ {
 
-        /* "xmhuffman.pyx":51
+        /* "xmhuffman.pyx":67
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:
  *         xmh_decompress_encode_array(&inv[0], op)             # <<<<<<<<<<<<<<
@@ -17133,7 +17274,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
         xmh_decompress_encode_array((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_inv.data) + __pyx_t_7)) )))), __pyx_v_op);
       }
 
-      /* "xmhuffman.pyx":50
+      /* "xmhuffman.pyx":66
  *     out = PyBytes_FromStringAndSize(NULL, 256)
  *     op = <unsigned char *>(<char *>out)
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -17150,7 +17291,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
       }
   }
 
-  /* "xmhuffman.pyx":52
+  /* "xmhuffman.pyx":68
  *     with nogil:
  *         xmh_decompress_encode_array(&inv[0], op)
  *     return out             # <<<<<<<<<<<<<<
@@ -17162,7 +17303,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "xmhuffman.pyx":41
+  /* "xmhuffman.pyx":57
  * 
  * 
  * def decompress_encode_array(buffer):             # <<<<<<<<<<<<<<
@@ -17185,7 +17326,7 @@ static PyObject *__pyx_pf_9xmhuffman_2decompress_encode_array(CYTHON_UNUSED PyOb
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":55
+/* "xmhuffman.pyx":71
  * 
  * 
  * def build_table(encode_array_128):             # <<<<<<<<<<<<<<
@@ -17233,32 +17374,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_encode_array_128,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 55, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 71, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 55, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 71, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "build_table", 0) < (0)) __PYX_ERR(0, 55, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "build_table", 0) < (0)) __PYX_ERR(0, 71, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("build_table", 1, 1, 1, i); __PYX_ERR(0, 55, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("build_table", 1, 1, 1, i); __PYX_ERR(0, 71, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 55, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 71, __pyx_L3_error)
     }
     __pyx_v_encode_array_128 = values[0];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("build_table", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 55, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("build_table", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 71, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17311,19 +17452,19 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("build_table", 0);
 
-  /* "xmhuffman.pyx":62
+  /* "xmhuffman.pyx":78
  *     ``(symbol << 8) | code_len``.
  *     """
  *     cdef const unsigned char[::1] inv = encode_array_128             # <<<<<<<<<<<<<<
  *     cdef uint8_t lengths[256]
  *     cdef uint16_t *tbl
 */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_encode_array_128, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_encode_array_128, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 78, __pyx_L1_error)
   __pyx_v_inv = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "xmhuffman.pyx":65
+  /* "xmhuffman.pyx":81
  *     cdef uint8_t lengths[256]
  *     cdef uint16_t *tbl
  *     cdef unsigned max_len = 0             # <<<<<<<<<<<<<<
@@ -17332,7 +17473,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_max_len = 0;
 
-  /* "xmhuffman.pyx":70
+  /* "xmhuffman.pyx":86
  *     cdef bytes out
  * 
  *     if inv.shape[0] != 128:             # <<<<<<<<<<<<<<
@@ -17342,7 +17483,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_2 = ((__pyx_v_inv.shape[0]) != 0x80);
   if (unlikely(__pyx_t_2)) {
 
-    /* "xmhuffman.pyx":71
+    /* "xmhuffman.pyx":87
  * 
  *     if inv.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")             # <<<<<<<<<<<<<<
@@ -17355,14 +17496,14 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
       PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_encode_array_must_be_exactly_128};
       __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 71, __pyx_L1_error)
+    __PYX_ERR(0, 87, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":70
+    /* "xmhuffman.pyx":86
  *     cdef bytes out
  * 
  *     if inv.shape[0] != 128:             # <<<<<<<<<<<<<<
@@ -17371,7 +17512,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
   }
 
-  /* "xmhuffman.pyx":72
+  /* "xmhuffman.pyx":88
  *     if inv.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))             # <<<<<<<<<<<<<<
@@ -17380,7 +17521,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_tbl = ((uint16_t *)malloc((0x8000 * (sizeof(uint16_t)))));
 
-  /* "xmhuffman.pyx":73
+  /* "xmhuffman.pyx":89
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:             # <<<<<<<<<<<<<<
@@ -17390,16 +17531,16 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_2 = (__pyx_v_tbl == NULL);
   if (unlikely(__pyx_t_2)) {
 
-    /* "xmhuffman.pyx":74
+    /* "xmhuffman.pyx":90
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:
  *         raise MemoryError()             # <<<<<<<<<<<<<<
  *     try:
  *         with nogil:
 */
-    PyErr_NoMemory(); __PYX_ERR(0, 74, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 90, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":73
+    /* "xmhuffman.pyx":89
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:             # <<<<<<<<<<<<<<
@@ -17408,7 +17549,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
   }
 
-  /* "xmhuffman.pyx":75
+  /* "xmhuffman.pyx":91
  *     if tbl is NULL:
  *         raise MemoryError()
  *     try:             # <<<<<<<<<<<<<<
@@ -17417,7 +17558,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
   /*try:*/ {
 
-    /* "xmhuffman.pyx":76
+    /* "xmhuffman.pyx":92
  *         raise MemoryError()
  *     try:
  *         with nogil:             # <<<<<<<<<<<<<<
@@ -17430,7 +17571,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
         __Pyx_FastGIL_Remember();
         /*try:*/ {
 
-          /* "xmhuffman.pyx":77
+          /* "xmhuffman.pyx":93
  *     try:
  *         with nogil:
  *             xmh_decompress_encode_array(&inv[0], lengths)             # <<<<<<<<<<<<<<
@@ -17440,7 +17581,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
           __pyx_t_6 = 0;
           xmh_decompress_encode_array((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_inv.data) + __pyx_t_6)) )))), __pyx_v_lengths);
 
-          /* "xmhuffman.pyx":78
+          /* "xmhuffman.pyx":94
  *         with nogil:
  *             xmh_decompress_encode_array(&inv[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)             # <<<<<<<<<<<<<<
@@ -17450,7 +17591,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
           __pyx_v_rc = xmh_build_table(__pyx_v_lengths, __pyx_v_tbl, (&__pyx_v_max_len));
         }
 
-        /* "xmhuffman.pyx":76
+        /* "xmhuffman.pyx":92
  *         raise MemoryError()
  *     try:
  *         with nogil:             # <<<<<<<<<<<<<<
@@ -17467,7 +17608,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
         }
     }
 
-    /* "xmhuffman.pyx":79
+    /* "xmhuffman.pyx":95
  *             xmh_decompress_encode_array(&inv[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:             # <<<<<<<<<<<<<<
@@ -17477,7 +17618,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
     __pyx_t_2 = (__pyx_v_rc != 0);
     if (unlikely(__pyx_t_2)) {
 
-      /* "xmhuffman.pyx":80
+      /* "xmhuffman.pyx":96
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)             # <<<<<<<<<<<<<<
@@ -17485,9 +17626,9 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
  *             return b"", 0
 */
       __pyx_t_4 = NULL;
-      __pyx_t_7 = __Pyx_PyLong_From_int(__pyx_v_rc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 80, __pyx_L6_error)
+      __pyx_t_7 = __Pyx_PyLong_From_int(__pyx_v_rc); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 96, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_invalid_Huffman_code_lengths_rc, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 80, __pyx_L6_error)
+      __pyx_t_8 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_invalid_Huffman_code_lengths_rc, __pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 96, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_5 = 1;
@@ -17496,14 +17637,14 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
         __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 80, __pyx_L6_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L6_error)
         __Pyx_GOTREF(__pyx_t_3);
       }
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 80, __pyx_L6_error)
+      __PYX_ERR(0, 96, __pyx_L6_error)
 
-      /* "xmhuffman.pyx":79
+      /* "xmhuffman.pyx":95
  *             xmh_decompress_encode_array(&inv[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:             # <<<<<<<<<<<<<<
@@ -17512,7 +17653,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
     }
 
-    /* "xmhuffman.pyx":81
+    /* "xmhuffman.pyx":97
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:             # <<<<<<<<<<<<<<
@@ -17522,7 +17663,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
     __pyx_t_2 = (__pyx_v_max_len == 0);
     if (__pyx_t_2) {
 
-      /* "xmhuffman.pyx":82
+      /* "xmhuffman.pyx":98
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:
  *             return b"", 0             # <<<<<<<<<<<<<<
@@ -17534,7 +17675,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
       __pyx_r = __pyx_mstate_global->__pyx_tuple[1];
       goto __pyx_L5_return;
 
-      /* "xmhuffman.pyx":81
+      /* "xmhuffman.pyx":97
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:             # <<<<<<<<<<<<<<
@@ -17543,7 +17684,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
     }
 
-    /* "xmhuffman.pyx":83
+    /* "xmhuffman.pyx":99
  *         if max_len == 0:
  *             return b"", 0
  *         nbytes = (1 << max_len) * sizeof(uint16_t)             # <<<<<<<<<<<<<<
@@ -17552,19 +17693,19 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
     __pyx_v_nbytes = ((1 << __pyx_v_max_len) * (sizeof(uint16_t)));
 
-    /* "xmhuffman.pyx":84
+    /* "xmhuffman.pyx":100
  *             return b"", 0
  *         nbytes = (1 << max_len) * sizeof(uint16_t)
  *         out = PyBytes_FromStringAndSize(<char *>tbl, nbytes)             # <<<<<<<<<<<<<<
  *         return out, int(max_len)
  *     finally:
 */
-    __pyx_t_3 = PyBytes_FromStringAndSize(((char *)__pyx_v_tbl), __pyx_v_nbytes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L6_error)
+    __pyx_t_3 = PyBytes_FromStringAndSize(((char *)__pyx_v_tbl), __pyx_v_nbytes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L6_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_v_out = ((PyObject*)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "xmhuffman.pyx":85
+    /* "xmhuffman.pyx":101
  *         nbytes = (1 << max_len) * sizeof(uint16_t)
  *         out = PyBytes_FromStringAndSize(<char *>tbl, nbytes)
  *         return out, int(max_len)             # <<<<<<<<<<<<<<
@@ -17573,7 +17714,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
 */
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_8 = NULL;
-    __pyx_t_4 = __Pyx_PyLong_From_unsigned_int(__pyx_v_max_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L6_error)
+    __pyx_t_4 = __Pyx_PyLong_From_unsigned_int(__pyx_v_max_len); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 101, __pyx_L6_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = 1;
     {
@@ -17581,23 +17722,23 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
       __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(&PyLong_Type), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L6_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 101, __pyx_L6_error)
       __Pyx_GOTREF(__pyx_t_3);
     }
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L6_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 101, __pyx_L6_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_v_out);
     __Pyx_GIVEREF(__pyx_v_out);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_out) != (0)) __PYX_ERR(0, 85, __pyx_L6_error);
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_out) != (0)) __PYX_ERR(0, 101, __pyx_L6_error);
     __Pyx_GIVEREF(__pyx_t_3);
-    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3) != (0)) __PYX_ERR(0, 85, __pyx_L6_error);
+    if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3) != (0)) __PYX_ERR(0, 101, __pyx_L6_error);
     __pyx_t_3 = 0;
     __pyx_r = __pyx_t_4;
     __pyx_t_4 = 0;
     goto __pyx_L5_return;
   }
 
-  /* "xmhuffman.pyx":87
+  /* "xmhuffman.pyx":103
  *         return out, int(max_len)
  *     finally:
  *         free(tbl)             # <<<<<<<<<<<<<<
@@ -17650,7 +17791,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
     }
   }
 
-  /* "xmhuffman.pyx":55
+  /* "xmhuffman.pyx":71
  * 
  * 
  * def build_table(encode_array_128):             # <<<<<<<<<<<<<<
@@ -17675,7 +17816,7 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":90
+/* "xmhuffman.pyx":106
  * 
  * 
  * cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,             # <<<<<<<<<<<<<<
@@ -17683,11 +17824,12 @@ static PyObject *__pyx_pf_9xmhuffman_4build_table(CYTHON_UNUSED PyObject *__pyx_
  *                        const uint32_t *offsets, Py_ssize_t n_strings,
 */
 
-static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped, size_t __pyx_v_swapped_len, uint16_t const *__pyx_v_table, unsigned int __pyx_v_max_len, uint32_t const *__pyx_v_offsets, Py_ssize_t __pyx_v_n_strings, uint64_t __pyx_v_total_bits) {
+static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped, size_t __pyx_v_swapped_len, uint16_t const *__pyx_v_table, unsigned int __pyx_v_max_len, uint32_t const *__pyx_v_offsets, Py_ssize_t __pyx_v_n_strings, uint64_t __pyx_v_total_bits, int __pyx_v_charset_mode, uint8_t __pyx_v_charset_byte) {
   PyObject *__pyx_v_result = 0;
   uint64_t __pyx_v_span_bits;
   uint64_t __pyx_v_max_span;
   Py_ssize_t __pyx_v_i;
+  Py_ssize_t __pyx_v_k;
   uint64_t __pyx_v_end_i;
   uint64_t __pyx_v_start_bit;
   uint64_t __pyx_v_end_bit;
@@ -17695,6 +17837,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   uint8_t *__pyx_v_scratch;
   Py_ssize_t __pyx_v_nwritten;
   PyObject *__pyx_v_item = 0;
+  unsigned char *__pyx_v_item_buf;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17709,43 +17852,47 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11[5];
   PyObject *__pyx_t_12 = NULL;
-  int __pyx_t_13;
-  int __pyx_t_14;
-  char const *__pyx_t_15;
-  PyObject *__pyx_t_16 = NULL;
-  PyObject *__pyx_t_17 = NULL;
-  PyObject *__pyx_t_18 = NULL;
-  PyObject *__pyx_t_19 = NULL;
+  char *__pyx_t_13;
+  Py_ssize_t __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  int __pyx_t_17;
+  int __pyx_t_18;
+  char const *__pyx_t_19;
   PyObject *__pyx_t_20 = NULL;
   PyObject *__pyx_t_21 = NULL;
+  PyObject *__pyx_t_22 = NULL;
+  PyObject *__pyx_t_23 = NULL;
+  PyObject *__pyx_t_24 = NULL;
+  PyObject *__pyx_t_25 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_decode_loop", 0);
 
-  /* "xmhuffman.pyx":95
- *                        uint64_t total_bits):
- *     """Decode all strings on a page into a list[bytes]. GIL held."""
+  /* "xmhuffman.pyx":118
+ *     so the caller can ``b.decode('utf-16-le')`` directly.
+ *     """
  *     cdef list result = PyList_New(n_strings)             # <<<<<<<<<<<<<<
  *     cdef uint64_t span_bits, max_span = 0
- *     cdef Py_ssize_t i
+ *     cdef Py_ssize_t i, k
 */
-  __pyx_t_1 = PyList_New(__pyx_v_n_strings); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(__pyx_v_n_strings); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_result = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "xmhuffman.pyx":96
- *     """Decode all strings on a page into a list[bytes]. GIL held."""
+  /* "xmhuffman.pyx":119
+ *     """
  *     cdef list result = PyList_New(n_strings)
  *     cdef uint64_t span_bits, max_span = 0             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t i
+ *     cdef Py_ssize_t i, k
  *     cdef uint64_t end_i, start_bit, end_bit
 */
   __pyx_v_max_span = 0;
 
-  /* "xmhuffman.pyx":104
- *     cdef bytes item
+  /* "xmhuffman.pyx":128
+ *     cdef unsigned char *item_buf
  * 
  *     if n_strings == 0:             # <<<<<<<<<<<<<<
  *         return result
@@ -17754,7 +17901,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   __pyx_t_2 = (__pyx_v_n_strings == 0);
   if (__pyx_t_2) {
 
-    /* "xmhuffman.pyx":105
+    /* "xmhuffman.pyx":129
  * 
  *     if n_strings == 0:
  *         return result             # <<<<<<<<<<<<<<
@@ -17766,8 +17913,8 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     __pyx_r = __pyx_v_result;
     goto __pyx_L0;
 
-    /* "xmhuffman.pyx":104
- *     cdef bytes item
+    /* "xmhuffman.pyx":128
+ *     cdef unsigned char *item_buf
  * 
  *     if n_strings == 0:             # <<<<<<<<<<<<<<
  *         return result
@@ -17775,7 +17922,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
   }
 
-  /* "xmhuffman.pyx":107
+  /* "xmhuffman.pyx":131
  *         return result
  * 
  *     for i in range(n_strings):             # <<<<<<<<<<<<<<
@@ -17787,7 +17934,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_i = __pyx_t_5;
 
-    /* "xmhuffman.pyx":108
+    /* "xmhuffman.pyx":132
  * 
  *     for i in range(n_strings):
  *         end_i = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]             # <<<<<<<<<<<<<<
@@ -17802,7 +17949,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     }
     __pyx_v_end_i = __pyx_t_6;
 
-    /* "xmhuffman.pyx":109
+    /* "xmhuffman.pyx":133
  *     for i in range(n_strings):
  *         end_i = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
  *         if end_i > <uint64_t>offsets[i]:             # <<<<<<<<<<<<<<
@@ -17812,7 +17959,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     __pyx_t_2 = (__pyx_v_end_i > ((uint64_t)(__pyx_v_offsets[__pyx_v_i])));
     if (__pyx_t_2) {
 
-      /* "xmhuffman.pyx":110
+      /* "xmhuffman.pyx":134
  *         end_i = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
  *         if end_i > <uint64_t>offsets[i]:
  *             span_bits = end_i - <uint64_t>offsets[i]             # <<<<<<<<<<<<<<
@@ -17821,7 +17968,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
       __pyx_v_span_bits = (__pyx_v_end_i - ((uint64_t)(__pyx_v_offsets[__pyx_v_i])));
 
-      /* "xmhuffman.pyx":111
+      /* "xmhuffman.pyx":135
  *         if end_i > <uint64_t>offsets[i]:
  *             span_bits = end_i - <uint64_t>offsets[i]
  *             if span_bits > max_span:             # <<<<<<<<<<<<<<
@@ -17831,7 +17978,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
       __pyx_t_2 = (__pyx_v_span_bits > __pyx_v_max_span);
       if (__pyx_t_2) {
 
-        /* "xmhuffman.pyx":112
+        /* "xmhuffman.pyx":136
  *             span_bits = end_i - <uint64_t>offsets[i]
  *             if span_bits > max_span:
  *                 max_span = span_bits             # <<<<<<<<<<<<<<
@@ -17840,7 +17987,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
         __pyx_v_max_span = __pyx_v_span_bits;
 
-        /* "xmhuffman.pyx":111
+        /* "xmhuffman.pyx":135
  *         if end_i > <uint64_t>offsets[i]:
  *             span_bits = end_i - <uint64_t>offsets[i]
  *             if span_bits > max_span:             # <<<<<<<<<<<<<<
@@ -17849,7 +17996,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
       }
 
-      /* "xmhuffman.pyx":109
+      /* "xmhuffman.pyx":133
  *     for i in range(n_strings):
  *         end_i = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
  *         if end_i > <uint64_t>offsets[i]:             # <<<<<<<<<<<<<<
@@ -17859,7 +18006,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     }
   }
 
-  /* "xmhuffman.pyx":114
+  /* "xmhuffman.pyx":138
  *                 max_span = span_bits
  * 
  *     scratch_cap = <size_t>max_span if max_span > 0 else 1             # <<<<<<<<<<<<<<
@@ -17874,7 +18021,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   }
   __pyx_v_scratch_cap = __pyx_t_7;
 
-  /* "xmhuffman.pyx":115
+  /* "xmhuffman.pyx":139
  * 
  *     scratch_cap = <size_t>max_span if max_span > 0 else 1
  *     scratch = <uint8_t *>malloc(scratch_cap)             # <<<<<<<<<<<<<<
@@ -17883,7 +18030,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
   __pyx_v_scratch = ((uint8_t *)malloc(__pyx_v_scratch_cap));
 
-  /* "xmhuffman.pyx":116
+  /* "xmhuffman.pyx":140
  *     scratch_cap = <size_t>max_span if max_span > 0 else 1
  *     scratch = <uint8_t *>malloc(scratch_cap)
  *     if scratch is NULL:             # <<<<<<<<<<<<<<
@@ -17893,16 +18040,16 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   __pyx_t_2 = (__pyx_v_scratch == NULL);
   if (unlikely(__pyx_t_2)) {
 
-    /* "xmhuffman.pyx":117
+    /* "xmhuffman.pyx":141
  *     scratch = <uint8_t *>malloc(scratch_cap)
  *     if scratch is NULL:
  *         raise MemoryError()             # <<<<<<<<<<<<<<
  * 
  *     try:
 */
-    PyErr_NoMemory(); __PYX_ERR(0, 117, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 141, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":116
+    /* "xmhuffman.pyx":140
  *     scratch_cap = <size_t>max_span if max_span > 0 else 1
  *     scratch = <uint8_t *>malloc(scratch_cap)
  *     if scratch is NULL:             # <<<<<<<<<<<<<<
@@ -17911,7 +18058,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
   }
 
-  /* "xmhuffman.pyx":119
+  /* "xmhuffman.pyx":143
  *         raise MemoryError()
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -17920,45 +18067,53 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
   /*try:*/ {
 
-    /* "xmhuffman.pyx":120
+    /* "xmhuffman.pyx":144
  * 
  *     try:
  *         for i in range(n_strings):             # <<<<<<<<<<<<<<
  *             start_bit = <uint64_t>offsets[i]
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
+ *             end_bit = total_bits if i + 1 == n_strings \
 */
     __pyx_t_3 = __pyx_v_n_strings;
     __pyx_t_4 = __pyx_t_3;
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_i = __pyx_t_5;
 
-      /* "xmhuffman.pyx":121
+      /* "xmhuffman.pyx":145
  *     try:
  *         for i in range(n_strings):
  *             start_bit = <uint64_t>offsets[i]             # <<<<<<<<<<<<<<
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
- *             with nogil:
+ *             end_bit = total_bits if i + 1 == n_strings \
+ *                 else <uint64_t>offsets[i + 1]
 */
       __pyx_v_start_bit = ((uint64_t)(__pyx_v_offsets[__pyx_v_i]));
 
-      /* "xmhuffman.pyx":122
+      /* "xmhuffman.pyx":146
  *         for i in range(n_strings):
  *             start_bit = <uint64_t>offsets[i]
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]             # <<<<<<<<<<<<<<
+ *             end_bit = total_bits if i + 1 == n_strings \             # <<<<<<<<<<<<<<
+ *                 else <uint64_t>offsets[i + 1]
  *             with nogil:
- *                 nwritten = xmh_decode_one(swapped, swapped_len,
 */
       __pyx_t_2 = ((__pyx_v_i + 1) == __pyx_v_n_strings);
       if (__pyx_t_2) {
         __pyx_t_6 = __pyx_v_total_bits;
       } else {
+
+        /* "xmhuffman.pyx":147
+ *             start_bit = <uint64_t>offsets[i]
+ *             end_bit = total_bits if i + 1 == n_strings \
+ *                 else <uint64_t>offsets[i + 1]             # <<<<<<<<<<<<<<
+ *             with nogil:
+ *                 nwritten = xmh_decode_one(swapped, swapped_len,
+*/
         __pyx_t_6 = ((uint64_t)(__pyx_v_offsets[(__pyx_v_i + 1)]));
       }
       __pyx_v_end_bit = __pyx_t_6;
 
-      /* "xmhuffman.pyx":123
- *             start_bit = <uint64_t>offsets[i]
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
+      /* "xmhuffman.pyx":148
+ *             end_bit = total_bits if i + 1 == n_strings \
+ *                 else <uint64_t>offsets[i + 1]
  *             with nogil:             # <<<<<<<<<<<<<<
  *                 nwritten = xmh_decode_one(swapped, swapped_len,
  *                                           table, max_len,
@@ -17969,8 +18124,8 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
           __Pyx_FastGIL_Remember();
           /*try:*/ {
 
-            /* "xmhuffman.pyx":124
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
+            /* "xmhuffman.pyx":149
+ *                 else <uint64_t>offsets[i + 1]
  *             with nogil:
  *                 nwritten = xmh_decode_one(swapped, swapped_len,             # <<<<<<<<<<<<<<
  *                                           table, max_len,
@@ -17979,9 +18134,9 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
             __pyx_v_nwritten = xmh_decode_one(__pyx_v_swapped, __pyx_v_swapped_len, __pyx_v_table, __pyx_v_max_len, __pyx_v_start_bit, __pyx_v_end_bit, __pyx_v_scratch, __pyx_v_scratch_cap);
           }
 
-          /* "xmhuffman.pyx":123
- *             start_bit = <uint64_t>offsets[i]
- *             end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
+          /* "xmhuffman.pyx":148
+ *             end_bit = total_bits if i + 1 == n_strings \
+ *                 else <uint64_t>offsets[i + 1]
  *             with nogil:             # <<<<<<<<<<<<<<
  *                 nwritten = xmh_decode_one(swapped, swapped_len,
  *                                           table, max_len,
@@ -17996,7 +18151,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
           }
       }
 
-      /* "xmhuffman.pyx":128
+      /* "xmhuffman.pyx":153
  *                                           start_bit, end_bit,
  *                                           scratch, scratch_cap)
  *             if nwritten < 0:             # <<<<<<<<<<<<<<
@@ -18006,25 +18161,25 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
       __pyx_t_2 = (__pyx_v_nwritten < 0);
       if (unlikely(__pyx_t_2)) {
 
-        /* "xmhuffman.pyx":129
+        /* "xmhuffman.pyx":154
  *                                           scratch, scratch_cap)
  *             if nwritten < 0:
  *                 raise ValueError("decode failure on string %d (rc=%d)"             # <<<<<<<<<<<<<<
  *                                  % (i, nwritten))
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+ * 
 */
         __pyx_t_8 = NULL;
 
-        /* "xmhuffman.pyx":130
+        /* "xmhuffman.pyx":155
  *             if nwritten < 0:
  *                 raise ValueError("decode failure on string %d (rc=%d)"
  *                                  % (i, nwritten))             # <<<<<<<<<<<<<<
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
- *             Py_INCREF(item)
+ * 
+ *             if charset_mode == _CHARSET_SINGLE:
 */
-        __pyx_t_9 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_i, 0, ' ', 'd'); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 130, __pyx_L10_error)
+        __pyx_t_9 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_i, 0, ' ', 'd'); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 155, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_10 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_nwritten, 0, ' ', 'd'); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 130, __pyx_L10_error)
+        __pyx_t_10 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_nwritten, 0, ' ', 'd'); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 155, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_10);
         __pyx_t_11[0] = __pyx_mstate_global->__pyx_kp_u_decode_failure_on_string;
         __pyx_t_11[1] = __pyx_t_9;
@@ -18032,15 +18187,15 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
         __pyx_t_11[3] = __pyx_t_10;
         __pyx_t_11[4] = __pyx_mstate_global->__pyx_kp_u__5;
 
-        /* "xmhuffman.pyx":129
+        /* "xmhuffman.pyx":154
  *                                           scratch, scratch_cap)
  *             if nwritten < 0:
  *                 raise ValueError("decode failure on string %d (rc=%d)"             # <<<<<<<<<<<<<<
  *                                  % (i, nwritten))
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+ * 
 */
         __pyx_t_12 = __Pyx_PyUnicode_Join(__pyx_t_11, 5, 25 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_9) + 5 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 1, 127);
-        if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 129, __pyx_L10_error)
+        if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 154, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -18050,14 +18205,14 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
           __pyx_t_1 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
           __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L10_error)
+          if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L10_error)
           __Pyx_GOTREF(__pyx_t_1);
         }
         __Pyx_Raise(__pyx_t_1, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __PYX_ERR(0, 129, __pyx_L10_error)
+        __PYX_ERR(0, 154, __pyx_L10_error)
 
-        /* "xmhuffman.pyx":128
+        /* "xmhuffman.pyx":153
  *                                           start_bit, end_bit,
  *                                           scratch, scratch_cap)
  *             if nwritten < 0:             # <<<<<<<<<<<<<<
@@ -18066,29 +18221,109 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
 */
       }
 
-      /* "xmhuffman.pyx":131
- *                 raise ValueError("decode failure on string %d (rc=%d)"
+      /* "xmhuffman.pyx":157
  *                                  % (i, nwritten))
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)             # <<<<<<<<<<<<<<
- *             Py_INCREF(item)
- *             PyList_SET_ITEM(result, i, item)
+ * 
+ *             if charset_mode == _CHARSET_SINGLE:             # <<<<<<<<<<<<<<
+ *                 item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
+ *                 item_buf = <unsigned char *>(<char *>item)
 */
-      __pyx_t_1 = PyBytes_FromStringAndSize(((char *)__pyx_v_scratch), __pyx_v_nwritten); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L10_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_XDECREF_SET(__pyx_v_item, ((PyObject*)__pyx_t_1));
-      __pyx_t_1 = 0;
+      __pyx_t_2 = (__pyx_v_charset_mode == 1);
+      if (__pyx_t_2) {
 
-      /* "xmhuffman.pyx":132
+        /* "xmhuffman.pyx":158
+ * 
+ *             if charset_mode == _CHARSET_SINGLE:
+ *                 item = PyBytes_FromStringAndSize(NULL, nwritten * 2)             # <<<<<<<<<<<<<<
+ *                 item_buf = <unsigned char *>(<char *>item)
+ *                 for k in range(nwritten):
+*/
+        __pyx_t_1 = PyBytes_FromStringAndSize(NULL, (__pyx_v_nwritten * 2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L10_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_XDECREF_SET(__pyx_v_item, ((PyObject*)__pyx_t_1));
+        __pyx_t_1 = 0;
+
+        /* "xmhuffman.pyx":159
+ *             if charset_mode == _CHARSET_SINGLE:
+ *                 item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
+ *                 item_buf = <unsigned char *>(<char *>item)             # <<<<<<<<<<<<<<
+ *                 for k in range(nwritten):
+ *                     item_buf[2 * k] = scratch[k]
+*/
+        if (unlikely(__pyx_v_item == Py_None)) {
+          PyErr_SetString(PyExc_TypeError, "expected bytes, NoneType found");
+          __PYX_ERR(0, 159, __pyx_L10_error)
+        }
+        __pyx_t_13 = __Pyx_PyBytes_AsWritableString(__pyx_v_item); if (unlikely((!__pyx_t_13) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L10_error)
+        __pyx_v_item_buf = ((unsigned char *)((char *)__pyx_t_13));
+
+        /* "xmhuffman.pyx":160
+ *                 item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
+ *                 item_buf = <unsigned char *>(<char *>item)
+ *                 for k in range(nwritten):             # <<<<<<<<<<<<<<
+ *                     item_buf[2 * k] = scratch[k]
+ *                     item_buf[2 * k + 1] = charset_byte
+*/
+        __pyx_t_14 = __pyx_v_nwritten;
+        __pyx_t_15 = __pyx_t_14;
+        for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
+          __pyx_v_k = __pyx_t_16;
+
+          /* "xmhuffman.pyx":161
+ *                 item_buf = <unsigned char *>(<char *>item)
+ *                 for k in range(nwritten):
+ *                     item_buf[2 * k] = scratch[k]             # <<<<<<<<<<<<<<
+ *                     item_buf[2 * k + 1] = charset_byte
+ *             else:
+*/
+          (__pyx_v_item_buf[(2 * __pyx_v_k)]) = (__pyx_v_scratch[__pyx_v_k]);
+
+          /* "xmhuffman.pyx":162
+ *                 for k in range(nwritten):
+ *                     item_buf[2 * k] = scratch[k]
+ *                     item_buf[2 * k + 1] = charset_byte             # <<<<<<<<<<<<<<
+ *             else:
+ *                 item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+*/
+          (__pyx_v_item_buf[((2 * __pyx_v_k) + 1)]) = __pyx_v_charset_byte;
+        }
+
+        /* "xmhuffman.pyx":157
  *                                  % (i, nwritten))
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+ * 
+ *             if charset_mode == _CHARSET_SINGLE:             # <<<<<<<<<<<<<<
+ *                 item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
+ *                 item_buf = <unsigned char *>(<char *>item)
+*/
+        goto __pyx_L20;
+      }
+
+      /* "xmhuffman.pyx":164
+ *                     item_buf[2 * k + 1] = charset_byte
+ *             else:
+ *                 item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)             # <<<<<<<<<<<<<<
+ * 
+ *             Py_INCREF(item)
+*/
+      /*else*/ {
+        __pyx_t_1 = PyBytes_FromStringAndSize(((char *)__pyx_v_scratch), __pyx_v_nwritten); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 164, __pyx_L10_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_XDECREF_SET(__pyx_v_item, ((PyObject*)__pyx_t_1));
+        __pyx_t_1 = 0;
+      }
+      __pyx_L20:;
+
+      /* "xmhuffman.pyx":166
+ *                 item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+ * 
  *             Py_INCREF(item)             # <<<<<<<<<<<<<<
  *             PyList_SET_ITEM(result, i, item)
  *     finally:
 */
       Py_INCREF(__pyx_v_item);
 
-      /* "xmhuffman.pyx":133
- *             item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+      /* "xmhuffman.pyx":167
+ * 
  *             Py_INCREF(item)
  *             PyList_SET_ITEM(result, i, item)             # <<<<<<<<<<<<<<
  *     finally:
@@ -18098,7 +18333,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     }
   }
 
-  /* "xmhuffman.pyx":135
+  /* "xmhuffman.pyx":169
  *             PyList_SET_ITEM(result, i, item)
  *     finally:
  *         free(scratch)             # <<<<<<<<<<<<<<
@@ -18114,40 +18349,40 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
     /*exception exit:*/{
       __Pyx_PyThreadState_declare
       __Pyx_PyThreadState_assign
-      __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+      __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0; __pyx_t_25 = 0;
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-       __Pyx_ExceptionSwap(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
-      if ( unlikely(__Pyx_GetException(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18) < 0)) __Pyx_ErrFetch(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
-      __Pyx_XGOTREF(__pyx_t_16);
-      __Pyx_XGOTREF(__pyx_t_17);
-      __Pyx_XGOTREF(__pyx_t_18);
-      __Pyx_XGOTREF(__pyx_t_19);
+       __Pyx_ExceptionSwap(&__pyx_t_23, &__pyx_t_24, &__pyx_t_25);
+      if ( unlikely(__Pyx_GetException(&__pyx_t_20, &__pyx_t_21, &__pyx_t_22) < 0)) __Pyx_ErrFetch(&__pyx_t_20, &__pyx_t_21, &__pyx_t_22);
       __Pyx_XGOTREF(__pyx_t_20);
       __Pyx_XGOTREF(__pyx_t_21);
-      __pyx_t_13 = __pyx_lineno; __pyx_t_14 = __pyx_clineno; __pyx_t_15 = __pyx_filename;
+      __Pyx_XGOTREF(__pyx_t_22);
+      __Pyx_XGOTREF(__pyx_t_23);
+      __Pyx_XGOTREF(__pyx_t_24);
+      __Pyx_XGOTREF(__pyx_t_25);
+      __pyx_t_17 = __pyx_lineno; __pyx_t_18 = __pyx_clineno; __pyx_t_19 = __pyx_filename;
       {
         free(__pyx_v_scratch);
       }
-      __Pyx_XGIVEREF(__pyx_t_19);
+      __Pyx_XGIVEREF(__pyx_t_23);
+      __Pyx_XGIVEREF(__pyx_t_24);
+      __Pyx_XGIVEREF(__pyx_t_25);
+      __Pyx_ExceptionReset(__pyx_t_23, __pyx_t_24, __pyx_t_25);
       __Pyx_XGIVEREF(__pyx_t_20);
       __Pyx_XGIVEREF(__pyx_t_21);
-      __Pyx_ExceptionReset(__pyx_t_19, __pyx_t_20, __pyx_t_21);
-      __Pyx_XGIVEREF(__pyx_t_16);
-      __Pyx_XGIVEREF(__pyx_t_17);
-      __Pyx_XGIVEREF(__pyx_t_18);
-      __Pyx_ErrRestore(__pyx_t_16, __pyx_t_17, __pyx_t_18);
-      __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
-      __pyx_lineno = __pyx_t_13; __pyx_clineno = __pyx_t_14; __pyx_filename = __pyx_t_15;
+      __Pyx_XGIVEREF(__pyx_t_22);
+      __Pyx_ErrRestore(__pyx_t_20, __pyx_t_21, __pyx_t_22);
+      __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0; __pyx_t_25 = 0;
+      __pyx_lineno = __pyx_t_17; __pyx_clineno = __pyx_t_18; __pyx_filename = __pyx_t_19;
       goto __pyx_L1_error;
     }
     __pyx_L11:;
   }
 
-  /* "xmhuffman.pyx":136
+  /* "xmhuffman.pyx":170
  *     finally:
  *         free(scratch)
  *     return result             # <<<<<<<<<<<<<<
@@ -18159,7 +18394,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   __pyx_r = __pyx_v_result;
   goto __pyx_L0;
 
-  /* "xmhuffman.pyx":90
+  /* "xmhuffman.pyx":106
  * 
  * 
  * cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,             # <<<<<<<<<<<<<<
@@ -18184,7 +18419,7 @@ static PyObject *__pyx_f_9xmhuffman__decode_loop(uint8_t const *__pyx_v_swapped,
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":139
+/* "xmhuffman.pyx":173
  * 
  * 
  * cdef object _coerce_offsets_to_u32(offsets, uint32_t **out_ptr,             # <<<<<<<<<<<<<<
@@ -18219,7 +18454,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_coerce_offsets_to_u32", 0);
 
-  /* "xmhuffman.pyx":151
+  /* "xmhuffman.pyx":185
  *     cdef list lst
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -18235,19 +18470,19 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "xmhuffman.pyx":152
+      /* "xmhuffman.pyx":186
  * 
  *     try:
  *         mv = offsets             # <<<<<<<<<<<<<<
  *         out_ptr[0] = <uint32_t *>&mv[0] if mv.shape[0] > 0 else NULL
  *         out_n[0] = mv.shape[0]
 */
-      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint32_t__const__(__pyx_v_offsets, 0); if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 152, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_uint32_t__const__(__pyx_v_offsets, 0); if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 186, __pyx_L3_error)
       __pyx_v_mv = __pyx_t_4;
       __pyx_t_4.memview = NULL;
       __pyx_t_4.data = NULL;
 
-      /* "xmhuffman.pyx":153
+      /* "xmhuffman.pyx":187
  *     try:
  *         mv = offsets
  *         out_ptr[0] = <uint32_t *>&mv[0] if mv.shape[0] > 0 else NULL             # <<<<<<<<<<<<<<
@@ -18263,7 +18498,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
       }
       (__pyx_v_out_ptr[0]) = __pyx_t_5;
 
-      /* "xmhuffman.pyx":154
+      /* "xmhuffman.pyx":188
  *         mv = offsets
  *         out_ptr[0] = <uint32_t *>&mv[0] if mv.shape[0] > 0 else NULL
  *         out_n[0] = mv.shape[0]             # <<<<<<<<<<<<<<
@@ -18272,7 +18507,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
       (__pyx_v_out_n[0]) = (__pyx_v_mv.shape[0]);
 
-      /* "xmhuffman.pyx":155
+      /* "xmhuffman.pyx":189
  *         out_ptr[0] = <uint32_t *>&mv[0] if mv.shape[0] > 0 else NULL
  *         out_n[0] = mv.shape[0]
  *         owns[0] = 0             # <<<<<<<<<<<<<<
@@ -18281,7 +18516,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
       (__pyx_v_owns[0]) = 0;
 
-      /* "xmhuffman.pyx":156
+      /* "xmhuffman.pyx":190
  *         out_n[0] = mv.shape[0]
  *         owns[0] = 0
  *         return mv  # keep alive             # <<<<<<<<<<<<<<
@@ -18289,13 +18524,13 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
  *         pass
 */
       __Pyx_XDECREF(__pyx_r);
-      __pyx_t_8 = __pyx_memoryview_fromslice(__pyx_v_mv, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_uint32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 156, __pyx_L3_error)
+      __pyx_t_8 = __pyx_memoryview_fromslice(__pyx_v_mv, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_uint32_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 190, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_r = __pyx_t_8;
       __pyx_t_8 = 0;
       goto __pyx_L7_try_return;
 
-      /* "xmhuffman.pyx":151
+      /* "xmhuffman.pyx":185
  *     cdef list lst
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -18308,7 +18543,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
     __pyx_t_4.memview = NULL; __pyx_t_4.data = NULL;
     __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "xmhuffman.pyx":157
+    /* "xmhuffman.pyx":191
  *         owns[0] = 0
  *         return mv  # keep alive
  *     except (TypeError, ValueError):             # <<<<<<<<<<<<<<
@@ -18322,7 +18557,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
     }
     goto __pyx_L5_except_error;
 
-    /* "xmhuffman.pyx":151
+    /* "xmhuffman.pyx":185
  *     cdef list lst
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -18348,29 +18583,29 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
     __Pyx_ExceptionReset(__pyx_t_1, __pyx_t_2, __pyx_t_3);
   }
 
-  /* "xmhuffman.pyx":160
+  /* "xmhuffman.pyx":194
  *         pass
  * 
  *     lst = list(offsets)             # <<<<<<<<<<<<<<
  *     n = len(lst)
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))
 */
-  __pyx_t_8 = PySequence_List(__pyx_v_offsets); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_8 = PySequence_List(__pyx_v_offsets); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 194, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __pyx_v_lst = ((PyObject*)__pyx_t_8);
   __pyx_t_8 = 0;
 
-  /* "xmhuffman.pyx":161
+  /* "xmhuffman.pyx":195
  * 
  *     lst = list(offsets)
  *     n = len(lst)             # <<<<<<<<<<<<<<
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))
  *     if buf is NULL:
 */
-  __pyx_t_10 = __Pyx_PyList_GET_SIZE(__pyx_v_lst); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 161, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_PyList_GET_SIZE(__pyx_v_lst); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 195, __pyx_L1_error)
   __pyx_v_n = __pyx_t_10;
 
-  /* "xmhuffman.pyx":162
+  /* "xmhuffman.pyx":196
  *     lst = list(offsets)
  *     n = len(lst)
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))             # <<<<<<<<<<<<<<
@@ -18385,7 +18620,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   }
   __pyx_v_buf = ((uint32_t *)malloc((__pyx_t_11 * (sizeof(uint32_t)))));
 
-  /* "xmhuffman.pyx":163
+  /* "xmhuffman.pyx":197
  *     n = len(lst)
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))
  *     if buf is NULL:             # <<<<<<<<<<<<<<
@@ -18395,16 +18630,16 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   __pyx_t_6 = (__pyx_v_buf == NULL);
   if (unlikely(__pyx_t_6)) {
 
-    /* "xmhuffman.pyx":164
+    /* "xmhuffman.pyx":198
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))
  *     if buf is NULL:
  *         raise MemoryError()             # <<<<<<<<<<<<<<
  *     for i in range(n):
  *         buf[i] = <uint32_t>(<unsigned long long>lst[i])
 */
-    PyErr_NoMemory(); __PYX_ERR(0, 164, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 198, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":163
+    /* "xmhuffman.pyx":197
  *     n = len(lst)
  *     buf = <uint32_t *>malloc((n if n > 0 else 1) * sizeof(uint32_t))
  *     if buf is NULL:             # <<<<<<<<<<<<<<
@@ -18413,7 +18648,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
   }
 
-  /* "xmhuffman.pyx":165
+  /* "xmhuffman.pyx":199
  *     if buf is NULL:
  *         raise MemoryError()
  *     for i in range(n):             # <<<<<<<<<<<<<<
@@ -18425,18 +18660,18 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
     __pyx_v_i = __pyx_t_13;
 
-    /* "xmhuffman.pyx":166
+    /* "xmhuffman.pyx":200
  *         raise MemoryError()
  *     for i in range(n):
  *         buf[i] = <uint32_t>(<unsigned long long>lst[i])             # <<<<<<<<<<<<<<
  *     out_ptr[0] = buf
  *     out_n[0] = n
 */
-    __pyx_t_14 = __Pyx_PyLong_As_unsigned_PY_LONG_LONG(__Pyx_PyList_GET_ITEM(__pyx_v_lst, __pyx_v_i)); if (unlikely((__pyx_t_14 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyLong_As_unsigned_PY_LONG_LONG(__Pyx_PyList_GET_ITEM(__pyx_v_lst, __pyx_v_i)); if (unlikely((__pyx_t_14 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 200, __pyx_L1_error)
     (__pyx_v_buf[__pyx_v_i]) = ((uint32_t)((unsigned PY_LONG_LONG)__pyx_t_14));
   }
 
-  /* "xmhuffman.pyx":167
+  /* "xmhuffman.pyx":201
  *     for i in range(n):
  *         buf[i] = <uint32_t>(<unsigned long long>lst[i])
  *     out_ptr[0] = buf             # <<<<<<<<<<<<<<
@@ -18445,7 +18680,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
   (__pyx_v_out_ptr[0]) = __pyx_v_buf;
 
-  /* "xmhuffman.pyx":168
+  /* "xmhuffman.pyx":202
  *         buf[i] = <uint32_t>(<unsigned long long>lst[i])
  *     out_ptr[0] = buf
  *     out_n[0] = n             # <<<<<<<<<<<<<<
@@ -18454,7 +18689,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
   (__pyx_v_out_n[0]) = __pyx_v_n;
 
-  /* "xmhuffman.pyx":169
+  /* "xmhuffman.pyx":203
  *     out_ptr[0] = buf
  *     out_n[0] = n
  *     owns[0] = 1             # <<<<<<<<<<<<<<
@@ -18463,7 +18698,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
 */
   (__pyx_v_owns[0]) = 1;
 
-  /* "xmhuffman.pyx":170
+  /* "xmhuffman.pyx":204
  *     out_n[0] = n
  *     owns[0] = 1
  *     return None             # <<<<<<<<<<<<<<
@@ -18474,7 +18709,7 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
 
-  /* "xmhuffman.pyx":139
+  /* "xmhuffman.pyx":173
  * 
  * 
  * cdef object _coerce_offsets_to_u32(offsets, uint32_t **out_ptr,             # <<<<<<<<<<<<<<
@@ -18496,11 +18731,11 @@ static PyObject *__pyx_f_9xmhuffman__coerce_offsets_to_u32(PyObject *__pyx_v_off
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":173
+/* "xmhuffman.pyx":207
  * 
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                       swap=True):
+ *                       swap=True, charset_mode='general', charset_byte=0):
  *     """Decode a page given an already-built table.
 */
 
@@ -18512,7 +18747,7 @@ PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_9xmhuffman_6decode_with_table, "Decode a page given an already-built table.\n\n    ``table`` must be the bytes object returned by :func:`build_table`\n    (length ``(2**max_len) * 2``).\n    ");
+PyDoc_STRVAR(__pyx_doc_9xmhuffman_6decode_with_table, "Decode a page given an already-built table.\n\n    ``table`` must be the bytes object returned by :func:`build_table`\n    (length ``(2**max_len) * 2``).\n\n    Parameters\n    ----------\n    charset_mode : {'general', 'single'}, default 'general'\n        Per MS-XLDM. In ``'single'`` mode (``XM_HUFFMAN_SINGLECHARSET``,\n        0xABA91) the page-level ``CharacterSetUsed`` byte is reinserted\n        as the UTF-16-LE high byte of every decoded character, so each\n        output element is exactly ``2 * decoded_length`` bytes and can\n        be ``b.decode('utf-16-le')``-ed directly. In ``'general'`` mode\n        (``XM_HUFFMAN_MULTICHARSET``, 0xABA92) the raw decoded byte\n        stream is returned unchanged.\n    charset_byte : int, default 0\n        The page's ``CharacterSetUsed`` byte. Ignored unless\n        ``charset_mode`` is ``'single'``.\n    ");
 static PyMethodDef __pyx_mdef_9xmhuffman_7decode_with_table = {"decode_with_table", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_9xmhuffman_7decode_with_table, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_9xmhuffman_6decode_with_table};
 static PyObject *__pyx_pw_9xmhuffman_7decode_with_table(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
@@ -18527,11 +18762,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   PyObject *__pyx_v_offsets = 0;
   PyObject *__pyx_v_store_total_bits = 0;
   PyObject *__pyx_v_swap = 0;
+  PyObject *__pyx_v_charset_mode = 0;
+  PyObject *__pyx_v_charset_byte = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[6] = {0,0,0,0,0,0};
+  PyObject* values[8] = {0,0,0,0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -18547,73 +18784,93 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_bitstream,&__pyx_mstate_global->__pyx_n_u_table,&__pyx_mstate_global->__pyx_n_u_max_len,&__pyx_mstate_global->__pyx_n_u_offsets,&__pyx_mstate_global->__pyx_n_u_store_total_bits,&__pyx_mstate_global->__pyx_n_u_swap,0};
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_bitstream,&__pyx_mstate_global->__pyx_n_u_table,&__pyx_mstate_global->__pyx_n_u_max_len,&__pyx_mstate_global->__pyx_n_u_offsets,&__pyx_mstate_global->__pyx_n_u_store_total_bits,&__pyx_mstate_global->__pyx_n_u_swap,&__pyx_mstate_global->__pyx_n_u_charset_mode,&__pyx_mstate_global->__pyx_n_u_charset_byte,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 173, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 207, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
+        case  8:
+        values[7] = __Pyx_ArgRef_FASTCALL(__pyx_args, 7);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[7])) __PYX_ERR(0, 207, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  7:
+        values[6] = __Pyx_ArgRef_FASTCALL(__pyx_args, 6);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[6])) __PYX_ERR(0, 207, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
         case  6:
         values[5] = __Pyx_ArgRef_FASTCALL(__pyx_args, 5);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  5:
         values[4] = __Pyx_ArgRef_FASTCALL(__pyx_args, 4);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  4:
         values[3] = __Pyx_ArgRef_FASTCALL(__pyx_args, 3);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  3:
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decode_with_table", 0) < (0)) __PYX_ERR(0, 173, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decode_with_table", 0) < (0)) __PYX_ERR(0, 207, __pyx_L3_error)
 
-      /* "xmhuffman.pyx":174
+      /* "xmhuffman.pyx":208
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,
- *                       swap=True):             # <<<<<<<<<<<<<<
+ *                       swap=True, charset_mode='general', charset_byte=0):             # <<<<<<<<<<<<<<
  *     """Decode a page given an already-built table.
  * 
 */
       if (!values[5]) values[5] = __Pyx_NewRef(((PyObject *)((PyObject*)Py_True)));
+      if (!values[6]) values[6] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_n_u_general)));
+      if (!values[7]) values[7] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_int_0)));
       for (Py_ssize_t i = __pyx_nargs; i < 5; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decode_with_table", 0, 5, 6, i); __PYX_ERR(0, 173, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decode_with_table", 0, 5, 8, i); __PYX_ERR(0, 207, __pyx_L3_error) }
       }
     } else {
       switch (__pyx_nargs) {
+        case  8:
+        values[7] = __Pyx_ArgRef_FASTCALL(__pyx_args, 7);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[7])) __PYX_ERR(0, 207, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  7:
+        values[6] = __Pyx_ArgRef_FASTCALL(__pyx_args, 6);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[6])) __PYX_ERR(0, 207, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
         case  6:
         values[5] = __Pyx_ArgRef_FASTCALL(__pyx_args, 5);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 207, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  5:
         values[4] = __Pyx_ArgRef_FASTCALL(__pyx_args, 4);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 207, __pyx_L3_error)
         values[3] = __Pyx_ArgRef_FASTCALL(__pyx_args, 3);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 207, __pyx_L3_error)
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 207, __pyx_L3_error)
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 207, __pyx_L3_error)
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 173, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 207, __pyx_L3_error)
         break;
         default: goto __pyx_L5_argtuple_error;
       }
       if (!values[5]) values[5] = __Pyx_NewRef(((PyObject *)((PyObject*)Py_True)));
+      if (!values[6]) values[6] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_n_u_general)));
+      if (!values[7]) values[7] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_int_0)));
     }
     __pyx_v_bitstream = values[0];
     __pyx_v_table = values[1];
@@ -18621,10 +18878,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     __pyx_v_offsets = values[3];
     __pyx_v_store_total_bits = values[4];
     __pyx_v_swap = values[5];
+    __pyx_v_charset_mode = values[6];
+    __pyx_v_charset_byte = values[7];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decode_with_table", 0, 5, 6, __pyx_nargs); __PYX_ERR(0, 173, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("decode_with_table", 0, 5, 8, __pyx_nargs); __PYX_ERR(0, 207, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18635,13 +18894,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9xmhuffman_6decode_with_table(__pyx_self, __pyx_v_bitstream, __pyx_v_table, __pyx_v_max_len, __pyx_v_offsets, __pyx_v_store_total_bits, __pyx_v_swap);
+  __pyx_r = __pyx_pf_9xmhuffman_6decode_with_table(__pyx_self, __pyx_v_bitstream, __pyx_v_table, __pyx_v_max_len, __pyx_v_offsets, __pyx_v_store_total_bits, __pyx_v_swap, __pyx_v_charset_mode, __pyx_v_charset_byte);
 
-  /* "xmhuffman.pyx":173
+  /* "xmhuffman.pyx":207
  * 
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                       swap=True):
+ *                       swap=True, charset_mode='general', charset_byte=0):
  *     """Decode a page given an already-built table.
 */
 
@@ -18653,7 +18912,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_table, PyObject *__pyx_v_max_len, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap) {
+static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_table, PyObject *__pyx_v_max_len, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap, PyObject *__pyx_v_charset_mode, PyObject *__pyx_v_charset_byte) {
   unsigned int __pyx_v_ml;
   __Pyx_memviewslice __pyx_v_bsv = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_tblv = { 0, 0, { 0 }, { 0 }, { 0 } };
@@ -18665,24 +18924,26 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
   CYTHON_UNUSED PyObject *__pyx_v_keep = 0;
   uint8_t *__pyx_v_swapped_owned;
   uint8_t const *__pyx_v_swapped_view;
+  int __pyx_v_cset;
+  uint8_t __pyx_v_cb;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   unsigned int __pyx_t_1;
   int __pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
+  int __pyx_t_3;
+  Py_ssize_t __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
-  size_t __pyx_t_6;
-  __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  PyObject *__pyx_t_6 = NULL;
+  size_t __pyx_t_7;
   __Pyx_memviewslice __pyx_t_8 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  PyObject *__pyx_t_9 = NULL;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyObject *__pyx_t_10 = NULL;
-  PyObject *__pyx_t_11[4];
-  PyObject *__pyx_t_12 = NULL;
-  int __pyx_t_13;
-  Py_ssize_t __pyx_t_14;
-  uint64_t __pyx_t_15;
-  int __pyx_t_16;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12[4];
+  PyObject *__pyx_t_13 = NULL;
+  int __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  uint64_t __pyx_t_16;
   int __pyx_t_17;
   char const *__pyx_t_18;
   PyObject *__pyx_t_19 = NULL;
@@ -18696,17 +18957,17 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("decode_with_table", 0);
 
-  /* "xmhuffman.pyx":180
- *     (length ``(2**max_len) * 2``).
+  /* "xmhuffman.pyx":228
+ *         ``charset_mode`` is ``'single'``.
  *     """
  *     cdef unsigned ml = <unsigned>max_len             # <<<<<<<<<<<<<<
  *     cdef const unsigned char[::1] bsv
  *     cdef const unsigned char[::1] tblv
 */
-  __pyx_t_1 = __Pyx_PyLong_As_unsigned_int(__pyx_v_max_len); if (unlikely((__pyx_t_1 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 180, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyLong_As_unsigned_int(__pyx_v_max_len); if (unlikely((__pyx_t_1 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 228, __pyx_L1_error)
   __pyx_v_ml = ((unsigned int)__pyx_t_1);
 
-  /* "xmhuffman.pyx":184
+  /* "xmhuffman.pyx":232
  *     cdef const unsigned char[::1] tblv
  *     cdef Py_ssize_t n_buf, expected
  *     cdef uint32_t *off_ptr = NULL             # <<<<<<<<<<<<<<
@@ -18715,7 +18976,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   __pyx_v_off_ptr = NULL;
 
-  /* "xmhuffman.pyx":185
+  /* "xmhuffman.pyx":233
  *     cdef Py_ssize_t n_buf, expected
  *     cdef uint32_t *off_ptr = NULL
  *     cdef Py_ssize_t n_strings = 0             # <<<<<<<<<<<<<<
@@ -18724,7 +18985,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   __pyx_v_n_strings = 0;
 
-  /* "xmhuffman.pyx":186
+  /* "xmhuffman.pyx":234
  *     cdef uint32_t *off_ptr = NULL
  *     cdef Py_ssize_t n_strings = 0
  *     cdef int owns = 0             # <<<<<<<<<<<<<<
@@ -18733,26 +18994,46 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   __pyx_v_owns = 0;
 
-  /* "xmhuffman.pyx":188
+  /* "xmhuffman.pyx":236
  *     cdef int owns = 0
  *     cdef object keep
  *     cdef uint8_t *swapped_owned = NULL             # <<<<<<<<<<<<<<
  *     cdef const uint8_t *swapped_view
- * 
+ *     cdef int cset = _parse_charset_mode(charset_mode)
 */
   __pyx_v_swapped_owned = NULL;
 
-  /* "xmhuffman.pyx":191
+  /* "xmhuffman.pyx":238
+ *     cdef uint8_t *swapped_owned = NULL
  *     cdef const uint8_t *swapped_view
+ *     cdef int cset = _parse_charset_mode(charset_mode)             # <<<<<<<<<<<<<<
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
+ * 
+*/
+  __pyx_t_2 = __pyx_f_9xmhuffman__parse_charset_mode(__pyx_v_charset_mode); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_v_cset = __pyx_t_2;
+
+  /* "xmhuffman.pyx":239
+ *     cdef const uint8_t *swapped_view
+ *     cdef int cset = _parse_charset_mode(charset_mode)
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)             # <<<<<<<<<<<<<<
+ * 
+ *     if ml == 0:
+*/
+  __pyx_t_1 = __Pyx_PyLong_As_unsigned_int(__pyx_v_charset_byte); if (unlikely((__pyx_t_1 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 239, __pyx_L1_error)
+  __pyx_v_cb = ((uint8_t)(((unsigned int)__pyx_t_1) & 0xff));
+
+  /* "xmhuffman.pyx":241
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
  * 
  *     if ml == 0:             # <<<<<<<<<<<<<<
  *         return [b""] * len(offsets)
  *     if ml > 15:
 */
-  __pyx_t_2 = (__pyx_v_ml == 0);
-  if (__pyx_t_2) {
+  __pyx_t_3 = (__pyx_v_ml == 0);
+  if (__pyx_t_3) {
 
-    /* "xmhuffman.pyx":192
+    /* "xmhuffman.pyx":242
  * 
  *     if ml == 0:
  *         return [b""] * len(offsets)             # <<<<<<<<<<<<<<
@@ -18760,22 +19041,22 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
  *         raise ValueError("max_len must be in 0..15")
 */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_3 = PyObject_Length(__pyx_v_offsets); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 192, __pyx_L1_error)
-    __pyx_t_4 = PyList_New(1 * ((__pyx_t_3<0) ? 0:__pyx_t_3)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 192, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_4 = PyObject_Length(__pyx_v_offsets); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 242, __pyx_L1_error)
+    __pyx_t_5 = PyList_New(1 * ((__pyx_t_4<0) ? 0:__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 242, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
     { Py_ssize_t __pyx_temp;
-      for (__pyx_temp=0; __pyx_temp < __pyx_t_3; __pyx_temp++) {
+      for (__pyx_temp=0; __pyx_temp < __pyx_t_4; __pyx_temp++) {
         __Pyx_INCREF(__pyx_mstate_global->__pyx_kp_b__6);
         __Pyx_GIVEREF(__pyx_mstate_global->__pyx_kp_b__6);
-        if (__Pyx_PyList_SET_ITEM(__pyx_t_4, __pyx_temp, __pyx_mstate_global->__pyx_kp_b__6) != (0)) __PYX_ERR(0, 192, __pyx_L1_error);
+        if (__Pyx_PyList_SET_ITEM(__pyx_t_5, __pyx_temp, __pyx_mstate_global->__pyx_kp_b__6) != (0)) __PYX_ERR(0, 242, __pyx_L1_error);
       }
     }
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
+    __pyx_r = __pyx_t_5;
+    __pyx_t_5 = 0;
     goto __pyx_L0;
 
-    /* "xmhuffman.pyx":191
- *     cdef const uint8_t *swapped_view
+    /* "xmhuffman.pyx":241
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
  * 
  *     if ml == 0:             # <<<<<<<<<<<<<<
  *         return [b""] * len(offsets)
@@ -18783,37 +19064,37 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   }
 
-  /* "xmhuffman.pyx":193
+  /* "xmhuffman.pyx":243
  *     if ml == 0:
  *         return [b""] * len(offsets)
  *     if ml > 15:             # <<<<<<<<<<<<<<
  *         raise ValueError("max_len must be in 0..15")
  * 
 */
-  __pyx_t_2 = (__pyx_v_ml > 15);
-  if (unlikely(__pyx_t_2)) {
+  __pyx_t_3 = (__pyx_v_ml > 15);
+  if (unlikely(__pyx_t_3)) {
 
-    /* "xmhuffman.pyx":194
+    /* "xmhuffman.pyx":244
  *         return [b""] * len(offsets)
  *     if ml > 15:
  *         raise ValueError("max_len must be in 0..15")             # <<<<<<<<<<<<<<
  * 
  *     bsv = bitstream
 */
-    __pyx_t_5 = NULL;
-    __pyx_t_6 = 1;
+    __pyx_t_6 = NULL;
+    __pyx_t_7 = 1;
     {
-      PyObject *__pyx_callargs[2] = {__pyx_t_5, __pyx_mstate_global->__pyx_kp_u_max_len_must_be_in_0_15};
-      __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 194, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_mstate_global->__pyx_kp_u_max_len_must_be_in_0_15};
+      __pyx_t_5 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 244, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
     }
-    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 194, __pyx_L1_error)
+    __Pyx_Raise(__pyx_t_5, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __PYX_ERR(0, 244, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":193
+    /* "xmhuffman.pyx":243
  *     if ml == 0:
  *         return [b""] * len(offsets)
  *     if ml > 15:             # <<<<<<<<<<<<<<
@@ -18822,31 +19103,31 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   }
 
-  /* "xmhuffman.pyx":196
+  /* "xmhuffman.pyx":246
  *         raise ValueError("max_len must be in 0..15")
  * 
  *     bsv = bitstream             # <<<<<<<<<<<<<<
  *     tblv = table
  *     n_buf = bsv.shape[0]
 */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_bitstream, 0); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 196, __pyx_L1_error)
-  __pyx_v_bsv = __pyx_t_7;
-  __pyx_t_7.memview = NULL;
-  __pyx_t_7.data = NULL;
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_bitstream, 0); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 246, __pyx_L1_error)
+  __pyx_v_bsv = __pyx_t_8;
+  __pyx_t_8.memview = NULL;
+  __pyx_t_8.data = NULL;
 
-  /* "xmhuffman.pyx":197
+  /* "xmhuffman.pyx":247
  * 
  *     bsv = bitstream
  *     tblv = table             # <<<<<<<<<<<<<<
  *     n_buf = bsv.shape[0]
  *     expected = (1 << ml) * 2
 */
-  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_table, 0); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 197, __pyx_L1_error)
-  __pyx_v_tblv = __pyx_t_8;
-  __pyx_t_8.memview = NULL;
-  __pyx_t_8.data = NULL;
+  __pyx_t_9 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_table, 0); if (unlikely(!__pyx_t_9.memview)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_v_tblv = __pyx_t_9;
+  __pyx_t_9.memview = NULL;
+  __pyx_t_9.data = NULL;
 
-  /* "xmhuffman.pyx":198
+  /* "xmhuffman.pyx":248
  *     bsv = bitstream
  *     tblv = table
  *     n_buf = bsv.shape[0]             # <<<<<<<<<<<<<<
@@ -18855,7 +19136,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   __pyx_v_n_buf = (__pyx_v_bsv.shape[0]);
 
-  /* "xmhuffman.pyx":199
+  /* "xmhuffman.pyx":249
  *     tblv = table
  *     n_buf = bsv.shape[0]
  *     expected = (1 << ml) * 2             # <<<<<<<<<<<<<<
@@ -18864,67 +19145,67 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   __pyx_v_expected = ((1 << __pyx_v_ml) * 2);
 
-  /* "xmhuffman.pyx":200
+  /* "xmhuffman.pyx":250
  *     n_buf = bsv.shape[0]
  *     expected = (1 << ml) * 2
  *     if tblv.shape[0] != expected:             # <<<<<<<<<<<<<<
  *         raise ValueError("table size mismatch: got %d bytes, expected %d"
  *                          % (tblv.shape[0], expected))
 */
-  __pyx_t_2 = ((__pyx_v_tblv.shape[0]) != __pyx_v_expected);
-  if (unlikely(__pyx_t_2)) {
+  __pyx_t_3 = ((__pyx_v_tblv.shape[0]) != __pyx_v_expected);
+  if (unlikely(__pyx_t_3)) {
 
-    /* "xmhuffman.pyx":201
+    /* "xmhuffman.pyx":251
  *     expected = (1 << ml) * 2
  *     if tblv.shape[0] != expected:
  *         raise ValueError("table size mismatch: got %d bytes, expected %d"             # <<<<<<<<<<<<<<
  *                          % (tblv.shape[0], expected))
  * 
 */
-    __pyx_t_5 = NULL;
+    __pyx_t_6 = NULL;
 
-    /* "xmhuffman.pyx":202
+    /* "xmhuffman.pyx":252
  *     if tblv.shape[0] != expected:
  *         raise ValueError("table size mismatch: got %d bytes, expected %d"
  *                          % (tblv.shape[0], expected))             # <<<<<<<<<<<<<<
  * 
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)
 */
-    __pyx_t_9 = __Pyx_PyUnicode_From_Py_ssize_t((__pyx_v_tblv.shape[0]), 0, ' ', 'd'); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 202, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_10 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_expected, 0, ' ', 'd'); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 202, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyUnicode_From_Py_ssize_t((__pyx_v_tblv.shape[0]), 0, ' ', 'd'); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 252, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
-    __pyx_t_11[0] = __pyx_mstate_global->__pyx_kp_u_table_size_mismatch_got;
-    __pyx_t_11[1] = __pyx_t_9;
-    __pyx_t_11[2] = __pyx_mstate_global->__pyx_kp_u_bytes_expected;
-    __pyx_t_11[3] = __pyx_t_10;
+    __pyx_t_11 = __Pyx_PyUnicode_From_Py_ssize_t(__pyx_v_expected, 0, ' ', 'd'); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 252, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
+    __pyx_t_12[0] = __pyx_mstate_global->__pyx_kp_u_table_size_mismatch_got;
+    __pyx_t_12[1] = __pyx_t_10;
+    __pyx_t_12[2] = __pyx_mstate_global->__pyx_kp_u_bytes_expected;
+    __pyx_t_12[3] = __pyx_t_11;
 
-    /* "xmhuffman.pyx":201
+    /* "xmhuffman.pyx":251
  *     expected = (1 << ml) * 2
  *     if tblv.shape[0] != expected:
  *         raise ValueError("table size mismatch: got %d bytes, expected %d"             # <<<<<<<<<<<<<<
  *                          % (tblv.shape[0], expected))
  * 
 */
-    __pyx_t_12 = __Pyx_PyUnicode_Join(__pyx_t_11, 4, 25 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_9) + 17 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10), 127);
-    if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 201, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_12);
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_13 = __Pyx_PyUnicode_Join(__pyx_t_12, 4, 25 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_10) + 17 + __Pyx_PyUnicode_GET_LENGTH(__pyx_t_11), 127);
+    if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 251, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_13);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    __pyx_t_6 = 1;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+    __pyx_t_7 = 1;
     {
-      PyObject *__pyx_callargs[2] = {__pyx_t_5, __pyx_t_12};
-      __pyx_t_4 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_6, (2-__pyx_t_6) | (__pyx_t_6*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_t_13};
+      __pyx_t_5 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 251, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
     }
-    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 201, __pyx_L1_error)
+    __Pyx_Raise(__pyx_t_5, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __PYX_ERR(0, 251, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":200
+    /* "xmhuffman.pyx":250
  *     n_buf = bsv.shape[0]
  *     expected = (1 << ml) * 2
  *     if tblv.shape[0] != expected:             # <<<<<<<<<<<<<<
@@ -18933,19 +19214,19 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   }
 
-  /* "xmhuffman.pyx":204
+  /* "xmhuffman.pyx":254
  *                          % (tblv.shape[0], expected))
  * 
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)             # <<<<<<<<<<<<<<
  * 
  *     try:
 */
-  __pyx_t_4 = __pyx_f_9xmhuffman__coerce_offsets_to_u32(__pyx_v_offsets, (&__pyx_v_off_ptr), (&__pyx_v_n_strings), (&__pyx_v_owns)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 204, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_v_keep = __pyx_t_4;
-  __pyx_t_4 = 0;
+  __pyx_t_5 = __pyx_f_9xmhuffman__coerce_offsets_to_u32(__pyx_v_offsets, (&__pyx_v_off_ptr), (&__pyx_v_n_strings), (&__pyx_v_owns)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 254, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_v_keep = __pyx_t_5;
+  __pyx_t_5 = 0;
 
-  /* "xmhuffman.pyx":206
+  /* "xmhuffman.pyx":256
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -18954,25 +19235,25 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
   /*try:*/ {
 
-    /* "xmhuffman.pyx":207
+    /* "xmhuffman.pyx":257
  * 
  *     try:
  *         if swap and n_buf > 0:             # <<<<<<<<<<<<<<
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:
 */
-    __pyx_t_13 = __Pyx_PyObject_IsTrue(__pyx_v_swap); if (unlikely((__pyx_t_13 < 0))) __PYX_ERR(0, 207, __pyx_L7_error)
-    if (__pyx_t_13) {
+    __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_v_swap); if (unlikely((__pyx_t_14 < 0))) __PYX_ERR(0, 257, __pyx_L7_error)
+    if (__pyx_t_14) {
     } else {
-      __pyx_t_2 = __pyx_t_13;
+      __pyx_t_3 = __pyx_t_14;
       goto __pyx_L10_bool_binop_done;
     }
-    __pyx_t_13 = (__pyx_v_n_buf > 0);
-    __pyx_t_2 = __pyx_t_13;
+    __pyx_t_14 = (__pyx_v_n_buf > 0);
+    __pyx_t_3 = __pyx_t_14;
     __pyx_L10_bool_binop_done:;
-    if (__pyx_t_2) {
+    if (__pyx_t_3) {
 
-      /* "xmhuffman.pyx":208
+      /* "xmhuffman.pyx":258
  *     try:
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)             # <<<<<<<<<<<<<<
@@ -18981,26 +19262,26 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
       __pyx_v_swapped_owned = ((uint8_t *)malloc(((size_t)__pyx_v_n_buf)));
 
-      /* "xmhuffman.pyx":209
+      /* "xmhuffman.pyx":259
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:             # <<<<<<<<<<<<<<
  *                 raise MemoryError()
  *             with nogil:
 */
-      __pyx_t_2 = (__pyx_v_swapped_owned == NULL);
-      if (unlikely(__pyx_t_2)) {
+      __pyx_t_3 = (__pyx_v_swapped_owned == NULL);
+      if (unlikely(__pyx_t_3)) {
 
-        /* "xmhuffman.pyx":210
+        /* "xmhuffman.pyx":260
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:
  *                 raise MemoryError()             # <<<<<<<<<<<<<<
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
 */
-        PyErr_NoMemory(); __PYX_ERR(0, 210, __pyx_L7_error)
+        PyErr_NoMemory(); __PYX_ERR(0, 260, __pyx_L7_error)
 
-        /* "xmhuffman.pyx":209
+        /* "xmhuffman.pyx":259
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:             # <<<<<<<<<<<<<<
@@ -19009,7 +19290,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
       }
 
-      /* "xmhuffman.pyx":211
+      /* "xmhuffman.pyx":261
  *             if swapped_owned is NULL:
  *                 raise MemoryError()
  *             with nogil:             # <<<<<<<<<<<<<<
@@ -19022,18 +19303,18 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
           __Pyx_FastGIL_Remember();
           /*try:*/ {
 
-            /* "xmhuffman.pyx":212
+            /* "xmhuffman.pyx":262
  *                 raise MemoryError()
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)             # <<<<<<<<<<<<<<
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:
 */
-            __pyx_t_14 = 0;
-            xmh_swap_pairs((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_14)) )))), __pyx_v_swapped_owned, ((size_t)__pyx_v_n_buf));
+            __pyx_t_15 = 0;
+            xmh_swap_pairs((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_15)) )))), __pyx_v_swapped_owned, ((size_t)__pyx_v_n_buf));
           }
 
-          /* "xmhuffman.pyx":211
+          /* "xmhuffman.pyx":261
  *             if swapped_owned is NULL:
  *                 raise MemoryError()
  *             with nogil:             # <<<<<<<<<<<<<<
@@ -19050,7 +19331,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
           }
       }
 
-      /* "xmhuffman.pyx":213
+      /* "xmhuffman.pyx":263
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned             # <<<<<<<<<<<<<<
@@ -19059,7 +19340,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
       __pyx_v_swapped_view = __pyx_v_swapped_owned;
 
-      /* "xmhuffman.pyx":207
+      /* "xmhuffman.pyx":257
  * 
  *     try:
  *         if swap and n_buf > 0:             # <<<<<<<<<<<<<<
@@ -19069,27 +19350,27 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
       goto __pyx_L9;
     }
 
-    /* "xmhuffman.pyx":214
+    /* "xmhuffman.pyx":264
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:             # <<<<<<<<<<<<<<
  *             swapped_view = &bsv[0]
  *         else:
 */
-    __pyx_t_2 = (__pyx_v_n_buf > 0);
-    if (__pyx_t_2) {
+    __pyx_t_3 = (__pyx_v_n_buf > 0);
+    if (__pyx_t_3) {
 
-      /* "xmhuffman.pyx":215
+      /* "xmhuffman.pyx":265
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:
  *             swapped_view = &bsv[0]             # <<<<<<<<<<<<<<
  *         else:
  *             swapped_view = NULL
 */
-      __pyx_t_14 = 0;
-      __pyx_v_swapped_view = (&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_14)) ))));
+      __pyx_t_15 = 0;
+      __pyx_v_swapped_view = (&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_15)) ))));
 
-      /* "xmhuffman.pyx":214
+      /* "xmhuffman.pyx":264
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:             # <<<<<<<<<<<<<<
@@ -19099,7 +19380,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
       goto __pyx_L9;
     }
 
-    /* "xmhuffman.pyx":217
+    /* "xmhuffman.pyx":267
  *             swapped_view = &bsv[0]
  *         else:
  *             swapped_view = NULL             # <<<<<<<<<<<<<<
@@ -19111,7 +19392,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
     }
     __pyx_L9:;
 
-    /* "xmhuffman.pyx":219
+    /* "xmhuffman.pyx":269
  *             swapped_view = NULL
  * 
  *         return _decode_loop(swapped_view, <size_t>n_buf,             # <<<<<<<<<<<<<<
@@ -19120,40 +19401,40 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
     __Pyx_XDECREF(__pyx_r);
 
-    /* "xmhuffman.pyx":220
+    /* "xmhuffman.pyx":270
  * 
  *         return _decode_loop(swapped_view, <size_t>n_buf,
  *                             <const uint16_t *>&tblv[0], ml,             # <<<<<<<<<<<<<<
  *                             off_ptr, n_strings,
- *                             <uint64_t>store_total_bits)
+ *                             <uint64_t>store_total_bits,
 */
-    __pyx_t_14 = 0;
+    __pyx_t_15 = 0;
 
-    /* "xmhuffman.pyx":222
+    /* "xmhuffman.pyx":272
  *                             <const uint16_t *>&tblv[0], ml,
  *                             off_ptr, n_strings,
- *                             <uint64_t>store_total_bits)             # <<<<<<<<<<<<<<
+ *                             <uint64_t>store_total_bits,             # <<<<<<<<<<<<<<
+ *                             cset, cb)
  *     finally:
- *         if swapped_owned is not NULL:
 */
-    __pyx_t_15 = __Pyx_PyLong_As_uint64_t(__pyx_v_store_total_bits); if (unlikely((__pyx_t_15 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L7_error)
+    __pyx_t_16 = __Pyx_PyLong_As_uint64_t(__pyx_v_store_total_bits); if (unlikely((__pyx_t_16 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 272, __pyx_L7_error)
 
-    /* "xmhuffman.pyx":219
+    /* "xmhuffman.pyx":269
  *             swapped_view = NULL
  * 
  *         return _decode_loop(swapped_view, <size_t>n_buf,             # <<<<<<<<<<<<<<
  *                             <const uint16_t *>&tblv[0], ml,
  *                             off_ptr, n_strings,
 */
-    __pyx_t_4 = __pyx_f_9xmhuffman__decode_loop(__pyx_v_swapped_view, ((size_t)__pyx_v_n_buf), ((uint16_t const *)(&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_tblv.data) + __pyx_t_14)) ))))), __pyx_v_ml, __pyx_v_off_ptr, __pyx_v_n_strings, ((uint64_t)__pyx_t_15)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 219, __pyx_L7_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
+    __pyx_t_5 = __pyx_f_9xmhuffman__decode_loop(__pyx_v_swapped_view, ((size_t)__pyx_v_n_buf), ((uint16_t const *)(&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_tblv.data) + __pyx_t_15)) ))))), __pyx_v_ml, __pyx_v_off_ptr, __pyx_v_n_strings, ((uint64_t)__pyx_t_16), __pyx_v_cset, __pyx_v_cb); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 269, __pyx_L7_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_r = __pyx_t_5;
+    __pyx_t_5 = 0;
     goto __pyx_L6_return;
   }
 
-  /* "xmhuffman.pyx":224
- *                             <uint64_t>store_total_bits)
+  /* "xmhuffman.pyx":275
+ *                             cset, cb)
  *     finally:
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
@@ -19166,14 +19447,14 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
       __Pyx_PyThreadState_assign
       __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0;
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __PYX_XCLEAR_MEMVIEW(&__pyx_t_7, 1);
-      __pyx_t_7.memview = NULL; __pyx_t_7.data = NULL;
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
       __pyx_t_8.memview = NULL; __pyx_t_8.data = NULL;
-      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __PYX_XCLEAR_MEMVIEW(&__pyx_t_9, 1);
+      __pyx_t_9.memview = NULL; __pyx_t_9.data = NULL;
        __Pyx_ExceptionSwap(&__pyx_t_22, &__pyx_t_23, &__pyx_t_24);
       if ( unlikely(__Pyx_GetException(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21) < 0)) __Pyx_ErrFetch(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
       __Pyx_XGOTREF(__pyx_t_19);
@@ -19182,12 +19463,12 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
       __Pyx_XGOTREF(__pyx_t_22);
       __Pyx_XGOTREF(__pyx_t_23);
       __Pyx_XGOTREF(__pyx_t_24);
-      __pyx_t_16 = __pyx_lineno; __pyx_t_17 = __pyx_clineno; __pyx_t_18 = __pyx_filename;
+      __pyx_t_2 = __pyx_lineno; __pyx_t_17 = __pyx_clineno; __pyx_t_18 = __pyx_filename;
       {
-        __pyx_t_2 = (__pyx_v_swapped_owned != NULL);
-        if (__pyx_t_2) {
+        __pyx_t_3 = (__pyx_v_swapped_owned != NULL);
+        if (__pyx_t_3) {
 
-          /* "xmhuffman.pyx":225
+          /* "xmhuffman.pyx":276
  *     finally:
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)             # <<<<<<<<<<<<<<
@@ -19196,8 +19477,8 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
           free(__pyx_v_swapped_owned);
 
-          /* "xmhuffman.pyx":224
- *                             <uint64_t>store_total_bits)
+          /* "xmhuffman.pyx":275
+ *                             cset, cb)
  *     finally:
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
@@ -19205,17 +19486,17 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
         }
 
-        /* "xmhuffman.pyx":226
+        /* "xmhuffman.pyx":277
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
  *             free(off_ptr)
  * 
 */
-        __pyx_t_2 = (__pyx_v_owns != 0);
-        if (__pyx_t_2) {
+        __pyx_t_3 = (__pyx_v_owns != 0);
+        if (__pyx_t_3) {
 
-          /* "xmhuffman.pyx":227
+          /* "xmhuffman.pyx":278
  *             free(swapped_owned)
  *         if owns:
  *             free(off_ptr)             # <<<<<<<<<<<<<<
@@ -19224,7 +19505,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
           free(__pyx_v_off_ptr);
 
-          /* "xmhuffman.pyx":226
+          /* "xmhuffman.pyx":277
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
@@ -19242,24 +19523,24 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
       __Pyx_XGIVEREF(__pyx_t_21);
       __Pyx_ErrRestore(__pyx_t_19, __pyx_t_20, __pyx_t_21);
       __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0;
-      __pyx_lineno = __pyx_t_16; __pyx_clineno = __pyx_t_17; __pyx_filename = __pyx_t_18;
+      __pyx_lineno = __pyx_t_2; __pyx_clineno = __pyx_t_17; __pyx_filename = __pyx_t_18;
       goto __pyx_L1_error;
     }
     __pyx_L6_return: {
       __pyx_t_24 = __pyx_r;
       __pyx_r = 0;
 
-      /* "xmhuffman.pyx":224
- *                             <uint64_t>store_total_bits)
+      /* "xmhuffman.pyx":275
+ *                             cset, cb)
  *     finally:
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
  *         if owns:
 */
-      __pyx_t_2 = (__pyx_v_swapped_owned != NULL);
-      if (__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_swapped_owned != NULL);
+      if (__pyx_t_3) {
 
-        /* "xmhuffman.pyx":225
+        /* "xmhuffman.pyx":276
  *     finally:
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)             # <<<<<<<<<<<<<<
@@ -19268,8 +19549,8 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
         free(__pyx_v_swapped_owned);
 
-        /* "xmhuffman.pyx":224
- *                             <uint64_t>store_total_bits)
+        /* "xmhuffman.pyx":275
+ *                             cset, cb)
  *     finally:
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
@@ -19277,17 +19558,17 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
       }
 
-      /* "xmhuffman.pyx":226
+      /* "xmhuffman.pyx":277
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
  *             free(off_ptr)
  * 
 */
-      __pyx_t_2 = (__pyx_v_owns != 0);
-      if (__pyx_t_2) {
+      __pyx_t_3 = (__pyx_v_owns != 0);
+      if (__pyx_t_3) {
 
-        /* "xmhuffman.pyx":227
+        /* "xmhuffman.pyx":278
  *             free(swapped_owned)
  *         if owns:
  *             free(off_ptr)             # <<<<<<<<<<<<<<
@@ -19296,7 +19577,7 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
 */
         free(__pyx_v_off_ptr);
 
-        /* "xmhuffman.pyx":226
+        /* "xmhuffman.pyx":277
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
@@ -19310,23 +19591,23 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
     }
   }
 
-  /* "xmhuffman.pyx":173
+  /* "xmhuffman.pyx":207
  * 
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                       swap=True):
+ *                       swap=True, charset_mode='general', charset_byte=0):
  *     """Decode a page given an already-built table.
 */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __PYX_XCLEAR_MEMVIEW(&__pyx_t_7, 1);
+  __Pyx_XDECREF(__pyx_t_6);
   __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
-  __Pyx_XDECREF(__pyx_t_9);
+  __PYX_XCLEAR_MEMVIEW(&__pyx_t_9, 1);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_13);
   __Pyx_AddTraceback("xmhuffman.decode_with_table", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -19338,11 +19619,11 @@ static PyObject *__pyx_pf_9xmhuffman_6decode_with_table(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "xmhuffman.pyx":230
+/* "xmhuffman.pyx":281
  * 
  * 
  * def decode_page(bitstream, encode_array_128, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                 swap=True):
+ *                 swap=True, charset_mode='general', charset_byte=0):
  *     """Decode every string on a Vertipaq dictionary page.
 */
 
@@ -19354,7 +19635,7 @@ PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_9xmhuffman_8decode_page, "Decode every string on a Vertipaq dictionary page.\n\n    Parameters\n    ----------\n    bitstream : bytes-like\n        The raw (or pre-swapped) ``compressed_string_buffer``.\n    encode_array_128 : bytes-like\n        The 128-byte nibble-packed ``encode_array``.\n    offsets : sequence of u32\n        Per-string start bit offsets (sorted ascending).\n    store_total_bits : int\n        End-of-stream sentinel for the last string.\n    swap : bool, default True\n        If True, byte-pair-swap ``bitstream`` inside the extension.\n    ");
+PyDoc_STRVAR(__pyx_doc_9xmhuffman_8decode_page, "Decode every string on a Vertipaq dictionary page.\n\n    Parameters\n    ----------\n    bitstream : bytes-like\n        The raw (or pre-swapped) ``compressed_string_buffer``.\n    encode_array_128 : bytes-like\n        The 128-byte nibble-packed ``encode_array``.\n    offsets : sequence of u32\n        Per-string start bit offsets (sorted ascending).\n    store_total_bits : int\n        End-of-stream sentinel for the last string.\n    swap : bool, default True\n        If True, byte-pair-swap ``bitstream`` inside the extension.\n    charset_mode : {'general', 'single'}, default 'general'\n        See :func:`decode_with_table`.\n    charset_byte : int, default 0\n        See :func:`decode_with_table`.\n    ");
 static PyMethodDef __pyx_mdef_9xmhuffman_9decode_page = {"decode_page", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_9xmhuffman_9decode_page, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_9xmhuffman_8decode_page};
 static PyObject *__pyx_pw_9xmhuffman_9decode_page(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
@@ -19368,11 +19649,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   PyObject *__pyx_v_offsets = 0;
   PyObject *__pyx_v_store_total_bits = 0;
   PyObject *__pyx_v_swap = 0;
+  PyObject *__pyx_v_charset_mode = 0;
+  PyObject *__pyx_v_charset_byte = 0;
   #if !CYTHON_METH_FASTCALL
   CYTHON_UNUSED Py_ssize_t __pyx_nargs;
   #endif
   CYTHON_UNUSED PyObject *const *__pyx_kwvalues;
-  PyObject* values[5] = {0,0,0,0,0};
+  PyObject* values[7] = {0,0,0,0,0,0,0};
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -19388,77 +19671,99 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   #endif
   __pyx_kwvalues = __Pyx_KwValues_FASTCALL(__pyx_args, __pyx_nargs);
   {
-    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_bitstream,&__pyx_mstate_global->__pyx_n_u_encode_array_128,&__pyx_mstate_global->__pyx_n_u_offsets,&__pyx_mstate_global->__pyx_n_u_store_total_bits,&__pyx_mstate_global->__pyx_n_u_swap,0};
+    PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_bitstream,&__pyx_mstate_global->__pyx_n_u_encode_array_128,&__pyx_mstate_global->__pyx_n_u_offsets,&__pyx_mstate_global->__pyx_n_u_store_total_bits,&__pyx_mstate_global->__pyx_n_u_swap,&__pyx_mstate_global->__pyx_n_u_charset_mode,&__pyx_mstate_global->__pyx_n_u_charset_byte,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 230, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 281, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
+        case  7:
+        values[6] = __Pyx_ArgRef_FASTCALL(__pyx_args, 6);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[6])) __PYX_ERR(0, 281, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  6:
+        values[5] = __Pyx_ArgRef_FASTCALL(__pyx_args, 5);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 281, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
         case  5:
         values[4] = __Pyx_ArgRef_FASTCALL(__pyx_args, 4);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  4:
         values[3] = __Pyx_ArgRef_FASTCALL(__pyx_args, 3);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  3:
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  2:
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decode_page", 0) < (0)) __PYX_ERR(0, 230, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "decode_page", 0) < (0)) __PYX_ERR(0, 281, __pyx_L3_error)
 
-      /* "xmhuffman.pyx":231
+      /* "xmhuffman.pyx":282
  * 
  * def decode_page(bitstream, encode_array_128, offsets, store_total_bits,
- *                 swap=True):             # <<<<<<<<<<<<<<
+ *                 swap=True, charset_mode='general', charset_byte=0):             # <<<<<<<<<<<<<<
  *     """Decode every string on a Vertipaq dictionary page.
  * 
 */
       if (!values[4]) values[4] = __Pyx_NewRef(((PyObject *)((PyObject*)Py_True)));
+      if (!values[5]) values[5] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_n_u_general)));
+      if (!values[6]) values[6] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_int_0)));
       for (Py_ssize_t i = __pyx_nargs; i < 4; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decode_page", 0, 4, 5, i); __PYX_ERR(0, 230, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("decode_page", 0, 4, 7, i); __PYX_ERR(0, 281, __pyx_L3_error) }
       }
     } else {
       switch (__pyx_nargs) {
+        case  7:
+        values[6] = __Pyx_ArgRef_FASTCALL(__pyx_args, 6);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[6])) __PYX_ERR(0, 281, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
+        case  6:
+        values[5] = __Pyx_ArgRef_FASTCALL(__pyx_args, 5);
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[5])) __PYX_ERR(0, 281, __pyx_L3_error)
+        CYTHON_FALLTHROUGH;
         case  5:
         values[4] = __Pyx_ArgRef_FASTCALL(__pyx_args, 4);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[4])) __PYX_ERR(0, 281, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  4:
         values[3] = __Pyx_ArgRef_FASTCALL(__pyx_args, 3);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[3])) __PYX_ERR(0, 281, __pyx_L3_error)
         values[2] = __Pyx_ArgRef_FASTCALL(__pyx_args, 2);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[2])) __PYX_ERR(0, 281, __pyx_L3_error)
         values[1] = __Pyx_ArgRef_FASTCALL(__pyx_args, 1);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[1])) __PYX_ERR(0, 281, __pyx_L3_error)
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 230, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 281, __pyx_L3_error)
         break;
         default: goto __pyx_L5_argtuple_error;
       }
       if (!values[4]) values[4] = __Pyx_NewRef(((PyObject *)((PyObject*)Py_True)));
+      if (!values[5]) values[5] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_n_u_general)));
+      if (!values[6]) values[6] = __Pyx_NewRef(((PyObject *)((PyObject*)__pyx_mstate_global->__pyx_int_0)));
     }
     __pyx_v_bitstream = values[0];
     __pyx_v_encode_array_128 = values[1];
     __pyx_v_offsets = values[2];
     __pyx_v_store_total_bits = values[3];
     __pyx_v_swap = values[4];
+    __pyx_v_charset_mode = values[5];
+    __pyx_v_charset_byte = values[6];
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("decode_page", 0, 4, 5, __pyx_nargs); __PYX_ERR(0, 230, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("decode_page", 0, 4, 7, __pyx_nargs); __PYX_ERR(0, 281, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -19469,13 +19774,13 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_9xmhuffman_8decode_page(__pyx_self, __pyx_v_bitstream, __pyx_v_encode_array_128, __pyx_v_offsets, __pyx_v_store_total_bits, __pyx_v_swap);
+  __pyx_r = __pyx_pf_9xmhuffman_8decode_page(__pyx_self, __pyx_v_bitstream, __pyx_v_encode_array_128, __pyx_v_offsets, __pyx_v_store_total_bits, __pyx_v_swap, __pyx_v_charset_mode, __pyx_v_charset_byte);
 
-  /* "xmhuffman.pyx":230
+  /* "xmhuffman.pyx":281
  * 
  * 
  * def decode_page(bitstream, encode_array_128, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                 swap=True):
+ *                 swap=True, charset_mode='general', charset_byte=0):
  *     """Decode every string on a Vertipaq dictionary page.
 */
 
@@ -19487,7 +19792,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_encode_array_128, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap) {
+static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bitstream, PyObject *__pyx_v_encode_array_128, PyObject *__pyx_v_offsets, PyObject *__pyx_v_store_total_bits, PyObject *__pyx_v_swap, PyObject *__pyx_v_charset_mode, PyObject *__pyx_v_charset_byte) {
   __Pyx_memviewslice __pyx_v_eav = { 0, 0, { 0 }, { 0 }, { 0 } };
   __Pyx_memviewslice __pyx_v_bsv = { 0, 0, { 0 }, { 0 }, { 0 } };
   Py_ssize_t __pyx_v_n_buf;
@@ -19501,46 +19806,49 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
   CYTHON_UNUSED PyObject *__pyx_v_keep = 0;
   uint8_t *__pyx_v_swapped_owned;
   uint8_t const *__pyx_v_swapped_view;
+  int __pyx_v_cset;
+  uint8_t __pyx_v_cb;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_memviewslice __pyx_t_1 = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  size_t __pyx_t_5;
-  __Pyx_memviewslice __pyx_t_6 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  Py_ssize_t __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_t_10;
-  uint64_t __pyx_t_11;
+  unsigned int __pyx_t_3;
+  int __pyx_t_4;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  size_t __pyx_t_7;
+  __Pyx_memviewslice __pyx_t_8 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_9;
+  PyObject *__pyx_t_10 = NULL;
+  PyObject *__pyx_t_11 = NULL;
   int __pyx_t_12;
-  int __pyx_t_13;
-  char const *__pyx_t_14;
-  PyObject *__pyx_t_15 = NULL;
+  uint64_t __pyx_t_13;
+  int __pyx_t_14;
+  char const *__pyx_t_15;
   PyObject *__pyx_t_16 = NULL;
   PyObject *__pyx_t_17 = NULL;
   PyObject *__pyx_t_18 = NULL;
   PyObject *__pyx_t_19 = NULL;
   PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("decode_page", 0);
 
-  /* "xmhuffman.pyx":247
- *         If True, byte-pair-swap ``bitstream`` inside the extension.
+  /* "xmhuffman.pyx":302
+ *         See :func:`decode_with_table`.
  *     """
  *     cdef const unsigned char[::1] eav = encode_array_128             # <<<<<<<<<<<<<<
  *     cdef const unsigned char[::1] bsv
  *     cdef Py_ssize_t n_buf
 */
-  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_encode_array_128, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 247, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_encode_array_128, 0); if (unlikely(!__pyx_t_1.memview)) __PYX_ERR(0, 302, __pyx_L1_error)
   __pyx_v_eav = __pyx_t_1;
   __pyx_t_1.memview = NULL;
   __pyx_t_1.data = NULL;
 
-  /* "xmhuffman.pyx":252
+  /* "xmhuffman.pyx":307
  *     cdef uint8_t lengths[256]
  *     cdef uint16_t *tbl
  *     cdef unsigned max_len = 0             # <<<<<<<<<<<<<<
@@ -19549,7 +19857,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_max_len = 0;
 
-  /* "xmhuffman.pyx":254
+  /* "xmhuffman.pyx":309
  *     cdef unsigned max_len = 0
  *     cdef int rc
  *     cdef uint32_t *off_ptr = NULL             # <<<<<<<<<<<<<<
@@ -19558,7 +19866,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_off_ptr = NULL;
 
-  /* "xmhuffman.pyx":255
+  /* "xmhuffman.pyx":310
  *     cdef int rc
  *     cdef uint32_t *off_ptr = NULL
  *     cdef Py_ssize_t n_strings = 0             # <<<<<<<<<<<<<<
@@ -19567,7 +19875,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_n_strings = 0;
 
-  /* "xmhuffman.pyx":256
+  /* "xmhuffman.pyx":311
  *     cdef uint32_t *off_ptr = NULL
  *     cdef Py_ssize_t n_strings = 0
  *     cdef int owns = 0             # <<<<<<<<<<<<<<
@@ -19576,47 +19884,67 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_owns = 0;
 
-  /* "xmhuffman.pyx":258
+  /* "xmhuffman.pyx":313
  *     cdef int owns = 0
  *     cdef object keep
  *     cdef uint8_t *swapped_owned = NULL             # <<<<<<<<<<<<<<
  *     cdef const uint8_t *swapped_view
- * 
+ *     cdef int cset = _parse_charset_mode(charset_mode)
 */
   __pyx_v_swapped_owned = NULL;
 
-  /* "xmhuffman.pyx":261
+  /* "xmhuffman.pyx":315
+ *     cdef uint8_t *swapped_owned = NULL
  *     cdef const uint8_t *swapped_view
+ *     cdef int cset = _parse_charset_mode(charset_mode)             # <<<<<<<<<<<<<<
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
+ * 
+*/
+  __pyx_t_2 = __pyx_f_9xmhuffman__parse_charset_mode(__pyx_v_charset_mode); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 315, __pyx_L1_error)
+  __pyx_v_cset = __pyx_t_2;
+
+  /* "xmhuffman.pyx":316
+ *     cdef const uint8_t *swapped_view
+ *     cdef int cset = _parse_charset_mode(charset_mode)
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)             # <<<<<<<<<<<<<<
+ * 
+ *     if eav.shape[0] != 128:
+*/
+  __pyx_t_3 = __Pyx_PyLong_As_unsigned_int(__pyx_v_charset_byte); if (unlikely((__pyx_t_3 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 316, __pyx_L1_error)
+  __pyx_v_cb = ((uint8_t)(((unsigned int)__pyx_t_3) & 0xff));
+
+  /* "xmhuffman.pyx":318
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
  * 
  *     if eav.shape[0] != 128:             # <<<<<<<<<<<<<<
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     bsv = bitstream
 */
-  __pyx_t_2 = ((__pyx_v_eav.shape[0]) != 0x80);
-  if (unlikely(__pyx_t_2)) {
+  __pyx_t_4 = ((__pyx_v_eav.shape[0]) != 0x80);
+  if (unlikely(__pyx_t_4)) {
 
-    /* "xmhuffman.pyx":262
+    /* "xmhuffman.pyx":319
  * 
  *     if eav.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")             # <<<<<<<<<<<<<<
  *     bsv = bitstream
  *     n_buf = bsv.shape[0]
 */
-    __pyx_t_4 = NULL;
-    __pyx_t_5 = 1;
+    __pyx_t_6 = NULL;
+    __pyx_t_7 = 1;
     {
-      PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_mstate_global->__pyx_kp_u_encode_array_must_be_exactly_128};
-      __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 262, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
+      PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_mstate_global->__pyx_kp_u_encode_array_must_be_exactly_128};
+      __pyx_t_5 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 319, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
     }
-    __Pyx_Raise(__pyx_t_3, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_Raise(__pyx_t_5, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __PYX_ERR(0, 319, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":261
- *     cdef const uint8_t *swapped_view
+    /* "xmhuffman.pyx":318
+ *     cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
  * 
  *     if eav.shape[0] != 128:             # <<<<<<<<<<<<<<
  *         raise ValueError("encode_array must be exactly 128 bytes")
@@ -19624,19 +19952,19 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   }
 
-  /* "xmhuffman.pyx":263
+  /* "xmhuffman.pyx":320
  *     if eav.shape[0] != 128:
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     bsv = bitstream             # <<<<<<<<<<<<<<
  *     n_buf = bsv.shape[0]
  * 
 */
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_bitstream, 0); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 263, __pyx_L1_error)
-  __pyx_v_bsv = __pyx_t_6;
-  __pyx_t_6.memview = NULL;
-  __pyx_t_6.data = NULL;
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_unsigned_char__const__(__pyx_v_bitstream, 0); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 320, __pyx_L1_error)
+  __pyx_v_bsv = __pyx_t_8;
+  __pyx_t_8.memview = NULL;
+  __pyx_t_8.data = NULL;
 
-  /* "xmhuffman.pyx":264
+  /* "xmhuffman.pyx":321
  *         raise ValueError("encode_array must be exactly 128 bytes")
  *     bsv = bitstream
  *     n_buf = bsv.shape[0]             # <<<<<<<<<<<<<<
@@ -19645,7 +19973,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_n_buf = (__pyx_v_bsv.shape[0]);
 
-  /* "xmhuffman.pyx":266
+  /* "xmhuffman.pyx":323
  *     n_buf = bsv.shape[0]
  * 
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))             # <<<<<<<<<<<<<<
@@ -19654,26 +19982,26 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   __pyx_v_tbl = ((uint16_t *)malloc((0x8000 * (sizeof(uint16_t)))));
 
-  /* "xmhuffman.pyx":267
+  /* "xmhuffman.pyx":324
  * 
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:             # <<<<<<<<<<<<<<
  *         raise MemoryError()
  * 
 */
-  __pyx_t_2 = (__pyx_v_tbl == NULL);
-  if (unlikely(__pyx_t_2)) {
+  __pyx_t_4 = (__pyx_v_tbl == NULL);
+  if (unlikely(__pyx_t_4)) {
 
-    /* "xmhuffman.pyx":268
+    /* "xmhuffman.pyx":325
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:
  *         raise MemoryError()             # <<<<<<<<<<<<<<
  * 
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)
 */
-    PyErr_NoMemory(); __PYX_ERR(0, 268, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 325, __pyx_L1_error)
 
-    /* "xmhuffman.pyx":267
+    /* "xmhuffman.pyx":324
  * 
  *     tbl = <uint16_t *>malloc(_TABLE_MAX * sizeof(uint16_t))
  *     if tbl is NULL:             # <<<<<<<<<<<<<<
@@ -19682,19 +20010,19 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   }
 
-  /* "xmhuffman.pyx":270
+  /* "xmhuffman.pyx":327
  *         raise MemoryError()
  * 
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)             # <<<<<<<<<<<<<<
  * 
  *     try:
 */
-  __pyx_t_3 = __pyx_f_9xmhuffman__coerce_offsets_to_u32(__pyx_v_offsets, (&__pyx_v_off_ptr), (&__pyx_v_n_strings), (&__pyx_v_owns)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 270, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_v_keep = __pyx_t_3;
-  __pyx_t_3 = 0;
+  __pyx_t_5 = __pyx_f_9xmhuffman__coerce_offsets_to_u32(__pyx_v_offsets, (&__pyx_v_off_ptr), (&__pyx_v_n_strings), (&__pyx_v_owns)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 327, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_v_keep = __pyx_t_5;
+  __pyx_t_5 = 0;
 
-  /* "xmhuffman.pyx":272
+  /* "xmhuffman.pyx":329
  *     keep = _coerce_offsets_to_u32(offsets, &off_ptr, &n_strings, &owns)
  * 
  *     try:             # <<<<<<<<<<<<<<
@@ -19703,7 +20031,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
   /*try:*/ {
 
-    /* "xmhuffman.pyx":273
+    /* "xmhuffman.pyx":330
  * 
  *     try:
  *         with nogil:             # <<<<<<<<<<<<<<
@@ -19716,17 +20044,17 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
         __Pyx_FastGIL_Remember();
         /*try:*/ {
 
-          /* "xmhuffman.pyx":274
+          /* "xmhuffman.pyx":331
  *     try:
  *         with nogil:
  *             xmh_decompress_encode_array(&eav[0], lengths)             # <<<<<<<<<<<<<<
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:
 */
-          __pyx_t_7 = 0;
-          xmh_decompress_encode_array((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_eav.data) + __pyx_t_7)) )))), __pyx_v_lengths);
+          __pyx_t_9 = 0;
+          xmh_decompress_encode_array((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_eav.data) + __pyx_t_9)) )))), __pyx_v_lengths);
 
-          /* "xmhuffman.pyx":275
+          /* "xmhuffman.pyx":332
  *         with nogil:
  *             xmh_decompress_encode_array(&eav[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)             # <<<<<<<<<<<<<<
@@ -19736,7 +20064,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
           __pyx_v_rc = xmh_build_table(__pyx_v_lengths, __pyx_v_tbl, (&__pyx_v_max_len));
         }
 
-        /* "xmhuffman.pyx":273
+        /* "xmhuffman.pyx":330
  * 
  *     try:
  *         with nogil:             # <<<<<<<<<<<<<<
@@ -19753,43 +20081,43 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
         }
     }
 
-    /* "xmhuffman.pyx":276
+    /* "xmhuffman.pyx":333
  *             xmh_decompress_encode_array(&eav[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:
 */
-    __pyx_t_2 = (__pyx_v_rc != 0);
-    if (unlikely(__pyx_t_2)) {
+    __pyx_t_4 = (__pyx_v_rc != 0);
+    if (unlikely(__pyx_t_4)) {
 
-      /* "xmhuffman.pyx":277
+      /* "xmhuffman.pyx":334
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)             # <<<<<<<<<<<<<<
  *         if max_len == 0:
  *             return [b""] * n_strings
 */
-      __pyx_t_4 = NULL;
-      __pyx_t_8 = __Pyx_PyLong_From_int(__pyx_v_rc); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 277, __pyx_L6_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_invalid_Huffman_code_lengths_rc, __pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 277, __pyx_L6_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_5 = 1;
+      __pyx_t_6 = NULL;
+      __pyx_t_10 = __Pyx_PyLong_From_int(__pyx_v_rc); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 334, __pyx_L6_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      __pyx_t_11 = PyUnicode_Format(__pyx_mstate_global->__pyx_kp_u_invalid_Huffman_code_lengths_rc, __pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 334, __pyx_L6_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __pyx_t_7 = 1;
       {
-        PyObject *__pyx_callargs[2] = {__pyx_t_4, __pyx_t_9};
-        __pyx_t_3 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_5, (2-__pyx_t_5) | (__pyx_t_5*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 277, __pyx_L6_error)
-        __Pyx_GOTREF(__pyx_t_3);
+        PyObject *__pyx_callargs[2] = {__pyx_t_6, __pyx_t_11};
+        __pyx_t_5 = __Pyx_PyObject_FastCall((PyObject*)(((PyTypeObject*)PyExc_ValueError)), __pyx_callargs+__pyx_t_7, (2-__pyx_t_7) | (__pyx_t_7*__Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET));
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 334, __pyx_L6_error)
+        __Pyx_GOTREF(__pyx_t_5);
       }
-      __Pyx_Raise(__pyx_t_3, 0, 0, 0);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 277, __pyx_L6_error)
+      __Pyx_Raise(__pyx_t_5, 0, 0, 0);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __PYX_ERR(0, 334, __pyx_L6_error)
 
-      /* "xmhuffman.pyx":276
+      /* "xmhuffman.pyx":333
  *             xmh_decompress_encode_array(&eav[0], lengths)
  *             rc = xmh_build_table(lengths, tbl, &max_len)
  *         if rc != 0:             # <<<<<<<<<<<<<<
@@ -19798,17 +20126,17 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
     }
 
-    /* "xmhuffman.pyx":278
+    /* "xmhuffman.pyx":335
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:             # <<<<<<<<<<<<<<
  *             return [b""] * n_strings
  * 
 */
-    __pyx_t_2 = (__pyx_v_max_len == 0);
-    if (__pyx_t_2) {
+    __pyx_t_4 = (__pyx_v_max_len == 0);
+    if (__pyx_t_4) {
 
-      /* "xmhuffman.pyx":279
+      /* "xmhuffman.pyx":336
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:
  *             return [b""] * n_strings             # <<<<<<<<<<<<<<
@@ -19816,20 +20144,20 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
  *         if swap and n_buf > 0:
 */
       __Pyx_XDECREF(__pyx_r);
-      __pyx_t_3 = PyList_New(1 * ((__pyx_v_n_strings<0) ? 0:__pyx_v_n_strings)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L6_error)
-      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_5 = PyList_New(1 * ((__pyx_v_n_strings<0) ? 0:__pyx_v_n_strings)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 336, __pyx_L6_error)
+      __Pyx_GOTREF(__pyx_t_5);
       { Py_ssize_t __pyx_temp;
         for (__pyx_temp=0; __pyx_temp < __pyx_v_n_strings; __pyx_temp++) {
           __Pyx_INCREF(__pyx_mstate_global->__pyx_kp_b__6);
           __Pyx_GIVEREF(__pyx_mstate_global->__pyx_kp_b__6);
-          if (__Pyx_PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_mstate_global->__pyx_kp_b__6) != (0)) __PYX_ERR(0, 279, __pyx_L6_error);
+          if (__Pyx_PyList_SET_ITEM(__pyx_t_5, __pyx_temp, __pyx_mstate_global->__pyx_kp_b__6) != (0)) __PYX_ERR(0, 336, __pyx_L6_error);
         }
       }
-      __pyx_r = __pyx_t_3;
-      __pyx_t_3 = 0;
+      __pyx_r = __pyx_t_5;
+      __pyx_t_5 = 0;
       goto __pyx_L5_return;
 
-      /* "xmhuffman.pyx":278
+      /* "xmhuffman.pyx":335
  *         if rc != 0:
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:             # <<<<<<<<<<<<<<
@@ -19838,25 +20166,25 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
     }
 
-    /* "xmhuffman.pyx":281
+    /* "xmhuffman.pyx":338
  *             return [b""] * n_strings
  * 
  *         if swap and n_buf > 0:             # <<<<<<<<<<<<<<
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:
 */
-    __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_v_swap); if (unlikely((__pyx_t_10 < 0))) __PYX_ERR(0, 281, __pyx_L6_error)
-    if (__pyx_t_10) {
+    __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_v_swap); if (unlikely((__pyx_t_12 < 0))) __PYX_ERR(0, 338, __pyx_L6_error)
+    if (__pyx_t_12) {
     } else {
-      __pyx_t_2 = __pyx_t_10;
+      __pyx_t_4 = __pyx_t_12;
       goto __pyx_L14_bool_binop_done;
     }
-    __pyx_t_10 = (__pyx_v_n_buf > 0);
-    __pyx_t_2 = __pyx_t_10;
+    __pyx_t_12 = (__pyx_v_n_buf > 0);
+    __pyx_t_4 = __pyx_t_12;
     __pyx_L14_bool_binop_done:;
-    if (__pyx_t_2) {
+    if (__pyx_t_4) {
 
-      /* "xmhuffman.pyx":282
+      /* "xmhuffman.pyx":339
  * 
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)             # <<<<<<<<<<<<<<
@@ -19865,26 +20193,26 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
       __pyx_v_swapped_owned = ((uint8_t *)malloc(((size_t)__pyx_v_n_buf)));
 
-      /* "xmhuffman.pyx":283
+      /* "xmhuffman.pyx":340
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:             # <<<<<<<<<<<<<<
  *                 raise MemoryError()
  *             with nogil:
 */
-      __pyx_t_2 = (__pyx_v_swapped_owned == NULL);
-      if (unlikely(__pyx_t_2)) {
+      __pyx_t_4 = (__pyx_v_swapped_owned == NULL);
+      if (unlikely(__pyx_t_4)) {
 
-        /* "xmhuffman.pyx":284
+        /* "xmhuffman.pyx":341
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:
  *                 raise MemoryError()             # <<<<<<<<<<<<<<
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
 */
-        PyErr_NoMemory(); __PYX_ERR(0, 284, __pyx_L6_error)
+        PyErr_NoMemory(); __PYX_ERR(0, 341, __pyx_L6_error)
 
-        /* "xmhuffman.pyx":283
+        /* "xmhuffman.pyx":340
  *         if swap and n_buf > 0:
  *             swapped_owned = <uint8_t *>malloc(<size_t>n_buf)
  *             if swapped_owned is NULL:             # <<<<<<<<<<<<<<
@@ -19893,7 +20221,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
       }
 
-      /* "xmhuffman.pyx":285
+      /* "xmhuffman.pyx":342
  *             if swapped_owned is NULL:
  *                 raise MemoryError()
  *             with nogil:             # <<<<<<<<<<<<<<
@@ -19906,18 +20234,18 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
           __Pyx_FastGIL_Remember();
           /*try:*/ {
 
-            /* "xmhuffman.pyx":286
+            /* "xmhuffman.pyx":343
  *                 raise MemoryError()
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)             # <<<<<<<<<<<<<<
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:
 */
-            __pyx_t_7 = 0;
-            xmh_swap_pairs((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_7)) )))), __pyx_v_swapped_owned, ((size_t)__pyx_v_n_buf));
+            __pyx_t_9 = 0;
+            xmh_swap_pairs((&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_9)) )))), __pyx_v_swapped_owned, ((size_t)__pyx_v_n_buf));
           }
 
-          /* "xmhuffman.pyx":285
+          /* "xmhuffman.pyx":342
  *             if swapped_owned is NULL:
  *                 raise MemoryError()
  *             with nogil:             # <<<<<<<<<<<<<<
@@ -19934,7 +20262,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
           }
       }
 
-      /* "xmhuffman.pyx":287
+      /* "xmhuffman.pyx":344
  *             with nogil:
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned             # <<<<<<<<<<<<<<
@@ -19943,7 +20271,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
       __pyx_v_swapped_view = __pyx_v_swapped_owned;
 
-      /* "xmhuffman.pyx":281
+      /* "xmhuffman.pyx":338
  *             return [b""] * n_strings
  * 
  *         if swap and n_buf > 0:             # <<<<<<<<<<<<<<
@@ -19953,27 +20281,27 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
       goto __pyx_L13;
     }
 
-    /* "xmhuffman.pyx":288
+    /* "xmhuffman.pyx":345
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:             # <<<<<<<<<<<<<<
  *             swapped_view = &bsv[0]
  *         else:
 */
-    __pyx_t_2 = (__pyx_v_n_buf > 0);
-    if (__pyx_t_2) {
+    __pyx_t_4 = (__pyx_v_n_buf > 0);
+    if (__pyx_t_4) {
 
-      /* "xmhuffman.pyx":289
+      /* "xmhuffman.pyx":346
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:
  *             swapped_view = &bsv[0]             # <<<<<<<<<<<<<<
  *         else:
  *             swapped_view = NULL
 */
-      __pyx_t_7 = 0;
-      __pyx_v_swapped_view = (&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_7)) ))));
+      __pyx_t_9 = 0;
+      __pyx_v_swapped_view = (&(*((unsigned char const  *) ( /* dim=0 */ ((char *) (((unsigned char const  *) __pyx_v_bsv.data) + __pyx_t_9)) ))));
 
-      /* "xmhuffman.pyx":288
+      /* "xmhuffman.pyx":345
  *                 xmh_swap_pairs(&bsv[0], swapped_owned, <size_t>n_buf)
  *             swapped_view = swapped_owned
  *         elif n_buf > 0:             # <<<<<<<<<<<<<<
@@ -19983,7 +20311,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
       goto __pyx_L13;
     }
 
-    /* "xmhuffman.pyx":291
+    /* "xmhuffman.pyx":348
  *             swapped_view = &bsv[0]
  *         else:
  *             swapped_view = NULL             # <<<<<<<<<<<<<<
@@ -19995,7 +20323,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
     }
     __pyx_L13:;
 
-    /* "xmhuffman.pyx":293
+    /* "xmhuffman.pyx":350
  *             swapped_view = NULL
  * 
  *         return _decode_loop(swapped_view, <size_t>n_buf,             # <<<<<<<<<<<<<<
@@ -20004,31 +20332,31 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
     __Pyx_XDECREF(__pyx_r);
 
-    /* "xmhuffman.pyx":296
+    /* "xmhuffman.pyx":353
  *                             tbl, max_len,
  *                             off_ptr, n_strings,
- *                             <uint64_t>store_total_bits)             # <<<<<<<<<<<<<<
+ *                             <uint64_t>store_total_bits,             # <<<<<<<<<<<<<<
+ *                             cset, cb)
  *     finally:
- *         free(tbl)
 */
-    __pyx_t_11 = __Pyx_PyLong_As_uint64_t(__pyx_v_store_total_bits); if (unlikely((__pyx_t_11 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 296, __pyx_L6_error)
+    __pyx_t_13 = __Pyx_PyLong_As_uint64_t(__pyx_v_store_total_bits); if (unlikely((__pyx_t_13 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 353, __pyx_L6_error)
 
-    /* "xmhuffman.pyx":293
+    /* "xmhuffman.pyx":350
  *             swapped_view = NULL
  * 
  *         return _decode_loop(swapped_view, <size_t>n_buf,             # <<<<<<<<<<<<<<
  *                             tbl, max_len,
  *                             off_ptr, n_strings,
 */
-    __pyx_t_3 = __pyx_f_9xmhuffman__decode_loop(__pyx_v_swapped_view, ((size_t)__pyx_v_n_buf), __pyx_v_tbl, __pyx_v_max_len, __pyx_v_off_ptr, __pyx_v_n_strings, ((uint64_t)__pyx_t_11)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 293, __pyx_L6_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_r = __pyx_t_3;
-    __pyx_t_3 = 0;
+    __pyx_t_5 = __pyx_f_9xmhuffman__decode_loop(__pyx_v_swapped_view, ((size_t)__pyx_v_n_buf), __pyx_v_tbl, __pyx_v_max_len, __pyx_v_off_ptr, __pyx_v_n_strings, ((uint64_t)__pyx_t_13), __pyx_v_cset, __pyx_v_cb); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 350, __pyx_L6_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_r = __pyx_t_5;
+    __pyx_t_5 = 0;
     goto __pyx_L5_return;
   }
 
-  /* "xmhuffman.pyx":298
- *                             <uint64_t>store_total_bits)
+  /* "xmhuffman.pyx":356
+ *                             cset, cb)
  *     finally:
  *         free(tbl)             # <<<<<<<<<<<<<<
  *         if swapped_owned is not NULL:
@@ -20039,38 +20367,38 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
     /*exception exit:*/{
       __Pyx_PyThreadState_declare
       __Pyx_PyThreadState_assign
-      __pyx_t_15 = 0; __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0;
+      __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
       __PYX_XCLEAR_MEMVIEW(&__pyx_t_1, 1);
       __pyx_t_1.memview = NULL; __pyx_t_1.data = NULL;
-      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __PYX_XCLEAR_MEMVIEW(&__pyx_t_6, 1);
-      __pyx_t_6.memview = NULL; __pyx_t_6.data = NULL;
-      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-       __Pyx_ExceptionSwap(&__pyx_t_18, &__pyx_t_19, &__pyx_t_20);
-      if ( unlikely(__Pyx_GetException(&__pyx_t_15, &__pyx_t_16, &__pyx_t_17) < 0)) __Pyx_ErrFetch(&__pyx_t_15, &__pyx_t_16, &__pyx_t_17);
-      __Pyx_XGOTREF(__pyx_t_15);
+      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
+      __pyx_t_8.memview = NULL; __pyx_t_8.data = NULL;
+       __Pyx_ExceptionSwap(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
+      if ( unlikely(__Pyx_GetException(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18) < 0)) __Pyx_ErrFetch(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
       __Pyx_XGOTREF(__pyx_t_16);
       __Pyx_XGOTREF(__pyx_t_17);
       __Pyx_XGOTREF(__pyx_t_18);
       __Pyx_XGOTREF(__pyx_t_19);
       __Pyx_XGOTREF(__pyx_t_20);
-      __pyx_t_12 = __pyx_lineno; __pyx_t_13 = __pyx_clineno; __pyx_t_14 = __pyx_filename;
+      __Pyx_XGOTREF(__pyx_t_21);
+      __pyx_t_2 = __pyx_lineno; __pyx_t_14 = __pyx_clineno; __pyx_t_15 = __pyx_filename;
       {
         free(__pyx_v_tbl);
 
-        /* "xmhuffman.pyx":299
+        /* "xmhuffman.pyx":357
  *     finally:
  *         free(tbl)
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
  *         if owns:
 */
-        __pyx_t_2 = (__pyx_v_swapped_owned != NULL);
-        if (__pyx_t_2) {
+        __pyx_t_4 = (__pyx_v_swapped_owned != NULL);
+        if (__pyx_t_4) {
 
-          /* "xmhuffman.pyx":300
+          /* "xmhuffman.pyx":358
  *         free(tbl)
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)             # <<<<<<<<<<<<<<
@@ -20079,7 +20407,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
           free(__pyx_v_swapped_owned);
 
-          /* "xmhuffman.pyx":299
+          /* "xmhuffman.pyx":357
  *     finally:
  *         free(tbl)
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
@@ -20088,23 +20416,23 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
         }
 
-        /* "xmhuffman.pyx":301
+        /* "xmhuffman.pyx":359
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
  *             free(off_ptr)
 */
-        __pyx_t_2 = (__pyx_v_owns != 0);
-        if (__pyx_t_2) {
+        __pyx_t_4 = (__pyx_v_owns != 0);
+        if (__pyx_t_4) {
 
-          /* "xmhuffman.pyx":302
+          /* "xmhuffman.pyx":360
  *             free(swapped_owned)
  *         if owns:
  *             free(off_ptr)             # <<<<<<<<<<<<<<
 */
           free(__pyx_v_off_ptr);
 
-          /* "xmhuffman.pyx":301
+          /* "xmhuffman.pyx":359
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
@@ -20112,24 +20440,24 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
         }
       }
-      __Pyx_XGIVEREF(__pyx_t_18);
       __Pyx_XGIVEREF(__pyx_t_19);
       __Pyx_XGIVEREF(__pyx_t_20);
-      __Pyx_ExceptionReset(__pyx_t_18, __pyx_t_19, __pyx_t_20);
-      __Pyx_XGIVEREF(__pyx_t_15);
+      __Pyx_XGIVEREF(__pyx_t_21);
+      __Pyx_ExceptionReset(__pyx_t_19, __pyx_t_20, __pyx_t_21);
       __Pyx_XGIVEREF(__pyx_t_16);
       __Pyx_XGIVEREF(__pyx_t_17);
-      __Pyx_ErrRestore(__pyx_t_15, __pyx_t_16, __pyx_t_17);
-      __pyx_t_15 = 0; __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0;
-      __pyx_lineno = __pyx_t_12; __pyx_clineno = __pyx_t_13; __pyx_filename = __pyx_t_14;
+      __Pyx_XGIVEREF(__pyx_t_18);
+      __Pyx_ErrRestore(__pyx_t_16, __pyx_t_17, __pyx_t_18);
+      __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0; __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0;
+      __pyx_lineno = __pyx_t_2; __pyx_clineno = __pyx_t_14; __pyx_filename = __pyx_t_15;
       goto __pyx_L1_error;
     }
     __pyx_L5_return: {
-      __pyx_t_20 = __pyx_r;
+      __pyx_t_21 = __pyx_r;
       __pyx_r = 0;
 
-      /* "xmhuffman.pyx":298
- *                             <uint64_t>store_total_bits)
+      /* "xmhuffman.pyx":356
+ *                             cset, cb)
  *     finally:
  *         free(tbl)             # <<<<<<<<<<<<<<
  *         if swapped_owned is not NULL:
@@ -20137,17 +20465,17 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
       free(__pyx_v_tbl);
 
-      /* "xmhuffman.pyx":299
+      /* "xmhuffman.pyx":357
  *     finally:
  *         free(tbl)
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
  *             free(swapped_owned)
  *         if owns:
 */
-      __pyx_t_2 = (__pyx_v_swapped_owned != NULL);
-      if (__pyx_t_2) {
+      __pyx_t_4 = (__pyx_v_swapped_owned != NULL);
+      if (__pyx_t_4) {
 
-        /* "xmhuffman.pyx":300
+        /* "xmhuffman.pyx":358
  *         free(tbl)
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)             # <<<<<<<<<<<<<<
@@ -20156,7 +20484,7 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
         free(__pyx_v_swapped_owned);
 
-        /* "xmhuffman.pyx":299
+        /* "xmhuffman.pyx":357
  *     finally:
  *         free(tbl)
  *         if swapped_owned is not NULL:             # <<<<<<<<<<<<<<
@@ -20165,51 +20493,51 @@ static PyObject *__pyx_pf_9xmhuffman_8decode_page(CYTHON_UNUSED PyObject *__pyx_
 */
       }
 
-      /* "xmhuffman.pyx":301
+      /* "xmhuffman.pyx":359
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
  *             free(off_ptr)
 */
-      __pyx_t_2 = (__pyx_v_owns != 0);
-      if (__pyx_t_2) {
+      __pyx_t_4 = (__pyx_v_owns != 0);
+      if (__pyx_t_4) {
 
-        /* "xmhuffman.pyx":302
+        /* "xmhuffman.pyx":360
  *             free(swapped_owned)
  *         if owns:
  *             free(off_ptr)             # <<<<<<<<<<<<<<
 */
         free(__pyx_v_off_ptr);
 
-        /* "xmhuffman.pyx":301
+        /* "xmhuffman.pyx":359
  *         if swapped_owned is not NULL:
  *             free(swapped_owned)
  *         if owns:             # <<<<<<<<<<<<<<
  *             free(off_ptr)
 */
       }
-      __pyx_r = __pyx_t_20;
-      __pyx_t_20 = 0;
+      __pyx_r = __pyx_t_21;
+      __pyx_t_21 = 0;
       goto __pyx_L0;
     }
   }
 
-  /* "xmhuffman.pyx":230
+  /* "xmhuffman.pyx":281
  * 
  * 
  * def decode_page(bitstream, encode_array_128, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                 swap=True):
+ *                 swap=True, charset_mode='general', charset_byte=0):
  *     """Decode every string on a Vertipaq dictionary page.
 */
 
   /* function exit code */
   __pyx_L1_error:;
   __PYX_XCLEAR_MEMVIEW(&__pyx_t_1, 1);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XCLEAR_MEMVIEW(&__pyx_t_6, 1);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_11);
   __Pyx_AddTraceback("xmhuffman.decode_page", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -22073,81 +22401,81 @@ __Pyx_RefNannySetupContext("PyInit_xmhuffman", 0);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_pyx_unpickle_Enum, __pyx_t_4) < (0)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "xmhuffman.pyx":27
+  /* "xmhuffman.pyx":43
  * 
  * 
  * def swap_bytes(buffer):             # <<<<<<<<<<<<<<
  *     """Pair-swap a bytes-like buffer; trailing odd byte left as-is."""
  *     cdef const unsigned char[::1] inv = buffer
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_1swap_bytes, 0, __pyx_mstate_global->__pyx_n_u_swap_bytes, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_1swap_bytes, 0, __pyx_mstate_global->__pyx_n_u_swap_bytes, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_4);
   #endif
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_swap_bytes, __pyx_t_4) < (0)) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_swap_bytes, __pyx_t_4) < (0)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "xmhuffman.pyx":41
+  /* "xmhuffman.pyx":57
  * 
  * 
  * def decompress_encode_array(buffer):             # <<<<<<<<<<<<<<
  *     """Expand the 128-byte nibble-packed code-length array to 256 bytes."""
  *     cdef const unsigned char[::1] inv = buffer
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_3decompress_encode_array, 0, __pyx_mstate_global->__pyx_n_u_decompress_encode_array, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_3decompress_encode_array, 0, __pyx_mstate_global->__pyx_n_u_decompress_encode_array, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_4);
   #endif
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decompress_encode_array, __pyx_t_4) < (0)) __PYX_ERR(0, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decompress_encode_array, __pyx_t_4) < (0)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "xmhuffman.pyx":55
+  /* "xmhuffman.pyx":71
  * 
  * 
  * def build_table(encode_array_128):             # <<<<<<<<<<<<<<
  *     """Build the canonical-Huffman decode table.
  * 
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_5build_table, 0, __pyx_mstate_global->__pyx_n_u_build_table, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[2])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_5build_table, 0, __pyx_mstate_global->__pyx_n_u_build_table, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[2])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_4);
   #endif
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_build_table, __pyx_t_4) < (0)) __PYX_ERR(0, 55, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_build_table, __pyx_t_4) < (0)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "xmhuffman.pyx":173
+  /* "xmhuffman.pyx":207
  * 
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                       swap=True):
+ *                       swap=True, charset_mode='general', charset_byte=0):
  *     """Decode a page given an already-built table.
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_7decode_with_table, 0, __pyx_mstate_global->__pyx_n_u_decode_with_table, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[3])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 173, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_7decode_with_table, 0, __pyx_mstate_global->__pyx_n_u_decode_with_table, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[3])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_4);
   #endif
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_mstate_global->__pyx_tuple[2]);
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decode_with_table, __pyx_t_4) < (0)) __PYX_ERR(0, 173, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decode_with_table, __pyx_t_4) < (0)) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "xmhuffman.pyx":230
+  /* "xmhuffman.pyx":281
  * 
  * 
  * def decode_page(bitstream, encode_array_128, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                 swap=True):
+ *                 swap=True, charset_mode='general', charset_byte=0):
  *     """Decode every string on a Vertipaq dictionary page.
 */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_9decode_page, 0, __pyx_mstate_global->__pyx_n_u_decode_page, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 230, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9xmhuffman_9decode_page, 0, __pyx_mstate_global->__pyx_n_u_decode_page, NULL, __pyx_mstate_global->__pyx_n_u_xmhuffman, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[4])); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_4);
   #endif
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_mstate_global->__pyx_tuple[2]);
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decode_page, __pyx_t_4) < (0)) __PYX_ERR(0, 230, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_decode_page, __pyx_t_4) < (0)) __PYX_ERR(0, 281, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
   /* "xmhuffman.pyx":1
@@ -22245,25 +22573,25 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
   __Pyx_GOTREF(__pyx_mstate_global->__pyx_slice[0]);
   __Pyx_GIVEREF(__pyx_mstate_global->__pyx_slice[0]);
 
-  /* "xmhuffman.pyx":82
+  /* "xmhuffman.pyx":98
  *             raise ValueError("invalid Huffman code lengths (rc=%d)" % rc)
  *         if max_len == 0:
  *             return b"", 0             # <<<<<<<<<<<<<<
  *         nbytes = (1 << max_len) * sizeof(uint16_t)
  *         out = PyBytes_FromStringAndSize(<char *>tbl, nbytes)
 */
-  __pyx_mstate_global->__pyx_tuple[1] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_kp_b__6, __pyx_mstate_global->__pyx_int_0); if (unlikely(!__pyx_mstate_global->__pyx_tuple[1])) __PYX_ERR(0, 82, __pyx_L1_error)
+  __pyx_mstate_global->__pyx_tuple[1] = PyTuple_Pack(2, __pyx_mstate_global->__pyx_kp_b__6, __pyx_mstate_global->__pyx_int_0); if (unlikely(!__pyx_mstate_global->__pyx_tuple[1])) __PYX_ERR(0, 98, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[1]);
   __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[1]);
 
-  /* "xmhuffman.pyx":173
+  /* "xmhuffman.pyx":207
  * 
  * 
  * def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,             # <<<<<<<<<<<<<<
- *                       swap=True):
+ *                       swap=True, charset_mode='general', charset_byte=0):
  *     """Decode a page given an already-built table.
 */
-  __pyx_mstate_global->__pyx_tuple[2] = PyTuple_Pack(1, ((PyObject*)Py_True)); if (unlikely(!__pyx_mstate_global->__pyx_tuple[2])) __PYX_ERR(0, 173, __pyx_L1_error)
+  __pyx_mstate_global->__pyx_tuple[2] = PyTuple_Pack(3, ((PyObject*)Py_True), ((PyObject*)__pyx_mstate_global->__pyx_n_u_general), ((PyObject*)__pyx_mstate_global->__pyx_int_0)); if (unlikely(!__pyx_mstate_global->__pyx_tuple[2])) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_mstate_global->__pyx_tuple[2]);
   __Pyx_GIVEREF(__pyx_mstate_global->__pyx_tuple[2]);
   #if CYTHON_IMMORTAL_CONSTANTS
@@ -22315,34 +22643,34 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
-    const struct { const unsigned int length: 9; } index[] = {{2},{68},{35},{54},{37},{60},{24},{52},{26},{34},{29},{33},{45},{22},{15},{179},{37},{30},{32},{1},{1},{1},{1},{1},{8},{5},{6},{17},{15},{23},{25},{25},{7},{6},{38},{2},{6},{35},{36},{9},{30},{24},{50},{8},{5},{20},{32},{22},{25},{30},{37},{13},{5},{8},{20},{8},{15},{3},{15},{18},{4},{9},{3},{6},{11},{1},{9},{17},{18},{5},{1},{11},{17},{23},{8},{15},{3},{6},{16},{9},{5},{8},{5},{6},{7},{8},{12},{2},{10},{5},{3},{13},{5},{8},{4},{7},{8},{7},{7},{2},{4},{10},{1},{5},{9},{4},{8},{6},{4},{7},{3},{7},{7},{2},{3},{4},{4},{3},{14},{11},{10},{19},{14},{12},{2},{10},{17},{13},{8},{12},{10},{12},{19},{5},{4},{5},{4},{4},{16},{6},{4},{10},{13},{12},{5},{3},{4},{8},{6},{6},{6},{1},{9},{0},{81},{358},{189},{78},{324},{1}};
-    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (1877 bytes) */
-const char* const cstring = "BZh91AY&SY\217\037>:\000\001W\377\377\377\377\377\357\373\367\177W\277\353\377\010\277\377\377\365@@@@@@@@@\000@@@\000@\000`\007\037\031\345s\271\305\225\232\201A\240v\200\334%\024\020M\252zbO\323L\212y\252~\246\243\315Q\350\312\r\033P\323M6\223A\240\364\2002z\2326S\324\032\030h\324\022\204\0014@\320M\010i\210\217D\320\033P\000\000\000\006\200\r\0004i\247\250hp\000\000\000\r\000\000\000\000h4\000\000\000\014\2004\000\006\232\020\"\032 \233Q\264\200\003\324\000\323@\320\000\017P\000\000\001\240=@\365\001\300\000\000\0004\000\000\000\001\240\320\000\000\0002\000\320\000\022\232\232\n\233SBxS\324z\207\232\246\312h\000\000\006\200\000\000\320\000\320\000\r\003$\312\225\230B\254\272\373C}\331\277\014~M&B\375\0168i\037\264;\222g\233\271\022\006\231\246\220\311\t\002\0232B\t\017\252\030\261u\265\0020bOA\250\231$&\004&\274\025@\324(Z(;\261|\201\006\210\302# \t\212\017\0360>\017\023tT5\024\"\203\004\230\270p\266N\351\225\034d\024\347\016\202\253VC\371\347u\327\2134\274\274\\\033\n\324\343\321\014\n\211\240\232#\024\"\"l\026\206W\247\3441\217`lm\365>\343\213\024\376\371*\217]\351_A\265)/\263\322\345\002\322$\221\211\204v\364P*\013\250\271;oJ\253\273KaY\337\347%\260\315\017J\0317\227\261\010\301\207b0\206\250\026\034\335\254\2660\202\263C\270\257\\\302\301\234\334\331\337Q\352\354\270TyJf~3\211\375U)\255k5fy\010\\r\254\310%\030\301\354f\224\355W-Q\330\216\216\036@]\332[-\035c\25603fQ,e\222\345\332\341a\301\302J0E\034t\245\006\211\246\300\223L\302\036\202h\231\305\001\350dO1\312&\267gC\243\0143$I+\255\246_\327t,98\241Y\016xQ3\\\224D@\212m\002dA\033\275\010\304\212\227\203|\234s\343\271\3141\3433\227\225\314\032\025\n\237'}G\0261\304a\\2f\027\203\250~\333\327\360\034v\251T*p\315\2577\275\323\245\370\343\320\265\304\325\232\037k\255\253\027i06ch<\363\237\331|\014r\0244\013A\343\236]\013{\325\243Tf$\264\027onLE\260\002\265x\035\021\232\373\004:\0160\233m\245I\3069\3157t\211\320\3423\002j\252\327\r\352\246Ed\323/T\254Kp\n\025UHS5p\300L\245\310\252\3035\220$i\r\253\305\340Y`^\3453""\357(\232\0245\225\205\237\213\005U;.\315\227Gr\355\tc\037/\362}\262\206\252\360\347e\252\003\203\246\347\351\210*Gf\265\027%\353\267Bu+\006\267'2\340\252h*\022\223\352\311\271\242XT\035\006\035\201]c\3426\3461\332FN\307\204a2\302\273\363\341\204\301\256\023-\"u\253n\325\277&\274\023%f\017d\2640\006\302[rX\224b\261W\373\025\031\370I\030VnA\207\3649\234A\020\250\240\221R\312\211B\371T\250\230\203\032.\240A;\266A\0025\3035X\305;W\0307\363\220\242<\342XV\004-\273\024\014\241P\241E*\025\210\r\032\266_\312\0069\225\334W,\330#~N\353\236\311\231G\245%\253\221&\001\360\007i0th\023z\017Y(B\023\233\357\2102\177\202\210\263H9\323\202r6z\264\316u\034\366\265AX\246\330\377L#\023\226\320K\243\030(\250iv\365\231dgf\305$\022zf'K\n\220L/\250\2624\334\274\236\274\306\2079ub\305s\314\314\272\324U\206\352%U.1\335aK\227\266\271\003\257\237C\330a\037\221\n\2525\036\216\211\177\036\016\205\3753 K\201\375,0\241\325X\315\036\227\032\224\250*2\201\264\352\033v\033{Zw\036\231\331\010\234\312\252*\220\265\311\254\312\372\252\024\314\021\203\234*\205\317!qe\311\305&\262IEY\314B!\024}\007\370\231\267\361\264\356\325:\370\t\320!'\203\222+\310\206W(u\215\031\327}\341\267M\020\357\027b\315CVx\263\255\205\222\351\365\3709`\233\026\010\267\225\310\345lu\245\365R\0220\316\2314\362\277E\350\024\025\320%3\303\3377gm\022W2\231\"\205\203\326UUAf-\254wd$\253[+\235y\31535\257R\017\312\241r\007\035Rl\301\021r\344b\212\204\305\2623\250\207j9\025TU\024}\t\004\204\244\336\364~e\251p\370\350\304.P\215\213\031Sa\254Q\027~\001\326\254\025f=z\255s\003\235\347\214\020\r\375XGpV\253\242Db\364F6\331\025EPY1\311\267|\246\342Z\305q\256\315z\363a\032V\370\242\233\351p\316\223B\274\374\362\272\226\251;\245\215c\033\341\3412\035\354xy\016P\353\247P{\323\260Y\242d\027\2016\260e\272,\333\235\262\227\313\327F(Z\024\343J3T\263\223\2740\336\363P\220\030\032\014\211\330\261\303\267\242\3430\244\231\251\316Y4$\364r\213\007I\230Q\3648\256|\014\271\214\213\237\243X#\343a4o\220X\265f\354\222\032\302\2509\263\"\214\\\244\2525<TT\205""\230\350/FO\306u\266\2247X\323\245f\212\233\202\203\366g\036\362\2120\034\013\241cJJ\221\345\357\3617\2554\026t\246\2673\324U\022\311eb\310_\341\326\013\306\027\310\222kA\350m/L3\222\256E&\005\305\321\\\007\275\003\247\261\256\2350T\233:rZlf\326\234\\Z\177\334\t\205\225\331\367\216\332\235\316!\222:\212be\217\2454\240+\351\024R\3476\225\321u\325#k\234\025$\324\234\323\023\212\31134\314  \230\20102\t\276P\360\352\242\241,\241\004\032\001w\023\215c\200Z&\204\\\206\003\235\030\t$9!\010\003V \222\221KT#\244\222\325\207\203d\203\222\366\361|\025\034\276PAM\2643\205\005P\33380\260j\237\316\020\367!\211 \0247\003\374\213x\354\3418\224\204Tx\374.6\t\351\351\027\362j0\216\340!\326>C\306(\237\027\352?iS=\177~t6)\323\032}\014\2362\306\341\37589\216:\315\031\024mM\223!T\337*\2461NFr\226\306G\312g)\3352\025\nf\302\233\315\334y7\352\227.:0G\000\267\007\203C\356=\223H\304\224\271\207G\260\030\214\243O\216\243\245\234\246\022Q\255t\335\242w\016\365\022\371t|\242P<ZE\022k\230\216\031\270\007\013\303\376\303t\351\214\237C\224\332\332<\334O\215\317\266+\314LF\363Ymig\214+C\210\2161p\371\243\347'\262\272\362\204\205\034P\034@\231\"\305I\223O0\240SZ\255\003!Z\243j\244\220gR\241D\201\021\202\350\226\377\213\271\"\234(HG\217\237\035\000";
-    PyObject *data = __Pyx_DecompressString(cstring, 1877, 2);
+    const struct { const unsigned int length: 9; } index[] = {{2},{68},{35},{54},{37},{60},{24},{52},{26},{34},{29},{33},{45},{22},{15},{179},{37},{30},{32},{1},{1},{1},{1},{1},{8},{5},{6},{17},{42},{15},{23},{25},{25},{7},{6},{38},{2},{6},{35},{36},{9},{30},{24},{50},{8},{5},{20},{32},{22},{25},{30},{37},{13},{5},{8},{20},{8},{15},{3},{15},{18},{4},{9},{3},{6},{11},{1},{2},{12},{12},{9},{17},{18},{5},{4},{1},{11},{17},{23},{8},{15},{3},{6},{16},{9},{5},{8},{5},{6},{7},{8},{7},{12},{2},{10},{5},{3},{13},{5},{8},{4},{7},{8},{7},{7},{2},{4},{10},{5},{1},{5},{9},{4},{8},{6},{4},{7},{3},{7},{7},{2},{3},{4},{4},{3},{14},{11},{10},{19},{14},{12},{2},{10},{17},{13},{8},{12},{10},{12},{19},{5},{6},{4},{5},{4},{4},{16},{6},{4},{10},{13},{12},{5},{3},{4},{8},{6},{6},{6},{1},{9},{0},{389},{81},{355},{189},{78},{1}};
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (1957 bytes) */
+const char* const cstring = "BZh91AY&SYI\2162\217\000\001h\377\377\377\377\377\357\373\367\177w\277\353\377\010\277\377\377\365@@@@@@@@@\000@@@\000@\000`\007}\361\335\304\352\356L\260\214M\206\266\313\244\007hJ\"M2\247\224\364O)\354F\244\332OI\3516\247\240\3222h\365\032\031\036\246\201\210\031\007\244\323\321\251\352d\321\352mC\310A(Bi\246\247\246\211\220\215\024\315OM\250\217P\006\233H\000z\200\000\000\000h\000\032\0008\000\000\001\240\000\000\006\200\032\000\001\240\000\006\200\000\000\001\246B\t4\324eO\3252~\224\330\202\001\210\321\240\014 \000\323A\243F@d1\006F\321\250\320\340\000\000\006\200\000\000\032\000h\000\006\200\000\032\000\000\000\004\246\220#D\247\246L4\246Oj\246m$z\236\210\365\001\240\000\000\000\000\000\000\000\033S\n\371\ta\261\0373\016\3437\366\303\374\035\326 \266\360p\340wGx\207q,\364w\020\021\331;)!0\220\220!0\204\t\010$C(\026\357\2679\027f\224(5\020&L\010M\244\253\234\345\014\305\010A\214\007\035\2420\211\000X \201\001\302r\213\025\027\000\230\340*Q\207\013\034\274\200\250\334\346\010\342\242\235\001\320U\312v\217\350\237\363\257\026IyR\243(\313[\230\270\311\250X\370\223\214G\320\0328I$\254\202Qo\214\344.\r\344b\266\362\335]\215\207\257\341}\335\227\037\225e\373W\257r/\225\302\275\t#\240\342\234\353\246\030\005\332[\377E\347\014\3337\316\023\304\1774[\006\314~\031\337\344\350\350\nK\216\215&x\0221\016\273{8\214\244\245;\306\016\200d\247~\376\230\300A}\234\260\020/}\0025Z\207\275\205l\263+'x\250\234\240\247v\025\245&6\035\262^\227*L\013\3255\362r\365\006\370\363\0238\3144\016\310\300mW\311C\343\216\031\3662\202\253\244\262J0\353V\312\255\033\351=S8\326,v\307\004\232L*SM\002\022\002]Gzg\023\306,\214\335\016\257\037\035\323\241\310\271\241\303\346i\016\265\373\306~\243\032\003Q\272\004\242!\310\246\217\270L\360I\203\017>\217\275\331\004\205{oMZ4\332\342\321\232U\313+-\246\231\020*\022\215\315'\332tH\242\034P\035\263\213wt~x\344\334v\327\324\253\025:\266>C\037d\344\373\264q_qbw\227\323\013\365\346\355E\346\366z \363\211\375\207\300\316\244\214\205\220\361\3170\033q\247\351""\361'\031\026\265\306\215<\223A\2232|\333p\031\337[\260.9\007\023\315\265g\207\351\323\\\336\220\005\267y\351\3019\260\317\316\214/\276\235\263\230|+\260\331\350\020I\004Y\033(\016(\013\0222\242hjr\td\241\324}\217\202\271\240\257\276\\8\261j*,\325\241^\315K\256;\016\307\014\277\211\023\3114\031\363\375\317\246\001\256|\223e\271\001\301\3339\372\254\005K7\266(\257J\353\3170\245T\314.\313\276*\263\252\022\2244\223\201\353\226\252\020A\267\204\307\022\034G)\270\201!]\332v\014\333L\254c\262\236\000P\033A3:'\212\337\203\243\027\3621\351L\222{\232\264\245\225\006\253\341[h\372\022\266\325z\277\326\210\317\214Q\205\243w\003\310q\177N4X\2101\004\002F')\026\032\3063R\3010\374\334\240\213\273X!\033\253\210o\305\246:\231\207\241j\213\264Z\205\306`'<9`\350&,Y\024\023\220\036\230q\265\177\270\010/\233%\005\337\205G\327Y\225\342\273j\274^-]\247$\314\022\374 \365B\031\344\235\023\031\211a3kDg\240\016\333\340\2066j;\322[\314ZpV\033\227xX\340\n\304\266\331\331qe\213\223\240\230\037\260\250\310\262\303\032\344\246\315X\221KD\227\214\261^\277+(\270\215f\363\030\306{\365%\263\"nu\355\263S\023\312HX\246\225\025a\300\211r\244\314\370\030Rk\373\255C\233NOa\204}P\271Q\244\364u\2059/t)\323*\021\351\331&\311#%\247YR-\026\270\322\212\203\263\262@l9M\232\315\237\256\214\"\331\235\211\237\342HH\225\3676\243z5L[\230'(@H.\211+\213\352>YqY\t4P\225\226\014L&\321\264\217{\233\207E\366]\252\312\3636$\251\020\203Mr1\300b\365\016\354\317%N\321\341\301\256\3444\365\033}d\241\2638\264_L(\232%\326\342\353\3017\326\010\267\227`\316gk\337J\\\244\"W$\256\316g\347D\025\t\310Ip\217\333\026\\\026\210\225\313K\264P\005\303\022)\211I a\313\360\"\035\211)g\320\357\220\357\330i\307\"J9\220\\\301\272\255c\270LY\267\236\202\26538\257g{X\375'\225$$\"\226\226\005\203[db\321\316\252\\Fz4\205\310'yy\274\333\014\001\014\261\220u\353$\254\"\271^\347\010C\312\034$\033ut&l\023\326\023&9\221\231\316\215\354\220\220*9\311\321\332[\261\257\274\256\212\341\257^n\204\355\256I\2626\265\303\302\217\013\270\264\306r\321ql\343\235""\326YHw\314\207V\315\333\216`\353!\270{\323\3034\021TP\326\204\311\265\214\272\345\371\347\234\246\303V\201\212\031\2058\322\214\325\\j\020}\271\"j\032K\024\002\224\315\325\304q\266\270\2564\002*\225\367\rT\326\031\3102\365H\021\0279&\370\030Q1\311p\\\270\364E\037ox\372\211\253\240E^\324\223\264\304j\212\240\346\314\020\345\350\245G\267\260\311\245\221\316\232\342\244u\331[\360c\205\3140V\002mb\010\341\234\214KP\340u\026\372\235\266\320-\237\177\315\240\351_c\n\313m\327\001\342\204\206\277r\224W\024B\376\254\340\261\nD\212lA\350m(\227\351\0267UK@\2318\254\301\307\0202\342d\247\237\230\250\363\032\364\225~&2\024\251R\177,\301\340\226\255\233\214_S\373Pd\263Y\307v\243\036^\235L\205\332\235.\224\261\202L\027\235S\225\364\016\030\360\340\366\300\350\244\352\\m6\315\002aic\2509\275%.\025h(20g\306\341%\340\030\226(\244\346u\rg\030*;-\324(\241\341\246\022R\233\352\205X\221\365d!C[w\002\334\r\261R^\3315\005>\010N\024\025Cp\375p\260\361\027\257\207\311\016$\242([\016D[&\217\t\374S T\204\374\257\033\016\222m\013\276j1'\333)j\226\210N\nt\005\2724\241\230\251\222\267\266P\263\034c\224\020\303\346:\366\215\362\3671\301I\303\n\222\024\3270\030\345\303\0358E?\315\3473\306\224\010\314'x\300c\021\226T\337\221H\257\022\\\244W\257\0000\253\030\265\310\2037\356E\203H\264\205\016b\002%7\213\2478\332$\364\236U\346>\303\306\257t\335\200\260w\340=\205\203T\242BN<\272d&&\244\313\245\374]\342ad\217\236\321\3447\017\241Xt\266r\233=\021\265\2667\275\255\321\350\333\202\201\333Y\333U\036N\347\224\021i\016(\034kq\026h\265a\027T\221\021G\022\007\020-\"^\\ZZ\234\344\206Y\3349\327\017EF}\230\310\301\252!\321A\001HA?\376.\344\212p\241 \223\034e\036";
+    PyObject *data = __Pyx_DecompressString(cstring, 1957, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (1712 bytes) */
-const char* const cstring = "x\332\275U\317o\033\307\025\026\035\312\246mF6\255\374*\"\247#\033\016\355\302&\314$\016\214\300Q\301Hv#\024u\314*\355\245\207\301pwHN\264;\263\334\231\245H\243(t\344q\217{\334\343\036y\314\321\177\202\216{\344\237\240?\241\357\315.%\252\256r*\np\311\3317o\346}\357{\337{\374\216t<\217\270\302\347R\013%5\tB\356pW\310\301\271\221<p\211\037iCz\234\010\351\362\tw\t\223.\221\312\020\355\tp\377!\352\367yH\306\202\037\021Wqm\267\370$P\232\023mB\341r\275\313$Q\322\233\022'\344\314p\302H\2578d\206\314\020\241\211\243\244\021\203HE\032\202\020\237\373*\234\266\340\024^\305\264\026\003I\214\"p\330}b\357)<0d\351T^|\024\n\303z\036/\035\nP\375P\371\277u\326\246E\216\204\031\0223\r8i\226v\0232\251m\032\347G\n78!\200*\263\302\335\336*a\242 \241pz\351\007fJ\364\220\301\325&\n\000\\_\205\304\231\232\241\222-\026\206l\272o\001\250\310\020\325'=\025IW\223\207l\002\267<p\037\355\277\037\253 ?\n\002\025\032\356\356\3131\363\004TI\271\3741\022\017\316P\244\246\323$\020\247\t\3010\221\346c2\200SK\347\002\016pm\303\274\370\213M\360\357\230 @x\255\200J[\232]\213\022\363q\271'z<\004\222\201B,+\004\261\365\223\344\315\3137O\276y\376\215\225E\310\177\201\360\032\320\365\034\017*\007r\300\234\"\341\031\010\206\364\352\026\331\357\223\251\212\210\344\000\023\312\032\200\337\352\0013\344\222hnpA\232\266\026\314@\336\024\216\2036\233%\257b\314\361\364+\346i\336\372\351\002y\000\271\024\030s\034\256\227l\036\030\036\020\237M-\177\240\347\267<T\347D\377MZ\345\300\225\240\3061\017A\030\206\373\370\256z\230Tk\247\371\350\217\314u\251Dz0Y\002\014=\235\220\336\324p\275\302\274\243<\017\361A\245Z\254\347\274X\0217\236*\320\357\374\247y\251\251\035\227;PI\322g\302\213B\216\271 \335\266'5\"\344\262\370F/j\365s\326\240|\302\034\003\365i\177\365\274@5p\310C,\373\300\252\021\031\301\213\370\304pil\253\235\367\271(\225\361#\020\347CU-\010\217\313\201\031\002\177\241\363=P$t\021\334Ef\264x\313\311\213\357\311\323\367\364\354\263\t\205\223+s\203<m\265\332\317\244\002\031\365Y\344\031Bi\310\335\310\341\224\0227""\262\244K%\237@\236c\301<\330u\204\024\0066\013\352w,\200\027\3054q/\260\370\276\rU\177F\346\205\3753k1#l\002\276\320>3\316\360;\313Qt\246\001\346y\312\261\263\3122\3542\303Z\377e\267\350#\274\274\034u\255\211?,\030l\005\323I\347`w\177\377\245\347\211@\013M\351\233\351\004\236=\350\035\372\032\212\360W\336?\340\243\010J\311\261\365Z\347]\010\262Y\206\240\205\222\231\236JG\250\226\243B\030\024Br\335c\232\367\204\201\270\234\371==.\374\260\325\\j\023t\200Fl)J\227\213\0017X9|\205\033\250\200\226\n\231\303{\3149t\240s\214[h\217\006l\300\313%\316\273\342:4\370\360\017\001\367\254\212\217R\027\363\241.67\205,\213\222q6.\274.\370\2020\271\214|;Gx\030\252p\3314}\217\r4\350\010jQ\016,J\373\221t\020;\240\326\006\231\240\302\205\307\307\261\007\27784A\264\030\362\214\224B\227\2458\0179\017J\001S\3523\310\226\226\312\204y\216\303\334\367pf\202U\271\221\007\277R\"\331\222\026\375\246%\363\321X|\333v\002\375\000y\222\037Q\314R\365\37340!\374\300\260\322*\000\010\352\010\3761\200\315@\005\224B\375\2513\344\316\241\216\374\342\255L\003\227\226-\273\212d \234C\210\377R.\375\306\226p\314}\0241\257@\020:\347=s\266*\272n\305\300'\270\034\010\r\323\231R\300U\342\207U\331zv]\002YY/o\262\202F\366\300\034\302\036\017\264Q\370\204\234\032\030\304\036E\315\001C\021\214\371#\026\340C-9\270\n\270K\201\003\356._\220f\233\214\351y\360\031S\n\236\200\001\222\006\232\242\000\372\212\303\334\211\270\236\2345\316qeQ}\230U\362\352g\311\007\311\267i#\335\316\253\037\237|\334\312X6\236w\027\325k\307\341ls\326\311k\267f\243\274z\375\344\372\347\311\363\264\235_\277\221\327>\211Y<\202S\355d/\255\246?f\235\274zs\326>\256\344\267\033\247dm\375QV9\275\261\266~7\351,\252w\223n^%)\204\371(\206\327{\351\366\351\325\265\365\332\261\236}\031W\342\315x7\036\345\265\215\331/I%i\344\325\0333\000Q\237\355\316\306q7f\013x\177\034\367\223N\362\217\354J\006;\327\216\315\354\353\031\313k\327\027\325\233'7\267\001\364\243\254\235\355\317\273\363\303w\215w\333\213\352z\376\341F^o\246\243\254\222mf\235\354\347y#\2577\342""\337\247\225\364w\331\203l4\257\344\265\233p\207\023\203\375N\374\207\244srw\357\335\017\357\030\232\237\307_\307,\257o\306\355\370OI{\001\226gq5~\225\334K:y}+\371s:\316\272\331p\016.\267f\377J\016R\3147o\334\311o\177\221\260d\224~\220\266\323\275\354\326|\362\353(\257\177\236\264\363\0177\343\257\342\256]'\273\340PY\340r\001\204\376\023,\257\263\207\363\355|\013\222\310\267\036\244\335|\353\313\224-j\365Yg\326E0;\311\247\020\240~\033Xj\340{\273\\\037WN7\n\212\257Z\212\221\351\313\351\274\204\276\374\177D\324\263\004\334\356\304\367 \3564\275\002\n\252m\234l\340\245\265\371\372\274\213\322\211\020RR)\023+5\367\233\0228\271q\037\210|\205\200/\210\016\255\235\364\000\360~\224u\227\202\373\344\323\323\372\332\372g\361\333\264qZ[[\377\342R\265\335\237Y8\243\370Z\254\223m(\016\260\241g\367P\337e\350E\241>d\372\\\202y\365v|%\276\037\377\234\334)\316\230\331\267q\003\014\007\230\371\022\364\026I\257\246,5Y\373r]\376\177\324\204\335k\346\355\371\336\257\225UU].\247\237\376\r\261\242\306\272";
-    PyObject *data = __Pyx_DecompressString(cstring, 1712, 1);
+    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (1774 bytes) */
+const char* const cstring = "x\332\275U\317o\333F\026\216R\271Q\022\327\261\3424\333E\234\3568A*\247H\204(i\212l\221z\241\332Ik,\232F\353\356^z\030\214\310\221419\2449CY\n\026\213\034u\344\221G\036y\324\321\307\374\t>\362\250?!\177\302\2767C\331r\323\024X\240X@?\2063o\336\217\357\373\336\3437\244\355y\304\025>\227J\004R\2210\342\016w\205\354\237n\222;.\361c\245I\227\023!]>\342.a\322%2\320Dy\002\314\277\213{=\036\221\241\340\207\304\r\2702G|\024\006\212\023\245#\341r\265\315$\t\2447&N\304\231\346\204\221\256\275\244\007L\023\241\210\023H-\372q\020+\010B|\356\007\321\270\t\267\320\025SJ\364%\321\001\201\313\356}\343\307Z`\310\322\250t|\030\t\315\272\036/\rlR\275(\360\177\357\256)\213\034\n= z\034r\322(\367u\304\2442e\234^\261fpC\000Tz\001\273\235E\300\204\005\301\032=\363C=&j\300\300\265\216CH\256\027D\304\031\353A \233,\212\330x\327$\020\304\232\004=\322\rb\351*\262\311F\340\345\216{w\367\375X\026\3748\014\203HswW\016\231'\200\245\300\345\367\020x0\006\222\032N\203@\234\006\004\303B\032\367H\037n\315\215m:\200\265\t\363\364GS\340\277\260@H\341E\000P\032j\266M\226X\217\313=\321\345\021\200\014\020\"\255\020\304\360'\311\313g/\357\177\365\344+#\213\210\277\202\360\n\262\353:\0360\007r\300\232b\341i\010\206\360\252&\331\355\221q\020\023\311!M\2405\004\273\305\013z\300%Q\\\343\2024\014\027LC\335\024\256\2036\033%\256b\310\361\366s\346)\336\374\351\014x\220r)0\3468\\\315\321\334\323<$>\033\033\374@\317\257y\024\234\002\375Oi\224\003.A\215C\036\20104\367\3619\350bQ\315\255\306\335\2771\327\245\022\341\301b\t \364`D\272c\315\325\002\362\316\200E\220>EBNz\247\321\347\022\340\363,)\n\352\360x\303\t<\017+\001N\233\254\353<]h\003\364o\353\334\372\365\366\\}[.w0D\217\t/\2168V\215\304\230\356UX\013\227\366\027\255\250Q\332I:|\304\034\rL\266\036>\261\371\367\035\262\211\002\351\033\335\"v\350\210\2174\227\3324\345\351D\020\245\206~\000\210}\340\337$\341q\331\327\003@:r\276\0050\205\262\301]\304P\211\327\234<\375\226<xO\371>\033Q\270\2710a\310\203f\263\365X\006 \270\036\213=M(\215\270\033;\234R\342\306\206""\036\031\310\373P\347P0\017N\035!\205\206CK\322\226I\340\251\235;\356\031\024\337\337C*N\300<s~\262k\247\211)\300\027\312g\332\031|c0\212O\324\302</p\314T3\010\273L\263\346o\234\332\216C\347\345Pl\216\374\201E\260\031\216G\355\275\355\335\335g\236'B%\024\245/\307#\370\356@\227\321\027@\302?xo\217\037\304@%\307&m\236\366+\310f\036\202Z\31535\226\216\010\232N\020\301H\021\222\253.S\274+4\304\345\314\357\252\241\265\303\246t\251)\320q\272s\321\242\030\026\005\014\000c[R:_\364\271FN\361\021|S\001m\0311\207w\231\263\357@\367i\007n\272V\2314d}^.qn\332`\270\341\303\233\006|-J\223R\027\253\245.\016\t\n\030XB9\033Z\2533\266 [.c\337\314#\036EA4o\276\236\307\372\nT\006L\225\203\217\322^,\035J\313\376\303\005 \201pQ\341\302\327\307)\n\3778\203A\331\030\371\0049+\336R\301\373\234\207\245\312)\365\031\024NK\371\302\353\001\337\r\276g\001\203\337\330\303\377\030\207\236DZ$\265\235\251$\363\341\244\3745\215\007J\0030%?\244Xq\320\353\321PG\360\0070\252 \204<\202Cx\013\001\272a\020R\nJ\241\316\200;\373*\366\355SY\013.\rrf\025\313P8\373\220\30439\267\033\032\360\221\307\203\230y6\203\3109\355\256\223\225\355\317\205\r>\302e_(\230\370\224\2420\354m$\3326\251Y\227\211,\254\347\236\214\364\355\310C \3410\002\013\036*\035\3407\342T\303\210\367(j\024p\212\341\005r\310B\374\0329*\\\205\334\245\200\004w\347\017\210\270)Iw=\370\014)\005K\310\004J\007\260\342\020\372\220\303\234\212\271\032\2354\332\233J\261z\343\370\306\243i\353\335\346\271\245\273y\345\335\245sK7\323\366\254z3\355\024U\222U\212\352\265\004\036oe\033\263\352\265\343k\215\354 \207\275\353\311\253l%\367\217\036\036uf\325\013o\324\344\213\244\222\254%\333\311AQ[\231\274J+i\275\250^\232l\024\325\345\311\366d\230t\0226\203\347{I/m\247\277\344\347s8\271\360FO\036MXQ\2738\253^>\276\274\221\325\263\273y+\337\235v\246\373o\353o!\336R\361\311J\261lB\346ky;\377yZ/\226\353\311_\262J\366\347\374N~0\255\024\265\313\340\303I`\377j\362e\332>\276\271\363\366\273\267\014\267\237$\217\022V,\257%\255\344\373\2645\203\235\307I5y\236\336J\333\305""\362z\372\367l\230w\362\301\024L\256L\376\223\356A\245\253\365\242~\265X\375<e\351A\366Q\326\312v\362+\323\321\321A\261|#m\025\237\254%\017\223\216Y\247\333`P\231\341rV\2732\3717\354\274\3107\247\033\305:\024Q\254\337\311:\305\372\027\031+\326\021\265\332\362\244=\351`F[\351\237 \312\362*@U\307\347V\271~S\231U7\021\325\317\322\217\322\257\001\006\000\347\323\343O\2339\313\207S\203o4Y\233\264\013\010uPT/\036_\274\221>\311Z\305\305KE\355z\302\222\003\270\325Jw\262j\366C\336.\252\340\027X\275\276q\274\361\327\243:\262\372Y\362:\253\277\253\235[\372\374\177\243\3646f\r!\223\013\211J7\000\001\263{\013\023))\236Y\212\261\222S\236\213\352jr>\271\235\374\234^\265w\364\344\353\244\016\033{i\345T\034\353$\3738c\231\316[\037&\377\377C\031\302\254\247\255\351\316Q\345=\352~\217\263w+\266a>6\r\203}S\373`\037|@\367\305\037\244\360\307\210\354\325\344\026\304\035g\347A>\265\225\343\025tZ\233.M\r\2111\246\224VJ1\226\202\303\324?\230\363\361\245\333\000\347sL\370\214\342p\267\235\355A\276\327\362\216\341\376\247\377\002\3362\004\024";
+    PyObject *data = __Pyx_DecompressString(cstring, 1774, 1);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #else /* compression: none (3230 bytes) */
-const char* const bytes = ": All dimensions preceding dimension %d must be indexed and not slicedBuffer view does not expose stridesCan only create a buffer that is contiguous in memory.Cannot assign to read-only memoryviewCannot create writable memory view from read-only memoryviewCannot index with type 'Cannot transpose memoryview with indirect dimensionsDimension %d is not directEmpty shape tuple for cython.arrayIndex out of bounds (axis %d)Indirect dimensions not supportedInvalid mode, expected 'c' or 'fortran', got Invalid shape in axis <MemoryView of Note that Cython is deliberately stricter than PEP-484 and rejects subclasses of builtin types. If you need to pass subclasses then set the 'annotation_typing' directive to False.Out of bounds on buffer access (axis Step may not be zero (axis %d)Unable to convert item to object.>')?add_note and  at 0x bytes, expected collections.abc<contiguous and direct><contiguous and indirect>decode failure on string disableenableencode_array must be exactly 128 bytesgc (got got differing extents in dimension invalid Huffman code lengths (rc=%d)isenableditemsize <= 0 for cython.arraymax_len must be in 0..15no default __reduce__ due to non-trivial __cinit__ object> (rc=<strided and direct><strided and direct or indirect><strided and indirect>table size mismatch: got unable to allocate array data.unable to allocate shape and strides.xmhuffman.pyxASCIIEllipsis__Pyx_PyDict_NextRefSequenceView.MemoryViewabcallocate_bufferasyncio.coroutinesbasebitstreambsvbufferbuild_tablec__class____class_getitem__cline_in_tracebackcountddecode_pagedecode_with_tabledecompress_encode_array__dict__dtype_is_objecteavencodeencode_array_128enumerateerrorexpectedflagsformatfortran__func____getstate__id__import__indexinv_is_coroutineitemsitemsizekeeplengths__main__max_lenmemviewmlmode__module__nn_bufn_stringsname__name__nbytesndim__new__objoff_ptroffsetsopoutownspackpop__pyx_checksum__pyx_state__pyx_type__pyx_unpickle_Enum__pyx_vtable____qualname__rc__reduce____reduce_cython____redu""ce_ex__register__set_name__setdefault__setstate____setstate_cython__shapesizestartstepstopstore_total_bitsstructswapswap_bytesswapped_ownedswapped_viewtabletbltblv__test__unpackupdatevaluesxxmhuffman\200\001\340\004(\250\001\330\004\030\230\003\2306\240\021\240!\330\004\025\320\025.\250a\250v\260Q\340\004\007\200r\210\023\210A\330\010\017\210q\330\004\t\320\t\033\2308\2401\330\t\n\330\010\026\220a\220q\230\003\2301\230D\240\004\240H\250A\330\004\013\2101\200\001\330\020\021\360 \000\005)\250\001\360\n\000\005\035\230A\340\004\035\230Q\330\004 \240\001\330\004\024\220A\340\004\"\240!\360\006\000\005\010\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\210!\330\004\014\210C\210v\220Q\220a\340\004\n\210,\220f\230A\230[\250\002\250!\330\004\007\200t\2103\210a\330\010\t\340\004\013\320\013!\240\021\240)\2501\250I\260Q\260k\300\021\300!\340\004\005\330\r\016\330\014'\240q\250\001\250\023\250A\250T\260\021\330\014\021\220\037\240\001\240\031\250%\250q\260\001\330\010\013\2103\210c\220\021\330\014\022\220*\230A\320\035D\300B\300a\330\010\013\2108\2203\220a\330\014\023\2201\220G\2301\340\010\013\2105\220\004\220F\230\"\230A\330\014\034\230K\240v\250Q\250h\260a\330\014\017\210~\230S\240\001\330\020\021\330\021\022\330\020\036\230a\230q\240\003\2401\240D\250\017\260x\270q\330\014\033\2301\330\r\023\2202\220Q\330\014\033\2301\230C\230q\240\001\340\014\033\2301\340\010\017\210|\2301\230N\250(\260!\330\034!\240\021\330\034%\240Q\330\034&\240a\340\010\014\210A\210Q\330\010\013\210>\230\027\240\001\330\014\020\220\001\220\021\330\010\013\2101\330\014\020\220\001\220\021\200\001\360\016\000\005)\250\001\360\006\000\005\035\230A\360\n\000\005\010\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\210,\220f\230A\230[\250\002\250!\330\004\007\200t\2103\210a\330\010\t\330\004\005\330\r\016\330\014'\240q\250\001\250\023\250A\250T\260\021\330\014\021\220\037\240\001\240\031\250%\250q\260\001\330\010\013\2103\210c\220\021\330\014""\022\220*\230A\320\035D\300B\300a\330\010\013\2108\2203\220a\330\014\023\2205\230\001\330\010\022\220\"\220C\220y\240\002\240!\330\010\016\320\016'\240q\250\010\260\005\260Q\330\010\017\210u\220C\220q\230\001\340\010\014\210A\210Q\200\001\340\004(\250\001\360\006\000\005\010\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\320\n#\2401\240F\250!\330\004\t\320\t\033\2308\2401\330\t\n\330\010#\2401\240A\240S\250\001\250\024\250Q\330\004\013\2101\200\001\330\026\027\360\014\000\005\030\220z\240\021\360\010\000\005\036\230Q\330\004 \240\001\330\004\024\220A\340\004\"\240!\360\006\000\005\010\200s\210#\210Q\330\010\017\210q\220\007\220s\230!\2301\330\004\007\200s\210\"\210A\330\010\016\210j\230\001\230\021\340\004\n\210!\330\004\013\2101\330\004\014\210C\210v\220Q\220a\330\004\020\220\002\220#\220T\230\022\2301\330\004\007\200t\2106\220\021\220#\220S\230\001\330\010\016\210j\230\001\230\021\330\034 \240\006\240a\240t\2501\340\004\013\320\013!\240\021\240)\2501\250I\260Q\260k\300\021\300!\340\004\005\330\010\013\2105\220\004\220F\230\"\230A\330\014\034\230K\240v\250Q\250h\260a\330\014\017\210~\230S\240\001\330\020\021\330\021\022\330\020\036\230a\230q\240\003\2401\240D\250\017\260x\270q\330\014\033\2301\330\r\023\2202\220Q\330\014\033\2301\230C\230q\240\001\340\014\033\2301\340\010\017\210|\2301\230N\250(\260!\330\034.\250a\250t\2601\260D\270\001\330\034%\240Q\330\034&\240a\340\010\013\210>\230\027\240\001\330\014\020\220\001\220\021\330\010\013\2101\330\014\020\220\001\220\021O";
+    #else /* compression: none (3382 bytes) */
+const char* const bytes = ": All dimensions preceding dimension %d must be indexed and not slicedBuffer view does not expose stridesCan only create a buffer that is contiguous in memory.Cannot assign to read-only memoryviewCannot create writable memory view from read-only memoryviewCannot index with type 'Cannot transpose memoryview with indirect dimensionsDimension %d is not directEmpty shape tuple for cython.arrayIndex out of bounds (axis %d)Indirect dimensions not supportedInvalid mode, expected 'c' or 'fortran', got Invalid shape in axis <MemoryView of Note that Cython is deliberately stricter than PEP-484 and rejects subclasses of builtin types. If you need to pass subclasses then set the 'annotation_typing' directive to False.Out of bounds on buffer access (axis Step may not be zero (axis %d)Unable to convert item to object.>')?add_note and  at 0x bytes, expected charset_mode must be 'general' or 'single'collections.abc<contiguous and direct><contiguous and indirect>decode failure on string disableenableencode_array must be exactly 128 bytesgc (got got differing extents in dimension invalid Huffman code lengths (rc=%d)isenableditemsize <= 0 for cython.arraymax_len must be in 0..15no default __reduce__ due to non-trivial __cinit__ object> (rc=<strided and direct><strided and direct or indirect><strided and indirect>table size mismatch: got unable to allocate array data.unable to allocate shape and strides.xmhuffman.pyxASCIIEllipsis__Pyx_PyDict_NextRefSequenceView.MemoryViewabcallocate_bufferasyncio.coroutinesbasebitstreambsvbufferbuild_tableccbcharset_bytecharset_mode__class____class_getitem__cline_in_tracebackcountcsetddecode_pagedecode_with_tabledecompress_encode_array__dict__dtype_is_objecteavencodeencode_array_128enumerateerrorexpectedflagsformatfortran__func__general__getstate__id__import__indexinv_is_coroutineitemsitemsizekeeplengths__main__max_lenmemviewmlmode__module__multinn_bufn_stringsname__name__nbytesndim__new__objoff_ptroffsetsopoutownspackpop__pyx_checksum__pyx_state__pyx_""type__pyx_unpickle_Enum__pyx_vtable____qualname__rc__reduce____reduce_cython____reduce_ex__register__set_name__setdefault__setstate____setstate_cython__shapesinglesizestartstepstopstore_total_bitsstructswapswap_bytesswapped_ownedswapped_viewtabletbltblv__test__unpackupdatevaluesxxmhuffman\200\001\330\020\033\320\0333\2601\360(\000\005)\250\001\360\n\000\005\035\230A\340\004\035\230Q\330\004 \240\001\330\004\024\220A\340\004\"\240!\340\004\024\320\024'\240q\250\001\330\004\026\220j\240\016\250m\2702\270Q\340\004\007\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\210!\330\004\014\210C\210v\220Q\220a\340\004\n\210,\220f\230A\230[\250\002\250!\330\004\007\200t\2103\210a\330\010\t\340\004\013\320\013!\240\021\240)\2501\250I\260Q\260k\300\021\300!\340\004\005\330\r\016\330\014'\240q\250\001\250\023\250A\250T\260\021\330\014\021\220\037\240\001\240\031\250%\250q\260\001\330\010\013\2103\210c\220\021\330\014\022\220*\230A\320\035D\300B\300a\330\010\013\2108\2203\220a\330\014\023\2201\220G\2301\340\010\013\2105\220\004\220F\230\"\230A\330\014\034\230K\240v\250Q\250h\260a\330\014\017\210~\230S\240\001\330\020\021\330\021\022\330\020\036\230a\230q\240\003\2401\240D\250\017\260x\270q\330\014\033\2301\330\r\023\2202\220Q\330\014\033\2301\230C\230q\240\001\340\014\033\2301\340\010\017\210|\2301\230N\250(\260!\330\034!\240\021\330\034%\240Q\330\034&\240a\330\034\"\240!\340\010\014\210A\210Q\330\010\013\210>\230\027\240\001\330\014\020\220\001\220\021\330\010\013\2101\330\014\020\220\001\220\021\200\001\340\004(\250\001\330\004\030\230\003\2306\240\021\240!\330\004\025\320\025.\250a\250v\260Q\340\004\007\200r\210\023\210A\330\010\017\210q\330\004\t\320\t\033\2308\2401\330\t\n\330\010\026\220a\220q\230\003\2301\230D\240\004\240H\250A\330\004\013\2101\200\001\330\026!\320!9\270\021\360(\000\005\030\220z\240\021\360\010\000\005\036\230Q\330\004 \240\001\330\004\024\220A\340\004\"\240!\340\004\024\320\024'\240q\250\001\330\004\026\220j\240\016\250m\2702""\270Q\340\004\007\200s\210#\210Q\330\010\017\210q\220\007\220s\230!\2301\330\004\007\200s\210\"\210A\330\010\016\210j\230\001\230\021\340\004\n\210!\330\004\013\2101\330\004\014\210C\210v\220Q\220a\330\004\020\220\002\220#\220T\230\022\2301\330\004\007\200t\2106\220\021\220#\220S\230\001\330\010\016\210j\230\001\230\021\330\034 \240\006\240a\240t\2501\340\004\013\320\013!\240\021\240)\2501\250I\260Q\260k\300\021\300!\340\004\005\330\010\013\2105\220\004\220F\230\"\230A\330\014\034\230K\240v\250Q\250h\260a\330\014\017\210~\230S\240\001\330\020\021\330\021\022\330\020\036\230a\230q\240\003\2401\240D\250\017\260x\270q\330\014\033\2301\330\r\023\2202\220Q\330\014\033\2301\230C\230q\240\001\340\014\033\2301\340\010\017\210|\2301\230N\250(\260!\330\034.\250a\250t\2601\260D\270\001\330\034%\240Q\330\034&\240a\330\034\"\240!\340\010\013\210>\230\027\240\001\330\014\020\220\001\220\021\330\010\013\2101\330\014\020\220\001\220\021\200\001\360\016\000\005)\250\001\360\006\000\005\035\230A\360\n\000\005\010\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\210,\220f\230A\230[\250\002\250!\330\004\007\200t\2103\210a\330\010\t\330\004\005\330\r\016\330\014'\240q\250\001\250\023\250A\250T\260\021\330\014\021\220\037\240\001\240\031\250%\250q\260\001\330\010\013\2103\210c\220\021\330\014\022\220*\230A\320\035D\300B\300a\330\010\013\2108\2203\220a\330\014\023\2205\230\001\330\010\022\220\"\220C\220y\240\002\240!\330\010\016\320\016'\240q\250\010\260\005\260Q\330\010\017\210u\220C\220q\230\001\340\010\014\210A\210Q\200\001\340\004(\250\001\360\006\000\005\010\200s\210&\220\001\220\023\220C\220q\330\010\016\210j\230\001\230\021\330\004\n\320\n#\2401\240F\250!\330\004\t\320\t\033\2308\2401\330\t\n\330\010#\2401\240A\240S\250\001\250\024\250Q\330\004\013\2101O";
     PyObject *data = NULL;
     CYTHON_UNUSED_VAR(__Pyx_DecompressString);
     #endif
     PyObject **stringtab = __pyx_mstate->__pyx_string_tab;
     Py_ssize_t pos = 0;
-    for (int i = 0; i < 153; i++) {
+    for (int i = 0; i < 161; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyUnicode_DecodeUTF8(bytes + pos, bytes_length, NULL);
-      if (likely(string) && i >= 52) PyUnicode_InternInPlace(&string);
+      if (likely(string) && i >= 53) PyUnicode_InternInPlace(&string);
       if (unlikely(!string)) {
         Py_XDECREF(data);
         __PYX_ERR(0, 1, __pyx_L1_error)
@@ -22350,7 +22678,7 @@ const char* const bytes = ": All dimensions preceding dimension %d must be index
       stringtab[i] = string;
       pos += bytes_length;
     }
-    for (int i = 153; i < 160; i++) {
+    for (int i = 161; i < 168; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyBytes_FromStringAndSize(bytes + pos, bytes_length);
       stringtab[i] = string;
@@ -22361,14 +22689,14 @@ const char* const bytes = ": All dimensions preceding dimension %d must be index
       }
     }
     Py_XDECREF(data);
-    for (Py_ssize_t i = 0; i < 160; i++) {
+    for (Py_ssize_t i = 0; i < 168; i++) {
       if (unlikely(PyObject_Hash(stringtab[i]) == -1)) {
         __PYX_ERR(0, 1, __pyx_L1_error)
       }
     }
     #if CYTHON_IMMORTAL_CONSTANTS
     {
-      PyObject **table = stringtab + 153;
+      PyObject **table = stringtab + 161;
       for (Py_ssize_t i=0; i<7; ++i) {
         #if CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
         #if PY_VERSION_HEX < 0x030E0000
@@ -22420,12 +22748,12 @@ const char* const bytes = ": All dimensions preceding dimension %d must be index
 }
 /* #### Code section: init_codeobjects ### */
 typedef struct {
-    unsigned int argcount : 3;
+    unsigned int argcount : 4;
     unsigned int num_posonly_args : 1;
     unsigned int num_kwonly_args : 1;
     unsigned int nlocals : 5;
     unsigned int flags : 10;
-    unsigned int first_line : 8;
+    unsigned int first_line : 9;
 } __Pyx_PyCode_New_function_description;
 /* NewCodeObj.proto */
 static PyObject* __Pyx_PyCode_New(
@@ -22442,29 +22770,29 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   PyObject* tuple_dedup_map = PyDict_New();
   if (unlikely(!tuple_dedup_map)) return -1;
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 27};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 43};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_buffer, __pyx_mstate->__pyx_n_u_inv, __pyx_mstate->__pyx_n_u_n, __pyx_mstate->__pyx_n_u_out, __pyx_mstate->__pyx_n_u_op};
     __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_swap_bytes, __pyx_mstate->__pyx_kp_b_iso88591_6_avQ_r_A_q_81_aq_1D_HA_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 4, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 41};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 4, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 57};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_buffer, __pyx_mstate->__pyx_n_u_inv, __pyx_mstate->__pyx_n_u_out, __pyx_mstate->__pyx_n_u_op};
     __pyx_mstate_global->__pyx_codeobj_tab[1] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_decompress_encode_array, __pyx_mstate->__pyx_kp_b_iso88591_s_Cq_j_1F_81_1AS_Q_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[1])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 8, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 55};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 8, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 71};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_encode_array_128, __pyx_mstate->__pyx_n_u_inv, __pyx_mstate->__pyx_n_u_lengths, __pyx_mstate->__pyx_n_u_tbl, __pyx_mstate->__pyx_n_u_max_len, __pyx_mstate->__pyx_n_u_rc_2, __pyx_mstate->__pyx_n_u_nbytes, __pyx_mstate->__pyx_n_u_out};
     __pyx_mstate_global->__pyx_codeobj_tab[2] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_build_table, __pyx_mstate->__pyx_kp_b_iso88591_A_s_Cq_j_fA_t3a_q_AT_q_3c_A_DBa, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[2])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {6, 0, 0, 17, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 173};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_bitstream, __pyx_mstate->__pyx_n_u_table, __pyx_mstate->__pyx_n_u_max_len, __pyx_mstate->__pyx_n_u_offsets, __pyx_mstate->__pyx_n_u_store_total_bits, __pyx_mstate->__pyx_n_u_swap, __pyx_mstate->__pyx_n_u_ml, __pyx_mstate->__pyx_n_u_bsv, __pyx_mstate->__pyx_n_u_tblv, __pyx_mstate->__pyx_n_u_n_buf, __pyx_mstate->__pyx_n_u_expected, __pyx_mstate->__pyx_n_u_off_ptr, __pyx_mstate->__pyx_n_u_n_strings, __pyx_mstate->__pyx_n_u_owns, __pyx_mstate->__pyx_n_u_keep, __pyx_mstate->__pyx_n_u_swapped_owned, __pyx_mstate->__pyx_n_u_swapped_view};
-    __pyx_mstate_global->__pyx_codeobj_tab[3] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_decode_with_table, __pyx_mstate->__pyx_kp_b_iso88591_z_Q_A_s_Q_q_s_1_s_A_j_1_CvQa_T, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[3])) goto bad;
+    const __Pyx_PyCode_New_function_description descr = {8, 0, 0, 21, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 207};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_bitstream, __pyx_mstate->__pyx_n_u_table, __pyx_mstate->__pyx_n_u_max_len, __pyx_mstate->__pyx_n_u_offsets, __pyx_mstate->__pyx_n_u_store_total_bits, __pyx_mstate->__pyx_n_u_swap, __pyx_mstate->__pyx_n_u_charset_mode, __pyx_mstate->__pyx_n_u_charset_byte, __pyx_mstate->__pyx_n_u_ml, __pyx_mstate->__pyx_n_u_bsv, __pyx_mstate->__pyx_n_u_tblv, __pyx_mstate->__pyx_n_u_n_buf, __pyx_mstate->__pyx_n_u_expected, __pyx_mstate->__pyx_n_u_off_ptr, __pyx_mstate->__pyx_n_u_n_strings, __pyx_mstate->__pyx_n_u_owns, __pyx_mstate->__pyx_n_u_keep, __pyx_mstate->__pyx_n_u_swapped_owned, __pyx_mstate->__pyx_n_u_swapped_view, __pyx_mstate->__pyx_n_u_cset, __pyx_mstate->__pyx_n_u_cb};
+    __pyx_mstate_global->__pyx_codeobj_tab[3] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_decode_with_table, __pyx_mstate->__pyx_kp_b_iso88591_9_z_Q_A_q_j_m2Q_s_Q_q_s_1_s_A_j, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[3])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {5, 0, 0, 18, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 230};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_bitstream, __pyx_mstate->__pyx_n_u_encode_array_128, __pyx_mstate->__pyx_n_u_offsets, __pyx_mstate->__pyx_n_u_store_total_bits, __pyx_mstate->__pyx_n_u_swap, __pyx_mstate->__pyx_n_u_eav, __pyx_mstate->__pyx_n_u_bsv, __pyx_mstate->__pyx_n_u_n_buf, __pyx_mstate->__pyx_n_u_lengths, __pyx_mstate->__pyx_n_u_tbl, __pyx_mstate->__pyx_n_u_max_len, __pyx_mstate->__pyx_n_u_rc_2, __pyx_mstate->__pyx_n_u_off_ptr, __pyx_mstate->__pyx_n_u_n_strings, __pyx_mstate->__pyx_n_u_owns, __pyx_mstate->__pyx_n_u_keep, __pyx_mstate->__pyx_n_u_swapped_owned, __pyx_mstate->__pyx_n_u_swapped_view};
-    __pyx_mstate_global->__pyx_codeobj_tab[4] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_decode_page, __pyx_mstate->__pyx_kp_b_iso88591_A_Q_A_s_Cq_j_CvQa_fA_t3a_1IQk_q, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[4])) goto bad;
+    const __Pyx_PyCode_New_function_description descr = {7, 0, 0, 22, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 281};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_bitstream, __pyx_mstate->__pyx_n_u_encode_array_128, __pyx_mstate->__pyx_n_u_offsets, __pyx_mstate->__pyx_n_u_store_total_bits, __pyx_mstate->__pyx_n_u_swap, __pyx_mstate->__pyx_n_u_charset_mode, __pyx_mstate->__pyx_n_u_charset_byte, __pyx_mstate->__pyx_n_u_eav, __pyx_mstate->__pyx_n_u_bsv, __pyx_mstate->__pyx_n_u_n_buf, __pyx_mstate->__pyx_n_u_lengths, __pyx_mstate->__pyx_n_u_tbl, __pyx_mstate->__pyx_n_u_max_len, __pyx_mstate->__pyx_n_u_rc_2, __pyx_mstate->__pyx_n_u_off_ptr, __pyx_mstate->__pyx_n_u_n_strings, __pyx_mstate->__pyx_n_u_owns, __pyx_mstate->__pyx_n_u_keep, __pyx_mstate->__pyx_n_u_swapped_owned, __pyx_mstate->__pyx_n_u_swapped_view, __pyx_mstate->__pyx_n_u_cset, __pyx_mstate->__pyx_n_u_cb};
+    __pyx_mstate_global->__pyx_codeobj_tab[4] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_xmhuffman_pyx, __pyx_mstate->__pyx_n_u_decode_page, __pyx_mstate->__pyx_kp_b_iso88591_31_A_Q_A_q_j_m2Q_s_Cq_j_CvQa_fA, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[4])) goto bad;
   }
   Py_DECREF(tuple_dedup_map);
   return 0;

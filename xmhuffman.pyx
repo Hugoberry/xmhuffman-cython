@@ -23,6 +23,22 @@ from xmhuffman cimport (
 
 DEF _TABLE_MAX = 1 << 15  # 32768 u16 entries = 64 KB
 
+DEF _CHARSET_GENERAL = 0
+DEF _CHARSET_SINGLE = 1
+
+
+cdef int _parse_charset_mode(object mode) except -1:
+    """Map ``'general'``/``'multi'`` and ``'single'`` to internal flags.
+
+    Mirrors MS-XLDM ``XM_HUFFMAN_MULTICHARSET`` (0xABA92) vs
+    ``XM_HUFFMAN_SINGLECHARSET`` (0xABA91).
+    """
+    if mode is None or mode == 'general' or mode == 'multi':
+        return _CHARSET_GENERAL
+    if mode == 'single':
+        return _CHARSET_SINGLE
+    raise ValueError("charset_mode must be 'general' or 'single'")
+
 
 def swap_bytes(buffer):
     """Pair-swap a bytes-like buffer; trailing odd byte left as-is."""
@@ -90,16 +106,24 @@ def build_table(encode_array_128):
 cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,
                        const uint16_t *table, unsigned max_len,
                        const uint32_t *offsets, Py_ssize_t n_strings,
-                       uint64_t total_bits):
-    """Decode all strings on a page into a list[bytes]. GIL held."""
+                       uint64_t total_bits,
+                       int charset_mode, uint8_t charset_byte):
+    """Decode all strings on a page into a ``list[bytes]``.
+
+    When ``charset_mode == _CHARSET_SINGLE`` each output element is
+    ``2 * nwritten`` bytes long: the page-level ``CharacterSetUsed``
+    byte is interleaved as the UTF-16-LE high byte of every character,
+    so the caller can ``b.decode('utf-16-le')`` directly.
+    """
     cdef list result = PyList_New(n_strings)
     cdef uint64_t span_bits, max_span = 0
-    cdef Py_ssize_t i
+    cdef Py_ssize_t i, k
     cdef uint64_t end_i, start_bit, end_bit
     cdef size_t scratch_cap
     cdef uint8_t *scratch
     cdef Py_ssize_t nwritten
     cdef bytes item
+    cdef unsigned char *item_buf
 
     if n_strings == 0:
         return result
@@ -119,7 +143,8 @@ cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,
     try:
         for i in range(n_strings):
             start_bit = <uint64_t>offsets[i]
-            end_bit = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
+            end_bit = total_bits if i + 1 == n_strings \
+                else <uint64_t>offsets[i + 1]
             with nogil:
                 nwritten = xmh_decode_one(swapped, swapped_len,
                                           table, max_len,
@@ -128,7 +153,16 @@ cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,
             if nwritten < 0:
                 raise ValueError("decode failure on string %d (rc=%d)"
                                  % (i, nwritten))
-            item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+
+            if charset_mode == _CHARSET_SINGLE:
+                item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
+                item_buf = <unsigned char *>(<char *>item)
+                for k in range(nwritten):
+                    item_buf[2 * k] = scratch[k]
+                    item_buf[2 * k + 1] = charset_byte
+            else:
+                item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
+
             Py_INCREF(item)
             PyList_SET_ITEM(result, i, item)
     finally:
@@ -171,11 +205,25 @@ cdef object _coerce_offsets_to_u32(offsets, uint32_t **out_ptr,
 
 
 def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,
-                      swap=True):
+                      swap=True, charset_mode='general', charset_byte=0):
     """Decode a page given an already-built table.
 
     ``table`` must be the bytes object returned by :func:`build_table`
     (length ``(2**max_len) * 2``).
+
+    Parameters
+    ----------
+    charset_mode : {'general', 'single'}, default 'general'
+        Per MS-XLDM. In ``'single'`` mode (``XM_HUFFMAN_SINGLECHARSET``,
+        0xABA91) the page-level ``CharacterSetUsed`` byte is reinserted
+        as the UTF-16-LE high byte of every decoded character, so each
+        output element is exactly ``2 * decoded_length`` bytes and can
+        be ``b.decode('utf-16-le')``-ed directly. In ``'general'`` mode
+        (``XM_HUFFMAN_MULTICHARSET``, 0xABA92) the raw decoded byte
+        stream is returned unchanged.
+    charset_byte : int, default 0
+        The page's ``CharacterSetUsed`` byte. Ignored unless
+        ``charset_mode`` is ``'single'``.
     """
     cdef unsigned ml = <unsigned>max_len
     cdef const unsigned char[::1] bsv
@@ -187,6 +235,8 @@ def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,
     cdef object keep
     cdef uint8_t *swapped_owned = NULL
     cdef const uint8_t *swapped_view
+    cdef int cset = _parse_charset_mode(charset_mode)
+    cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
 
     if ml == 0:
         return [b""] * len(offsets)
@@ -219,7 +269,8 @@ def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,
         return _decode_loop(swapped_view, <size_t>n_buf,
                             <const uint16_t *>&tblv[0], ml,
                             off_ptr, n_strings,
-                            <uint64_t>store_total_bits)
+                            <uint64_t>store_total_bits,
+                            cset, cb)
     finally:
         if swapped_owned is not NULL:
             free(swapped_owned)
@@ -228,7 +279,7 @@ def decode_with_table(bitstream, table, max_len, offsets, store_total_bits,
 
 
 def decode_page(bitstream, encode_array_128, offsets, store_total_bits,
-                swap=True):
+                swap=True, charset_mode='general', charset_byte=0):
     """Decode every string on a Vertipaq dictionary page.
 
     Parameters
@@ -243,6 +294,10 @@ def decode_page(bitstream, encode_array_128, offsets, store_total_bits,
         End-of-stream sentinel for the last string.
     swap : bool, default True
         If True, byte-pair-swap ``bitstream`` inside the extension.
+    charset_mode : {'general', 'single'}, default 'general'
+        See :func:`decode_with_table`.
+    charset_byte : int, default 0
+        See :func:`decode_with_table`.
     """
     cdef const unsigned char[::1] eav = encode_array_128
     cdef const unsigned char[::1] bsv
@@ -257,6 +312,8 @@ def decode_page(bitstream, encode_array_128, offsets, store_total_bits,
     cdef object keep
     cdef uint8_t *swapped_owned = NULL
     cdef const uint8_t *swapped_view
+    cdef int cset = _parse_charset_mode(charset_mode)
+    cdef uint8_t cb = <uint8_t>(<unsigned int>charset_byte & 0xff)
 
     if eav.shape[0] != 128:
         raise ValueError("encode_array must be exactly 128 bytes")
@@ -293,7 +350,8 @@ def decode_page(bitstream, encode_array_128, offsets, store_total_bits,
         return _decode_loop(swapped_view, <size_t>n_buf,
                             tbl, max_len,
                             off_ptr, n_strings,
-                            <uint64_t>store_total_bits)
+                            <uint64_t>store_total_bits,
+                            cset, cb)
     finally:
         free(tbl)
         if swapped_owned is not NULL:

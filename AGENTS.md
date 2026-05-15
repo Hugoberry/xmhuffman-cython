@@ -28,10 +28,13 @@ documentation in this repo describes the published file format only.
   `decompress_encode_array`, `build_table`, `decode_with_table`,
   `decode_page`. Resist adding more — the helpers exist mainly for
   testability and for callers that want to amortize work across pages.
-- **`bytes` in, `bytes` out.** No charset interpretation inside the
-  extension. The decoder emits the raw symbol stream; the caller picks
-  between `latin-1` and paired UTF-16LE based on the page's
-  `character_set_type_identifier`.
+- **`bytes` in, `bytes` out.** No `str` / `unicode` returns. The
+  extension emits raw `bytes`; the caller picks between `latin-1` and
+  paired UTF-16LE based on the page's `character_set_type_identifier`.
+  The one charset-aware option, `charset_mode='single', charset_byte=cb`,
+  performs the spec-defined `CharacterSetUsed` reinsertion as a byte
+  interleave (still `bytes` out) so the caller can `b.decode('utf-16-le')`
+  directly. That is the only place charset state lives in the extension.
 - **Decode table is flat.** A single `2^max_len` array of `uint16_t`
   packed as `(symbol << 8) | code_len`. `max_len ≤ 15`, so the worst
   case is 64 KB. Don't add a two-level table without a measured reason.
@@ -66,8 +69,11 @@ zero.
 ## Things to avoid
 
 - **Don't expand scope.** No encoder, no other alphabets, no other
-  bitstream conventions, no charset conversion inside the extension.
-  See "Scope and non-goals" in [README.md](README.md).
+  bitstream conventions, no Python-level charset conversion (`str`
+  outputs, `encoding=` knobs) inside the extension. The
+  `CharacterSetUsed` interleave for single-charset pages is spec-defined
+  and stays; everything beyond that belongs in the caller. See "Scope
+  and non-goals" in [README.md](README.md).
 - **Don't add dependencies.** The runtime dependency set is empty by
   design. Build-time needs only Cython and a C compiler.
 - **Don't reintroduce per-symbol Python.** Any change that puts Python
