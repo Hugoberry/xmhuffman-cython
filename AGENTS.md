@@ -24,6 +24,13 @@ documentation in this repo describes the published file format only.
 - **No Python objects in the inner loop.** The kernel takes typed
   memoryviews and raw pointers. The Cython surface releases the GIL
   around any work that takes more than a few microseconds.
+- **One GIL release per page, not per string.** `decode_page` /
+  `decode_with_table` must wrap their entire kernel call in a single
+  `with nogil:` block. Allocate Python objects (the `list[bytes]`
+  result) only after the kernel returns. This is what lets callers
+  fan out across `ThreadPoolExecutor` and actually scale — the
+  pre-`xmh_decode_page` per-string release/reacquire pattern
+  anti-scaled at 4+ workers.
 - **Tiny public API.** Five module-level functions: `swap_bytes`,
   `decompress_encode_array`, `build_table`, `decode_with_table`,
   `decode_page`. Resist adding more — the helpers exist mainly for

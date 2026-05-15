@@ -175,8 +175,27 @@ mask, one table lookup and one byte store per output symbol. The decode
 table is a flat `2^max_len` array of `uint16_t` (≤ 64 KB; usually 1–8 KB)
 that fits comfortably in L1/L2.
 
-The GIL is released around the inner work, so callers can decode
-multiple pages or columns from worker threads without contention.
+### Parallel scaling
+
+`decode_page` and `decode_with_table` are designed to run inside a
+`concurrent.futures.ThreadPoolExecutor` with no special setup. The
+entire per-page work — bit-stream walk plus charset reinsertion when
+requested — happens inside a single `with nogil:` block. Python
+objects (the `list[bytes]` result) are constructed only after the
+kernel returns, in one tight pass under the GIL.
+
+The practical effect on a 2,703-page workload (`meta.pbix`, 7.1M
+strings) on an 8-core M-class machine:
+
+| Workers | Wall clock | Speedup vs. n=1 |
+|---:|---:|---:|
+| 1 | 10.85 s | 1.00× |
+| 2 | 6.19 s | 1.75× |
+| 4 | 3.92 s | 2.77× |
+| 8 | 2.60 s | 4.17× |
+
+Scaling is monotonic up to physical-core count; the function does not
+fight the GIL on per-string allocation.
 
 ## Project layout
 

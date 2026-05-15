@@ -19,6 +19,7 @@ from xmhuffman cimport (
     xmh_swap_pairs,
     xmh_build_table,
     xmh_decode_one,
+    xmh_decode_page,
 )
 
 DEF _TABLE_MAX = 1 << 15  # 32768 u16 entries = 64 KB
@@ -110,63 +111,66 @@ cdef list _decode_loop(const uint8_t *swapped, size_t swapped_len,
                        int charset_mode, uint8_t charset_byte):
     """Decode all strings on a page into a ``list[bytes]``.
 
+    Holds the GIL once per page: the entire bit-stream walk runs inside
+    a single ``with nogil:`` block via ``xmh_decode_page``. Python
+    objects are allocated only afterwards, in a tight slicing pass. This
+    is what makes the function safe to call from a thread pool.
+
     When ``charset_mode == _CHARSET_SINGLE`` each output element is
     ``2 * nwritten`` bytes long: the page-level ``CharacterSetUsed``
     byte is interleaved as the UTF-16-LE high byte of every character,
     so the caller can ``b.decode('utf-16-le')`` directly.
     """
     cdef list result = PyList_New(n_strings)
-    cdef uint64_t span_bits, max_span = 0
-    cdef Py_ssize_t i, k
-    cdef uint64_t end_i, start_bit, end_bit
-    cdef size_t scratch_cap
-    cdef uint8_t *scratch
-    cdef Py_ssize_t nwritten
+    cdef Py_ssize_t i, prev, end
+    cdef size_t out_cap
+    cdef uint8_t *out = NULL
+    cdef Py_ssize_t *ends = NULL
+    cdef Py_ssize_t rc
     cdef bytes item
-    cdef unsigned char *item_buf
 
     if n_strings == 0:
         return result
 
-    for i in range(n_strings):
-        end_i = total_bits if i + 1 == n_strings else <uint64_t>offsets[i + 1]
-        if end_i > <uint64_t>offsets[i]:
-            span_bits = end_i - <uint64_t>offsets[i]
-            if span_bits > max_span:
-                max_span = span_bits
+    # Upper bound: each bit can produce at most one decoded symbol (the
+    # kernel accepts codeword lengths down to 1; the spec mandates >= 2,
+    # so this is loose but safe). Double for single-charset interleave.
+    out_cap = <size_t>total_bits
+    if charset_mode == _CHARSET_SINGLE:
+        out_cap *= 2
+    if out_cap == 0:
+        out_cap = 1
 
-    scratch_cap = <size_t>max_span if max_span > 0 else 1
-    scratch = <uint8_t *>malloc(scratch_cap)
-    if scratch is NULL:
+    out = <uint8_t *>malloc(out_cap)
+    if out is NULL:
+        raise MemoryError()
+    ends = <Py_ssize_t *>malloc(<size_t>n_strings * sizeof(Py_ssize_t))
+    if ends is NULL:
+        free(out)
         raise MemoryError()
 
     try:
+        with nogil:
+            rc = xmh_decode_page(swapped, swapped_len,
+                                 table, max_len,
+                                 offsets, <xmh_ssize_t>n_strings,
+                                 total_bits,
+                                 charset_mode, charset_byte,
+                                 out, out_cap, ends)
+        if rc < 0:
+            raise ValueError("decode failure (rc=%d)" % rc)
+
+        prev = 0
         for i in range(n_strings):
-            start_bit = <uint64_t>offsets[i]
-            end_bit = total_bits if i + 1 == n_strings \
-                else <uint64_t>offsets[i + 1]
-            with nogil:
-                nwritten = xmh_decode_one(swapped, swapped_len,
-                                          table, max_len,
-                                          start_bit, end_bit,
-                                          scratch, scratch_cap)
-            if nwritten < 0:
-                raise ValueError("decode failure on string %d (rc=%d)"
-                                 % (i, nwritten))
-
-            if charset_mode == _CHARSET_SINGLE:
-                item = PyBytes_FromStringAndSize(NULL, nwritten * 2)
-                item_buf = <unsigned char *>(<char *>item)
-                for k in range(nwritten):
-                    item_buf[2 * k] = scratch[k]
-                    item_buf[2 * k + 1] = charset_byte
-            else:
-                item = PyBytes_FromStringAndSize(<char *>scratch, nwritten)
-
+            end = ends[i]
+            item = PyBytes_FromStringAndSize(<char *>(out + prev),
+                                             end - prev)
             Py_INCREF(item)
             PyList_SET_ITEM(result, i, item)
+            prev = end
     finally:
-        free(scratch)
+        free(out)
+        free(ends)
     return result
 
 

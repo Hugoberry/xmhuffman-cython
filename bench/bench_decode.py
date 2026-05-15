@@ -17,6 +17,7 @@ Usage:
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
@@ -45,15 +46,27 @@ def _capture_pages(path):
     def spy(bitstream, encode_array, offsets, total_bits,
             swap=True, charset_mode='general', charset_byte=0):
         caller_locals = sys._getframe(1).f_locals
+        # Recent pbixray packs (is_general, charset_byte) into the worker's
+        # `args` tuple; older builds expose `compressed_store` directly.
+        mode = None
+        cs_byte = 0
         store = caller_locals.get("compressed_store")
         if store is not None:
             cs_type = int(getattr(store, "character_set_type_identifier",
                                   _HUFFMAN_GENERAL))
+            mode = "general" if cs_type == _HUFFMAN_GENERAL else "single"
             cs_byte = int(getattr(store, "character_set_used", 0)) & 0xFF
         else:
-            cs_type = _HUFFMAN_GENERAL
-            cs_byte = 0
-        mode = "general" if cs_type == _HUFFMAN_GENERAL else "single"
+            args = caller_locals.get("args")
+            if isinstance(args, tuple) and len(args) >= 6:
+                # (bitstream, encode_array, offsets, total_bits, is_general,
+                #  charset_byte)
+                mode = "general" if bool(args[4]) else "single"
+                cs_byte = int(args[5]) & 0xFF
+            else:
+                # Fall back to the call's own kwargs.
+                mode = ("general" if charset_mode == "general" else "single")
+                cs_byte = int(charset_byte) & 0xFF
         captured.append({
             "bitstream": bytes(bitstream),
             "encode_array": bytes(encode_array),
@@ -161,6 +174,42 @@ def main():
     print()
     print(f"ratio (2) vs (1): {t_old / t_new:.2f}x  "
           "(should be ~1.0x on files with charset_byte == 0)")
+
+    # Parallel scaling sweep: same charset-aware work, fanned across a
+    # ThreadPoolExecutor. With xmh_decode_page (GIL held once per page)
+    # this should scale roughly with cores, not invert.
+    print()
+    print("parallel scaling (charset-aware path, ThreadPoolExecutor):")
+
+    def run_threaded(n_workers):
+        def one(p):
+            if p["charset_mode"] == "single" and p["charset_byte"] != 0:
+                decoded = xmhuffman.decode_page(
+                    p["bitstream"], p["encode_array"], p["offsets"],
+                    p["total_bits"], swap=p["swap"],
+                    charset_mode="single", charset_byte=p["charset_byte"])
+                return [b.decode("utf-16-le", errors="ignore") for b in decoded]
+            decoded = xmhuffman.decode_page(
+                p["bitstream"], p["encode_array"], p["offsets"],
+                p["total_bits"], swap=p["swap"])
+            if p["charset_mode"] == "general":
+                return [b[:len(b) & ~1].decode("utf-16-le", errors="ignore")
+                        for b in decoded]
+            return [b.decode("latin-1") for b in decoded]
+
+        with ThreadPoolExecutor(max_workers=n_workers) as ex:
+            list(ex.map(one, captured))
+
+    cpu = os.cpu_count() or 4
+    sweep = sorted({1, 2, 4, min(cpu, 8), cpu})
+    t_serial = None
+    for n in sweep:
+        t = _bench(f"  n_workers={n:<2d}", lambda n=n: run_threaded(n))
+        if n == 1:
+            t_serial = t
+            print(f"    (ratio vs n=1: 1.00x)")
+        elif t_serial:
+            print(f"    (ratio vs n=1: {t_serial / t:.2f}x)")
 
 
 if __name__ == "__main__":

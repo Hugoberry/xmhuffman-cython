@@ -45,6 +45,33 @@ xmh_ssize_t xmh_decode_one(const uint8_t *swapped, size_t swapped_len,
                            uint64_t start_bit, uint64_t end_bit,
                            uint8_t *out, size_t out_cap);
 
+/* Decode every string on a page into a single contiguous output buffer.
+ *
+ *   offsets[i]         : per-string start bit (sorted ascending)
+ *   total_bits         : end-of-stream sentinel for offsets[n_strings - 1]
+ *   charset_mode       : 0 = general (one byte per symbol),
+ *                        1 = single  (write [symbol, charset_byte] per
+ *                                     symbol — UTF-16-LE-ready)
+ *   out, out_cap       : caller-owned write buffer
+ *   out_end_offsets    : caller-owned array of length n_strings; on
+ *                        successful return, holds the cumulative byte
+ *                        offset (one past the last written byte) of each
+ *                        decoded string. String i occupies
+ *                        out[out_end_offsets[i-1] .. out_end_offsets[i]],
+ *                        with out_end_offsets[-1] treated as 0.
+ *
+ * Returns total bytes written, or a negative error code (matching
+ * xmh_decode_one: -1 = overflow, -2 = corrupt stream).
+ *
+ * No heap allocations, no Python, fully nogil-safe. */
+xmh_ssize_t xmh_decode_page(const uint8_t *swapped, size_t swapped_len,
+                            const uint16_t *table, unsigned max_len,
+                            const uint32_t *offsets, xmh_ssize_t n_strings,
+                            uint64_t total_bits,
+                            int charset_mode, uint8_t charset_byte,
+                            uint8_t *out, size_t out_cap,
+                            xmh_ssize_t *out_end_offsets);
+
 #ifdef __cplusplus
 }
 #endif

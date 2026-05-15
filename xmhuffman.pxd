@@ -13,3 +13,12 @@ cdef extern from "xmhuffman_kernel.h":
                                const uint16_t *table, unsigned max_len,
                                uint64_t start_bit, uint64_t end_bit,
                                uint8_t *out, size_t out_cap) nogil
+
+    xmh_ssize_t xmh_decode_page(const uint8_t *swapped, size_t swapped_len,
+                                const uint16_t *table, unsigned max_len,
+                                const uint32_t *offsets,
+                                xmh_ssize_t n_strings,
+                                uint64_t total_bits,
+                                int charset_mode, uint8_t charset_byte,
+                                uint8_t *out, size_t out_cap,
+                                xmh_ssize_t *out_end_offsets) nogil

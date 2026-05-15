@@ -145,3 +145,54 @@ xmh_ssize_t xmh_decode_one(const uint8_t *swapped, size_t swapped_len,
     }
     return (xmh_ssize_t)(op - out);
 }
+
+xmh_ssize_t xmh_decode_page(const uint8_t *swapped, size_t swapped_len,
+                            const uint16_t *table, unsigned max_len,
+                            const uint32_t *offsets, xmh_ssize_t n_strings,
+                            uint64_t total_bits,
+                            int charset_mode, uint8_t charset_byte,
+                            uint8_t *out, size_t out_cap,
+                            xmh_ssize_t *out_end_offsets)
+{
+    if (n_strings <= 0) return 0;
+    if (max_len == 0) {
+        /* All strings are empty. */
+        for (xmh_ssize_t i = 0; i < n_strings; ++i) out_end_offsets[i] = 0;
+        return 0;
+    }
+
+    unsigned shift_const = 64u - max_len;
+    uint64_t mask = ((uint64_t)1 << max_len) - 1;
+    size_t cursor = 0;
+    const int single = (charset_mode != 0);
+
+    for (xmh_ssize_t i = 0; i < n_strings; ++i) {
+        uint64_t start_bit = (uint64_t)offsets[i];
+        uint64_t end_bit = (i + 1 == n_strings)
+            ? total_bits
+            : (uint64_t)offsets[i + 1];
+        uint64_t bit = start_bit;
+
+        while (bit < end_bit) {
+            size_t byte = (size_t)(bit >> 3);
+            unsigned off = (unsigned)(bit & 7u);
+            uint64_t w = xmh_load_be64_safe(swapped, swapped_len, byte);
+            unsigned idx = (unsigned)((w >> (shift_const - off)) & mask);
+            uint16_t e = table[idx];
+            unsigned code_len = e & 0xffu;
+            if (code_len == 0) return -2; /* corrupt stream */
+            uint8_t sym = (uint8_t)(e >> 8);
+            if (single) {
+                if (cursor + 2 > out_cap) return -1;
+                out[cursor++] = sym;
+                out[cursor++] = charset_byte;
+            } else {
+                if (cursor >= out_cap) return -1;
+                out[cursor++] = sym;
+            }
+            bit += code_len;
+        }
+        out_end_offsets[i] = (xmh_ssize_t)cursor;
+    }
+    return (xmh_ssize_t)cursor;
+}
