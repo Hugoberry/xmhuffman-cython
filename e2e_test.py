@@ -70,6 +70,35 @@ def main():
                                        total, swap=False)
     assert out2 == strings, f"decode_with_table mismatch: {out2!r}"
 
+    # Single-charset interleave: charset_byte == 0 must be byte-equivalent to
+    # the default (raw) output zero-padded for UTF-16-LE.
+    out_single_zero = xmhuffman.decode_page(
+        storage, ea, offsets, total, swap=True,
+        charset_mode="single", charset_byte=0)
+    for raw_item, interleaved in zip(strings, out_single_zero):
+        expected = bytes(b for byte in raw_item for b in (byte, 0))
+        assert interleaved == expected, (
+            f"single/cb=0 mismatch: got {interleaved!r}, want {expected!r}")
+    # And decoding as UTF-16-LE recovers the original ASCII text.
+    assert [b.decode("utf-16-le") for b in out_single_zero] == [
+        s.decode("latin-1") for s in strings]
+
+    # Single-charset with a non-zero charset byte: each emitted byte is the
+    # UTF-16-LE low byte, charset_byte is the high byte (matches xmsrv).
+    out_single_nz = xmhuffman.decode_page(
+        storage, ea, offsets, total, swap=True,
+        charset_mode="single", charset_byte=0x04)
+    decoded = [b.decode("utf-16-le") for b in out_single_nz]
+    expected_nz = ["".join(chr((0x04 << 8) | b) for b in s) for s in strings]
+    assert decoded == expected_nz, (
+        f"single/cb=0x04 mismatch: got {decoded!r}, want {expected_nz!r}")
+
+    # decode_with_table accepts the same charset kwargs.
+    out_single_nz2 = xmhuffman.decode_with_table(
+        raw, table_bytes, max_len, offsets, total, swap=False,
+        charset_mode="single", charset_byte=0x04)
+    assert out_single_nz2 == out_single_nz, "decode_with_table charset path mismatch"
+
     print("xmhuffman e2e: OK")
 
 
