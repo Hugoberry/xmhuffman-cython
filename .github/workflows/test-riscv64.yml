@@ -1,0 +1,94 @@
+name: Test RISCV64 Build (Linux only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_test_riscv64:
+    name: Build RISCV64 manylinux wheel (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install setuptools wheel cython build
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: riscv64
+
+      - name: Build RISCV64 manylinux wheels
+        uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_BUILD: cp${{ matrix.python-version == '3.10' && '310' || matrix.python-version == '3.11' && '311' || matrix.python-version == '3.14' && '314' || '312' }}-*
+          CIBW_ARCHS_LINUX: "riscv64"
+          # riscv64 manylinux only exists at the 2_39 baseline (glibc 2.39).
+          CIBW_MANYLINUX_RISCV64_IMAGE: manylinux_2_39
+          CIBW_SKIP: "*-musllinux_*"
+          CIBW_BUILD_VERBOSITY: 1
+
+      - name: Store built RISCV64 wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: riscv64-wheels-py${{ matrix.python-version }}
+          path: wheelhouse/*.whl
+
+      - name: List built wheels
+        run: |
+          echo "Built wheels:"
+          ls -lh wheelhouse/
+
+  test_riscv64_wheel:
+    needs: build_test_riscv64
+    name: Test RISCV64 wheel (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: riscv64
+
+      - name: Download RISCV64 wheel
+        uses: actions/download-artifact@v4
+        with:
+          name: riscv64-wheels-py${{ matrix.python-version }}
+          path: dist
+
+      # The manylinux image doubles as the runtime so the wheel's glibc
+      # baseline always matches the container. The python:*-slim riscv64
+      # tags vary in Debian base and can sit below glibc 2.39.
+      - name: Test wheel in RISCV64 container
+        run: |
+          tag=$(echo "${{ matrix.python-version }}" | tr -d .)
+          docker run --rm --platform linux/riscv64 \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            quay.io/pypa/manylinux_2_39_riscv64 \
+            bash -c "
+              py=/opt/python/cp$tag-cp$tag/bin/python && \
+              \$py -m pip install --upgrade pip && \
+              \$py -m pip install dist/*.whl && \
+              \$py -c 'import xmhuffman; print(\"xmhuffman imported successfully\")' && \
+              if [ -f e2e_test.py ]; then \$py e2e_test.py; fi
+            "
+
+      - name: Test results
+        run: echo "RISCV64 wheel test completed successfully!"

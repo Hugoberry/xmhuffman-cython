@@ -31,12 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install setuptools wheel cython build
 
-      # ARM64 cross-compilation on Linux via QEMU.
+      # Cross-architecture builds on Linux (aarch64, riscv64) via QEMU.
       - name: Set up QEMU
         if: matrix.os == 'ubuntu-latest'
         uses: docker/setup-qemu-action@v3
         with:
-          platforms: arm64
+          platforms: arm64,riscv64
 
       # macOS: build a single universal2 wheel covering x86_64 + arm64.
       - name: Build universal2 wheel for macOS
@@ -49,13 +49,14 @@ jobs:
           CIBW_ARCHS_MACOS: "universal2"
           MACOSX_DEPLOYMENT_TARGET: "11.0"
 
-      # Linux: cibuildwheel produces manylinux wheels (x86_64 + aarch64).
+      # Linux: cibuildwheel produces manylinux wheels (x86_64 + aarch64 +
+      # riscv64). The emulated arches are built under QEMU.
       - name: Build manylinux wheels for Linux
         if: matrix.os == 'ubuntu-latest'
         uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_BUILD: cp${{ matrix.python-version == '3.10' && '310' || matrix.python-version == '3.11' && '311' || matrix.python-version == '3.12' && '312' || matrix.python-version == '3.13' && '313' || matrix.python-version == '3.14' && '314' || '39' }}-*
-          CIBW_ARCHS_LINUX: "x86_64 aarch64"
+          CIBW_ARCHS_LINUX: "x86_64 aarch64 riscv64"
           CIBW_SKIP: "*-musllinux_*"
 
       # Windows: a plain build is fine; setuptools picks the right MSVC.
